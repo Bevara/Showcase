@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Display JPEG XL images</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Display JPEG XL images using the &lt;img&gt; tag </h1>
+    <p>This demo shows how a JPEG XL (<code>.jxl</code>) image can be displayed in any browser-even
+        if the browser does not natively support the format. As of the publication date, this format is not natively
+        supported by
+        Firefox or Chrome.</p>
+
+        <img is="universal-img_1" src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" using="solver_1"
+        with="libjxl_1" stats />
+
+    <p>If your browser supports JPEG XL natively, it may decode directly. Otherwise, the WebAssembly pipeline handles
+        the decoding transparently.</p>
+
+    <h2>Code snippet</h2>
+    <p>We decode a jxl file <a
+            href="https://jpegxl.info/images/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl">zoltan-tasi-CLJeQCr2F_A-unsplash.jxl</a>
+        using the <em>universal</em> img tag : </p>
+    <pre><code>&lt;img is="universal-img"
+     src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl"
+     using="solver_1"
+     with="libjxl_1"&gt;
+&lt;/img&gt;
+</code></pre>
+
+    <p>
+        It has been tested with Google Chrome Version 134.0.6998.166 (Official build) (arm64), Firefox 137.0 (aarch64)
+        and Safari Version 18.3.1 (20620.2.4.11.6).
+    </p>
+
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>jxl </td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>420 kB</td>
+            </tr>
+            <tr>
+                <td>Dimension</td>
+                <td>896 x 1080 pixels</td>
+            </tr>
+            <tr>
+                <td>Color</td>
+                <td>sRGB</td>
+            </tr>
+            <tr>
+                <td>Precision</td>
+                <td>32 bits</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="../scripts/universal-img_1.js"></script>
+</body>
+
+</html>

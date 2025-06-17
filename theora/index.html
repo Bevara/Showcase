@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Render OGG/Theora video</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1> Render OGG/Theora video using the <code>&lt;canvas&gt;</code> tag </h1>
+    <p>This demo shows how an Ogg/Theora video can be played back in modern browsers using a WebAssembly-based filter pipeline. </p>
+    
+    <canvas is="universal-canvas_1" data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1"
+        with="ogg_1;vorbis_1;theora_1" noloop></canvas>
+
+    <p>Although this format was once promoted as an open video standard, most major browsers (including Chrome, Firefox, and Safari) no longer natively support it.</p>
+    
+    <h2>Code snippet</h2>
+    <p>We decode the ogg file <a
+            href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a> that contains a
+        theora video stream and a vorbis audio stream
+        using the <em>universal</em> canvas tag : </p>
+
+    <pre><code>&lt;canvas is="universal-canvas_1" data-url="../test_sequences/trailer_1080p.ogg" using="solver_1"
+        with="ogg_1;vorbis_1;theora_1" &gt;
+        &lt; /canvas &gt;
+</code></pre>
+
+    <p>
+        It has been tested with Google Chrome Version 134.0.6998.166 (Official build) (arm64), Firefox 137.0 (aarch64)
+        and Safari Version 18.3.1 (20620.2.4.11.6).
+    </p>
+
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr class="total-row">
+                <td>Format</td>
+                <td>Ogg </td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>27873937</td>
+            </tr>
+            <tr>
+                <td>Duration</td>
+                <td> 33 sec</td>
+            </tr>
+            <tr>
+                <td>Overall BitRate</td>
+                <td>6757932</td>
+            </tr>
+            <tr class="total-row">
+                <td>Video</td>
+                <td>Theora</td>
+            </tr>
+            <tr>
+                <td>BitRate</td>
+                <td>6401458</td>
+            </tr>
+            <tr>
+                <td>FrameRate</td>
+                <td>24</td>
+            </tr>
+            <tr>
+                <td>Width</td>
+                <td>1920</td>
+            </tr>
+            <tr>
+                <td>Height</td>
+                <td>1080</td>
+            </tr>
+            <tr>
+                <td>FrameRate</td>
+                <td>25</td>
+            </tr>
+            <tr>
+                <td>FrameCount</td>
+                <td>825</td>
+            </tr>
+            <tr>
+                <td>StreamSize</td>
+                <td>26 MB</td>
+            </tr>
+            <tr class="total-row">
+                <td>Audio</td>
+                <td>Vorbis</td>
+            </tr>
+            <tr>
+                <td>BitRate</td>
+                <td>80000</td>
+            </tr>
+            <tr>
+                <td>Channels</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>SamplingRate</td>
+                <td>48000</td>
+            </tr>
+            <tr>
+                <td>StreamSize</td>
+                <td>329,9 kB</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="../scripts/universal-canvas_1.js"></script>
+</body>
+
+</html>
