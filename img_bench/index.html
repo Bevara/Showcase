@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Browser-native-JXL and Wasm--JXL-pipeline Load and Decode Benchmark</title>
+<style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1> Browser-native vs. WebAssembly-pipeline JXL Load and Decode Benchmark </h1>
+  
+    <p>In this benchmark, we decode a JXL image <a
+            href="https://jpegxl.info/images/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl">(zoltan-tasi-CLJeQCr2F_A-unsplash.jxl)</a>
+        using a native browser implementation (where supported) and a Wasm-based-JXL decoding pipeline. 
+    </p>
+  
+        
+    
+    <h2> Native-broswer-based decoding JXL image preview : </h1>
+    
+        <p>  The native section of this demonstration will work on: </p>
+    <ul>
+    <li> A chrome version (91-109) which supported JXL natively (enable JXL image format via chrome://flags/#enable-jxl)</li>
+    <li> The Firefox nightly build with JXL support enabled (using about:config)</li>   
+    <li> Safari Version 17.0 or later </li>
+    </ul>
+       
+        <div id="native_preview">
+  
+        </div>
+        <p> Benchmark result :</p>
+        <pre id="result_native">Running benchmark for native...</pre>
+  
+        <h2> Webassembly JXL image preview : </h1>
+            <div id="wasm_preview">
+  
+            </div>
+            <p> Benchmark result :</p>
+            <pre id="result_wasm">Running benchmark for native...</pre>
+  
+            <script>
+  
+                const previewEl_native = document.getElementById('native_preview');
+                const previewEl_wasm = document.getElementById('wasm_preview');
+  
+                previewEl_native.innerHTML = `<img id="nativeimg" src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" />`;
+                previewEl_wasm.innerHTML = `<img is="universal-img_1" id="wasmimg" src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" using="solver_1" with="libjxl_1" bench/>`;
+  
+                const resultEl_wasm = document.getElementById('result_wasm');
+                const resultEl_native = document.getElementById('result_native');
+  
+  
+  
+                const nativeimg = document.getElementById('nativeimg');
+                const imgWasm = document.getElementById('wasmimg');
+                const start = performance.now();
+  
+                // Native JXL image loading
+                nativeimg.onload = async () => {
+                    const decodeStart = performance.now();
+                    try {
+  
+                        await nativeimg.decode();
+                        const decodeEnd = performance.now();
+  
+                        requestAnimationFrame(() => {
+                            const displayEnd = performance.now();
+  
+                            const decodeTime = (decodeEnd - decodeStart) * 1000; // µs
+                            const totalTime = (decodeEnd - start) * 1000; // µs
+                            const displayTime = (displayEnd - start) * 1000; // µs
+  
+                            resultEl_native.textContent = `
+Decode time:   ${decodeTime.toFixed(0)} µs
+Total time (download + decode + display): ${displayTime.toFixed(0)} µs
+        `.trim();
+                        });
+                    } catch (err) {
+                        console.error("Decode failed:", err);
+                    }
+                };
+  
+                nativeimg.onerror = (err) => {
+                    console.error("Image failed to load", err);
+                };
+  
+                // WebAssembly JXL image loading
+                imgWasm.onload = async () => {
+                    const decodeStart = performance.now();
+                    if (imgWasm._decodingPromise) {
+                        imgWasm._decodingPromise.then(() => {
+                            const decodeEnd = performance.now();
+                            imgWasm._decodingPromise = null;
+  
+                        try {
+  
+                            requestAnimationFrame(() => {
+                                const displayEnd = performance.now();
+                                const compileTime = (imgWasm.compileEnd - imgWasm.compileStart) * 1000; // µs
+                                const decodeTime = (imgWasm.decodeEnd - imgWasm.decodeStart) * 1000; // µs
+                                const totalTime = (decodeEnd - start) * 1000; // µs
+                                const displayTime = (displayEnd - start) * 1000; // µs
+  
+                                resultEl_wasm.textContent = `
+Compile time:   ${compileTime.toFixed(0)} µs
+Decode time:   ${decodeTime.toFixed(0)} µs
+Total time (download + decode + display): ${totalTime.toFixed(0)} µs
+        `.trim();
+                            });
+                        } catch (err) {
+                            console.error("Decode failed:", err);
+                        }
+                        });
+                    }
+                };
+  
+                imgWasm.onerror = (err) => {
+                    console.error("Image failed to load", err);
+                };
+            </script>
+
+
+            <script src="../scripts/universal-img_1.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <head>
+    <title>Mutation observer demo</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+  </head>
+  <script src="../scripts/MutationObserver.js"></script>
+</head>
+<body>
+  <a href="javascript:history.back()">&larr; Back</a>
+  <h1>Mutation observer demo</h1>
+  <p>In this demo, we decode the jxl file <a
+    href="https://jpegxl.info/images/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl">zoltan-tasi-CLJeQCr2F_A-unsplash.jxl</a>
+
+,the ac3 file <a
+href="https://samples.ffmpeg.org/A-codecs/AC3/Canyon-5.1-48khz-448kbit.ac3">Canyon-5.1-48khz-448kbit.ac3</a>
+
+and the the ogg file <a
+href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a>
+using conventional, img, audio and canvas tag : </p>
+
+<p>
+&lt;img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" using="solver_with_sdl_1" with="libjxl_1" / &gt;
+</p>
+<p>
+&lt; audio src="../test_sequences/Canyon-5.1-48khz-448kbit.ac3" using="solver_with_sdl_1" with="liba52_1" controls &gt;
+&lt; /audio &gt;
+</p>
+<p>
+&lt;canvas data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1" with="vorbis_1;theora_1" &gt;
+&lt; /canvas &gt;
+</p>
+
+<p>
+  We use Mutation observer to monitor and detect changes in the DOM and decode seamlessly these formats using this script:
+</p>
+<p>
+  <pre><code>
+    new MutationObserver(mutations => mutations.forEach(mutation => mutation.addedNodes.forEach(el => {
+      if (el instanceof HTMLImageElement || el instanceof HTMLPictureElement || el instanceof HTMLAudioElement || el instanceof HTMLVideoElement || el instanceof HTMLCanvasElement)
+        universal_decode(el);
+    }))).observe(document.documentElement, { subtree: true, childList: true });
+  </code></pre>
+
+</p>
+<p>
+It has been tested with Google Chrome Version 134.0.6998.166 (Official build) (arm64), Firefox 137.0 (aarch64) and Safari Version 18.3.1 (20620.2.4.11.6).
+</p>
+  <h1> JXL image preview : </h1>
+  <img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" use-worker using="solver_with_sdl_1" with="libjxl_1">
+  <h1> A52 audio preview : </h1>
+  <audio src="../test_sequences/Canyon-5.1-48khz-448kbit.ac3" use-worker using="solver_with_sdl_1" with="liba52_1" controls>  </audio>
+  <h1> OGG video preview : </h1>
+  <canvas data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1" with="ogg_1;vorbis_1;theora_1"></canvas>
+</body>
+</html>
