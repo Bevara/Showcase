@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Browser-native-JXL and Wasm--JXL-pipeline Load and Decode Benchmark</title>
-<style>
+    <title>Wasm pipeline vs Browser native decoding Benchmark on JXL images</title>
+    <style>
         body {
             font-family: system-ui, sans-serif;
             line-height: 1.6;
@@ -48,69 +48,93 @@
 
 <body>
     <a href="javascript:history.back()">&larr; Back</a>
-    <h1> Browser-native vs. WebAssembly-pipeline JXL Load and Decode Benchmark </h1>
-  
-    <p>In this benchmark, we decode a JXL image <a
+    <h1> Wasm pipeline vs Browser native decoding Benchmark on JXL images </h1>
+
+    <p>In this benchmark, we compare the performance
+        of decoding a JXL image <a
             href="https://jpegxl.info/images/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl">(zoltan-tasi-CLJeQCr2F_A-unsplash.jxl)</a>
-        using a native browser implementation (where supported) and a Wasm-based-JXL decoding pipeline. 
+        using a native browser implementation (where supported) and a Wasm-based-JXL decoding pipeline
     </p>
-  
-        
-    
-    <h2> Native-broswer-based decoding JXL image preview : </h1>
-    
-        <p>  The native section of this demonstration will work on: </p>
-    <ul>
-    <li> A chrome version (91-109) which supported JXL natively (enable JXL image format via chrome://flags/#enable-jxl)</li>
-    <li> The Firefox nightly build with JXL support enabled (using about:config)</li>   
-    <li> Safari Version 17.0 or later </li>
-    </ul>
-       
-        <div id="native_preview">
-  
+
+    <h2> Webassembly JXL image preview : </h1>
+
+        <p>We decode a jxl file <a
+            href="https://jpegxl.info/images/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl">zoltan-tasi-CLJeQCr2F_A-unsplash.jxl</a>
+        using the <em>universal</em> img tag : </p>
+    <pre><code>&lt;img is="universal-img"
+     src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl"
+     using="solver_1"
+     with="libjxl_1"&gt;
+&lt;/img&gt;
+</code></pre>
+
+        <div id="wasm_preview">
+
         </div>
-        <p> Benchmark result :</p>
-        <pre id="result_native">Running benchmark for native...</pre>
-  
-        <h2> Webassembly JXL image preview : </h1>
-            <div id="wasm_preview">
-  
+        <p> Here is the decoding performance :</p>
+        <pre id="result_wasm">Running benchmark for native...</pre>
+
+
+        <h2> Native-broswer-based decoding JXL image preview : </h1>
+            <p>We decode a jxl file <a
+                    href="https://jpegxl.info/images/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl">zoltan-tasi-CLJeQCr2F_A-unsplash.jxl</a>
+                using native decoding when available : </p>
+            <pre><code>&lt;img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" /&gt; </code></pre>
+
+            <div id="native_ok">
+            <div id="native_preview">
+
             </div>
             <p> Benchmark result :</p>
-            <pre id="result_wasm">Running benchmark for native...</pre>
-  
+            <pre id="result_native">Running benchmark for native...</pre>
+            </div>
+            
+
+            <div style="display: none;" id="native_error">
+            <p> Native decoding failed on this browser, please ensure that you have : </p>
+            <ul>
+                <li> A chrome version (91-109) which supported JXL natively (enable JXL image format via
+                    chrome://flags/#enable-jxl)</li>
+                <li> The Firefox nightly build with JXL support enabled (using about:config)</li>
+                <li> Safari Version 17.0 or later </li>
+            </ul>
+            </div>
+            
+
             <script>
-  
+
                 const previewEl_native = document.getElementById('native_preview');
                 const previewEl_wasm = document.getElementById('wasm_preview');
-  
+
                 previewEl_native.innerHTML = `<img id="nativeimg" src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" />`;
                 previewEl_wasm.innerHTML = `<img is="universal-img_1" id="wasmimg" src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" using="solver_1" with="libjxl_1" bench/>`;
-  
+
                 const resultEl_wasm = document.getElementById('result_wasm');
                 const resultEl_native = document.getElementById('result_native');
-  
-  
-  
+                const native_error = document.getElementById('native_error');
+                const native_ok = document.getElementById('native_ok');
+
+
+
                 const nativeimg = document.getElementById('nativeimg');
                 const imgWasm = document.getElementById('wasmimg');
                 const start = performance.now();
-  
+
                 // Native JXL image loading
                 nativeimg.onload = async () => {
                     const decodeStart = performance.now();
                     try {
-  
+
                         await nativeimg.decode();
                         const decodeEnd = performance.now();
-  
+
                         requestAnimationFrame(() => {
                             const displayEnd = performance.now();
-  
+
                             const decodeTime = (decodeEnd - decodeStart) * 1000; // µs
                             const totalTime = (decodeEnd - start) * 1000; // µs
                             const displayTime = (displayEnd - start) * 1000; // µs
-  
+
                             resultEl_native.textContent = `
 Decode time:   ${decodeTime.toFixed(0)} µs
 Total time (download + decode + display): ${displayTime.toFixed(0)} µs
@@ -120,11 +144,12 @@ Total time (download + decode + display): ${displayTime.toFixed(0)} µs
                         console.error("Decode failed:", err);
                     }
                 };
-  
+
                 nativeimg.onerror = (err) => {
-                    console.error("Image failed to load", err);
+                    native_ok.style.display = "none";
+                    native_error.style.display = "block";
                 };
-  
+
                 // WebAssembly JXL image loading
                 imgWasm.onload = async () => {
                     const decodeStart = performance.now();
@@ -132,34 +157,65 @@ Total time (download + decode + display): ${displayTime.toFixed(0)} µs
                         imgWasm._decodingPromise.then(() => {
                             const decodeEnd = performance.now();
                             imgWasm._decodingPromise = null;
-  
-                        try {
-  
-                            requestAnimationFrame(() => {
-                                const displayEnd = performance.now();
-                                const compileTime = (imgWasm.compileEnd - imgWasm.compileStart) * 1000; // µs
-                                const decodeTime = (imgWasm.decodeEnd - imgWasm.decodeStart) * 1000; // µs
-                                const totalTime = (decodeEnd - start) * 1000; // µs
-                                const displayTime = (displayEnd - start) * 1000; // µs
-  
-                                resultEl_wasm.textContent = `
+
+                            try {
+
+                                requestAnimationFrame(() => {
+                                    const displayEnd = performance.now();
+                                    const compileTime = (imgWasm.compileEnd - imgWasm.compileStart) * 1000; // µs
+                                    const decodeTime = (imgWasm.decodeEnd - imgWasm.decodeStart) * 1000; // µs
+                                    const totalTime = (decodeEnd - start) * 1000; // µs
+                                    const displayTime = (displayEnd - start) * 1000; // µs
+
+                                    resultEl_wasm.textContent = `
 Compile time:   ${compileTime.toFixed(0)} µs
 Decode time:   ${decodeTime.toFixed(0)} µs
 Total time (download + decode + display): ${totalTime.toFixed(0)} µs
         `.trim();
-                            });
-                        } catch (err) {
-                            console.error("Decode failed:", err);
-                        }
+                                });
+                            } catch (err) {
+                                console.error("Decode failed:", err);
+                            }
                         });
                     }
                 };
-  
+
                 imgWasm.onerror = (err) => {
                     console.error("Image failed to load", err);
                 };
             </script>
 
+            <h2> Specifications : </h2>
+
+            <p>The specifications of the test sequence are : </p>
+            <table>
+                <colgroup>
+                    <col>
+                    <col>
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td>Format</td>
+                        <td>jxl </td>
+                    </tr>
+                    <tr>
+                        <td>FileSize</td>
+                        <td>420 kB</td>
+                    </tr>
+                    <tr>
+                        <td>Dimension</td>
+                        <td>896 x 1080 pixels</td>
+                    </tr>
+                    <tr>
+                        <td>Color</td>
+                        <td>sRGB</td>
+                    </tr>
+                    <tr>
+                        <td>Precision</td>
+                        <td>32 bits</td>
+                    </tr>
+                </tbody>
+            </table>
 
             <script src="../scripts/universal-img_1.js"></script>
 </body>
