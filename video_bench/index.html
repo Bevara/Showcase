@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Native versus Wasm-based Video decoding</title>
+    <title>WebAssembly pipeline vs Native Video decoding Benchmark</title>
     <script src="../scripts/universal-canvas_1.js"></script>
     <style>
         body {
@@ -49,14 +49,32 @@
 
 <body>
     <a href="javascript:history.back()">&larr; Back</a>
-    <h1> Native JXL vs WebAssembly Video decoding Benchmark </h1>
+    <h1> WebAssembly pipeline vs native video decoding Benchmark </h1>
   
     <p>In this benchmark, we decode as fast as possible the ogg file <a
         href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a>
     
-    using a native browser implementation (where supported) and a Wasm-based-JXL decoding pipeline. </p>
+    using a Wasm-based decoding pipeline and we compare it with a native browser decoding peformance (where supported). </p>
     
-    <h2>  Native video decoding with theora </h2>
+    <h2>  Decoding 1080p theora video using Webassembly pipeline </h2>
+
+        <p>We decode the ogg file <a
+            href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a> that contains a
+        theora video stream and a vorbis audio stream
+        using the <em>universal</em> canvas tag : </p>
+
+    <pre><code>&lt;canvas is="universal-canvas_1" data-url="../test_sequences/trailer_1080p.ogg" using="solver_1"
+        with="ogg_1;vorbis_1;theora_1" &gt; &lt; /canvas &gt;</code></pre>
+
+    <canvas is="universal-canvas_1" data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1" with="ogg_1;vorbis_1;theora_1" vbench noloop report print="stats_wasm" printErr="stats_wasm">
+
+    </canvas>
+
+    <p>Performance of the Webassembly is calculated using painting on the canvas without waiting for synchronization.  </p>
+     <p> Display performances are attached to V1 (vout) and decoding performances to V1 (theoradec) :</p>
+    <div style="background: green;" id="stats_wasm"></div>
+
+    <h2>  Native video decoding performance on 1080p theora video </h2>
         <p>  The native section of this demonstration will work on a chrome version (Version 104.0.5112.101) which supports theora decoding natively. </p>
     <p> Framerate of the native tag <em>video</em>  is an approximative calculation of how fast the decoding can be done at playbackRate=16 (maximum value) </p>   
 
@@ -65,19 +83,88 @@
     <p>Native performance : </p>
 
     <div id="stats_native">Collecting data...</div>
-    
-    
-    <h2>  Webassembly video decoding with theora </h2>
-    <p> Framerate of the extended <em>video</em> tag with Webassembly is calculated using painting without waiting for the next vsync and outputed in the stats of the pipeline. </p>
 
-    <canvas is="universal-canvas_1" data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1"
-        with="ogg_1;vorbis_1;theora_1" vbench noloop report stats print="stats_wasm" printErr="stats_wasm">
-
-    </canvas>
-
-    <p>Webassembly performance (FPS is attached to V1 - vout and elapsed to global run_time ) :</p>
-    <div style="background: green;" id="stats_wasm"></div>
     
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr class="total-row">
+                <td>Format</td>
+                <td>Ogg </td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>27873937</td>
+            </tr>
+            <tr>
+                <td>Duration</td>
+                <td> 33 sec</td>
+            </tr>
+            <tr>
+                <td>Overall BitRate</td>
+                <td>6757932</td>
+            </tr>
+            <tr class="total-row">
+                <td>Video</td>
+                <td>Theora</td>
+            </tr>
+            <tr>
+                <td>BitRate</td>
+                <td>6401458</td>
+            </tr>
+            <tr>
+                <td>FrameRate</td>
+                <td>24</td>
+            </tr>
+            <tr>
+                <td>Width</td>
+                <td>1920</td>
+            </tr>
+            <tr>
+                <td>Height</td>
+                <td>1080</td>
+            </tr>
+            <tr>
+                <td>FrameRate</td>
+                <td>25</td>
+            </tr>
+            <tr>
+                <td>FrameCount</td>
+                <td>825</td>
+            </tr>
+            <tr>
+                <td>StreamSize</td>
+                <td>26 MB</td>
+            </tr>
+            <tr class="total-row">
+                <td>Audio</td>
+                <td>Vorbis</td>
+            </tr>
+            <tr>
+                <td>BitRate</td>
+                <td>80000</td>
+            </tr>
+            <tr>
+                <td>Channels</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>SamplingRate</td>
+                <td>48000</td>
+            </tr>
+            <tr>
+                <td>StreamSize</td>
+                <td>329,9 kB</td>
+            </tr>
+        </tbody>
+    </table>
+
     <script>
         const video = document.getElementById('video');
         const statsDiv = document.getElementById('stats_native');
