@@ -8,7 +8,6 @@
         body {
             font-family: system-ui, sans-serif;
             line-height: 1.6;
-            max-width: 900px;
             margin: 0 auto;
             padding: 2rem;
             background: #f9f9f9;
@@ -51,8 +50,8 @@
     <h1> Render OGG/Theora video using the <code>&lt;canvas&gt;</code> tag </h1>
     <p>This demo shows how an Ogg/Theora video can be played back in modern browsers using a WebAssembly-based filter pipeline. </p>
     
-    <canvas is="universal-canvas_1" data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1"
-        with="ogg_1;vorbis_1;theora_1" noloop></canvas>
+    <canvas width="900" is="universal-canvas_1" data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1"
+        with="ogg_1;vorbis_1;theora_1"></canvas>
 
     <p>Although this format was once promoted as an open video standard, most major browsers (including Chrome, Firefox, and Safari) no longer natively support it.</p>
     
