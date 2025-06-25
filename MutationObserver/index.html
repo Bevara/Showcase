@@ -48,7 +48,7 @@
 </head>
 <body>
   <a href="javascript:history.back()">&larr; Back</a>
-  <h1>Mutation observer demo</h1>
+  <h1>Using filter pipelines with MutationObserver</h1>
   <p>In this demo, we decode the jxl file <a
     href="https://jpegxl.info/images/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl">zoltan-tasi-CLJeQCr2F_A-unsplash.jxl</a>
 
@@ -57,38 +57,26 @@ href="https://samples.ffmpeg.org/A-codecs/AC3/Canyon-5.1-48khz-448kbit.ac3">Cany
 
 and the the ogg file <a
 href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a>
-using conventional, img, audio and canvas tag : </p>
-
-<p>
-&lt;img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" using="solver_with_sdl_1" with="libjxl_1" / &gt;
-</p>
-<p>
-&lt; audio src="../test_sequences/Canyon-5.1-48khz-448kbit.ac3" using="solver_with_sdl_1" with="liba52_1" controls &gt;
-&lt; /audio &gt;
-</p>
-<p>
-&lt;canvas data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1" with="vorbis_1;theora_1" &gt;
-&lt; /canvas &gt;
-</p>
-
-<p>
-  We use Mutation observer to monitor and detect changes in the DOM and decode seamlessly these formats using this script:
-</p>
-<p>
-  <pre><code>
-    new MutationObserver(mutations => mutations.forEach(mutation => mutation.addedNodes.forEach(el => {
-      if (el instanceof HTMLImageElement || el instanceof HTMLPictureElement || el instanceof HTMLAudioElement || el instanceof HTMLVideoElement || el instanceof HTMLCanvasElement)
-        universal_decode(el);
-    }))).observe(document.documentElement, { subtree: true, childList: true });
-  </code></pre>
-
-</p>
+using conventional, img, audio and canvas tag. We use MutationObserver to monitor and detect changes in the DOM and decode seamlessly these formats. </p>
 
   <h1> JXL image preview : </h1>
   <img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" use-worker using="solver_with_sdl_1" with="libjxl_1">
+<p>
+  <pre><code>&lt;img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" using="<a href="https://github.com/Bevara/solver">solver_1</a>" with="<a href="https://github.com/Bevara/libjxl">libjxl_1</a>"&gt;&lt;/img&gt;
+</code></pre>
+</p>
   <h1> A52 audio preview : </h1>
   <audio src="../test_sequences/Canyon-5.1-48khz-448kbit.ac3" use-worker using="solver_with_sdl_1" with="liba52_1" controls>  </audio>
+  <p>
+    <pre><code>&lt;audio src="../test_sequences/Canyon-5.1-48khz-448kbit.ac3" using="<a href="https://github.com/Bevara/solver">solver_1</a>" with="<a href="https://github.com/Bevara/liba52">liba52_1</a>" controls&gt; &lt;/audio&gt;
+</code></pre>
+</p>
   <h1> OGG video preview : </h1>
   <canvas data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1" with="ogg_1;vorbis_1;theora_1"></canvas>
+  <p>
+    <pre><code>&lt;canvas data-url="../test_sequences/trailer_1080p.ogg" using="<a href="https://github.com/Bevara/solver">solver_1</a>" with="<a href="https://github.com/Bevara/ogg">ogg_1</a>;<a href="https://github.com/Bevara/vorbis">vorbis_1</a>;<a href="https://github.com/Bevara/theora" >theora_1</a>"&gt; &lt;/canvas&gt;
+</code></pre>
+</p>
+
 </body>
 </html>
