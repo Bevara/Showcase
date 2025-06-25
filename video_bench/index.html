@@ -10,7 +10,6 @@
         body {
             font-family: system-ui, sans-serif;
             line-height: 1.6;
-            max-width: 900px;
             margin: 0 auto;
             padding: 2rem;
             background: #f9f9f9;
@@ -51,15 +50,16 @@
 <body>
     <a href="javascript:history.back()">&larr; Back</a>
     <h1> WebAssembly pipeline vs native video decoding Benchmark </h1>
-  
-    <p>In this benchmark, we decode as fast as possible the ogg file <a
-        href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a>
-    
-    using a Wasm-based decoding pipeline and we compare it with a native browser decoding peformance (where supported). </p>
-    
-    <h2>  Decoding 1080p theora video using Webassembly pipeline </h2>
 
-        <p>We decode the ogg file <a
+    <p>In this benchmark, we decode as fast as possible the ogg file <a
+            href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a>
+
+        using a Wasm-based decoding pipeline and we compare it with a native browser decoding peformance (where
+        supported). </p>
+
+    <h2> Decoding 1080p theora video using Webassembly pipeline </h2>
+
+    <p>We decode the ogg file <a
             href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a> that contains a
         theora video stream and a vorbis audio stream
         using the <em>universal</em> canvas tag : </p>
@@ -67,25 +67,40 @@
     <pre><code>&lt;canvas is="<a href="https://github.com/Bevara/player">universal-canvas_1</a>" data-url="../test_sequences/trailer_1080p.ogg" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
         with="<a href="https://github.com/Bevara/ogg">ogg_1</a>;<a href="https://github.com/Bevara/vorbis">vorbis_1</a>;<a href="https://github.com/Bevara/theora" >theora_1</a>" &gt; &lt;/canvas&gt;</code></pre>
 
-    <canvas is="universal-canvas_1" data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1" with="ogg_1;vorbis_1;theora_1" vbench noloop report print="stats_wasm" printErr="stats_wasm">
+    <canvas is="universal-canvas_1" data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1"
+        with="ogg_1;vorbis_1;theora_1" vbench noloop report print="stats_wasm" printErr="stats_wasm">
 
     </canvas>
 
-    <p>Performance of the Webassembly is calculated using painting on the canvas without waiting for synchronization.  </p>
-     <p> Display performances are attached to V1 (vout) and decoding performances to V1 (theoradec) :</p>
+    <p>Performance of the Webassembly is calculated using painting on canvas without waiting for synchronization. </p>
+    <p> Display performances are attached to V1 (vout) and decoding performances to V1 (theoradec) :</p>
     <div style="background: green;" id="stats_wasm"></div>
 
-    <h2>  Native video decoding performance on 1080p theora video </h2>
-        <p>  The native section of this demonstration will work on a chrome version (Version 104.0.5112.101) which supports theora decoding natively. </p>
-    <p> Framerate of the native tag <em>video</em>  is an approximative calculation of how fast the decoding can be done at playbackRate=16 (maximum value) </p>   
+    <h2> Native video decoding performance on 1080p theora video </h2>
+    <p>We decode as fast as possible the ogg file <a
+            href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a>
+        using native decoding when available : </p>
+
+    <pre><code>&lt;video src="../test_sequences/trailer_1080p.ogg"&gt; &lt;/video&gt;</code></pre>
+
+
+    <div style="display:none" id="error">
+        <p> Format unsupported by the browser, please check <a href="https://caniuse.com/ogv">Ogg/Theora video format
+                supports</a> to compare with native performance.</p>
+    </div>
 
     <video id="video" src="../test_sequences/trailer_1080p.ogg" autoplay muted playsinline></video>
     
-    <p>Native performance : </p>
+    <div style="display:none"  id="supported">
+        <p> Framerate of the native tag <em>video</em> is an approximative calculation of how fast the decoding can be
+            done
+            at playbackRate=16 (maximum value) : </p>
 
-    <div id="stats_native">Collecting data...</div>
+        <div id="stats_native">Collecting data...</div>
+    </div>
 
-    
+
+
     <h2> Specifications : </h2>
 
     <p>The specifications of the test sequence are : </p>
@@ -169,6 +184,8 @@
     <script>
         const video = document.getElementById('video');
         const statsDiv = document.getElementById('stats_native');
+        const supported = document.getElementById('supported');
+        const error = document.getElementById('error');
 
         let frameCount = 0;
         let startTime = null;
@@ -232,10 +249,16 @@
 
         video.addEventListener('ended', () => {
             ended = true;
-            statsDiv.textContent += '\nVideo ended. Average FPS: ' + (fps_native.reduce((a, b) => a + b, 0) / fps_native.length).toFixed(2);
+            if (fps_native.length == 0){
+                error.style.display = "block";
+            }else{
+                supported.style.display = "block";
+                statsDiv.textContent += '\nVideo ended. Average FPS: ' + (fps_native.reduce((a, b) => a + b, 0) / fps_native.length).toFixed(2);
+            }
+            
         });
     </script>
-    
+
 </body>
 
 </html>
