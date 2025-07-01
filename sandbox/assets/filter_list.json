@@ -1,0 +1,299 @@
+{
+  "isobmff_1.wasm": {
+    "name": "isobmff",
+    "description": "ISOBMF demultiplexer/multiplexer",
+    "filters": [
+      "mp4dmx",
+      "mp4mx"
+    ],
+    "help": "This filter multiplexes and demultiplexes ISOBMF (14496-12 and derived specifications).",
+    "support": [
+      "image",
+      "audio",
+      "video"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/isobmff/zipball/1",
+    "filter_source": {
+      "mp4dmx": "isoffin_read.c",
+      "mp4mx": "mux_isom.c"
+    },
+    "licence_required": false,
+    "extension": {
+      "heif": "img",
+      "heic": "img"
+    },
+    "binaries": 187395325,
+    "owner": "Bevara",
+    "repo": "isobmff"
+  },
+  "libjxl_1.wasm": {
+    "name": "libjxl",
+    "description": "JXL decoder",
+    "filters": [
+      "jxldec",
+      "rfjxl"
+    ],
+    "help": "This filter decodes JXL images using libjxl.",
+    "support": [
+      "image"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/libjxl/zipball/1",
+    "filter_source": {
+      "jxldec": "dec_jxl.c",
+      "rfjxl": "reframe_jxl.c"
+    },
+    "extension": {
+      "jxl": "img"
+    },
+    "licence_required": false,
+    "binaries": 187395662,
+    "owner": "Bevara",
+    "repo": "libjxl"
+  },
+  "liba52_1.wasm": {
+    "name": "liba52",
+    "description": "A52 decoder",
+    "filters": [
+      "rfac3",
+      "a52dec"
+    ],
+    "help": "This filter decodes AC3 streams through a52dec library.",
+    "support": [
+      "audio"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/liba52/zipball/1",
+    "filter_source": {
+      "rfac3": "reframe_ac3.c",
+      "a52dec": "dec_ac52.c"
+    },
+    "Format": [
+      "AC-3"
+    ],
+    "extension": {
+      "ac3": "audio"
+    },
+    "licence_required": false,
+    "binaries": 187395327,
+    "owner": "Bevara",
+    "repo": "liba52"
+  },
+  "vorbis_1.wasm": {
+    "name": "vorbis",
+    "description": "vorbis decoder",
+    "filters": [
+      "oggdmx",
+      "vorbisdec"
+    ],
+    "help": "This filter decodes Ogg and Vorbis streams through libogg and libvorbis library.",
+    "support": [
+      "audio"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/vorbis/zipball/1",
+    "filter_source": {
+      "oggdmx": "dmx_ogg.c",
+      "vorbisdec": "dec_vorbis.c"
+    },
+    "Format": [
+      "Vorbis"
+    ],
+    "extension": {
+      "ogg": "audio"
+    },
+    "licence_required": false,
+    "binaries": 187396122,
+    "owner": "Bevara",
+    "repo": "vorbis"
+  },
+  "rfpcm_1.wasm": {
+    "name": "rfpcm",
+    "description": "PCM reframer",
+    "filters": [
+      "rfpcm"
+    ],
+    "help": "This filter parses raw PCM file/data or WAVE files and outputs corresponding raw audio.",
+    "support": [
+      "audio"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/rfpcm/zipball/1",
+    "filter_source": {
+      "rfpcm": "reframe_rawpcm.c"
+    },
+    "Format": [
+      "PCM"
+    ],
+    "extension": {
+      "wav": "audio"
+    },
+    "licence_required": false,
+    "binaries": 187396022,
+    "owner": "Bevara",
+    "repo": "rfpcm"
+  },
+  "libpng_1.wasm": {
+    "name": "libpng",
+    "description": "PNG encoder and decoder",
+    "filters": [
+      "rfpng",
+      "pngdec",
+      "encpng"
+    ],
+    "help": "This filter encodes and decodes to PNG using libpng.",
+    "support": [
+      "image"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/libpng/zipball/1",
+    "filter_source": {
+      "rfpng": "reframe_png.c",
+      "pngdec": "dec_png.c",
+      "encpng": "enc_png.c"
+    },
+    "Format": [
+      "PNG"
+    ],
+    "licence_required": false,
+    "binaries": 187395773,
+    "owner": "Bevara",
+    "repo": "libpng"
+  },
+  "openjpeg_1.wasm": {
+    "name": "openjpeg",
+    "description": "JP2000 decoder",
+    "filters": [
+      "rfjp2",
+      "j2kdec"
+    ],
+    "help": "This filter decodes JPEG2000 streams through OpenJPEG library.",
+    "support": [
+      "image"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/openjpeg/zipball/1",
+    "filter_source": {
+      "rfjp2": "reframe_jp2.c",
+      "j2kdec": "dec_j2k.c"
+    },
+    "Format": [
+      "JPEG 2000",
+      "j2k1"
+    ],
+    "licence_required": false,
+    "binaries": 187395853,
+    "owner": "Bevara",
+    "repo": "openjpeg"
+  },
+  "libjpeg_1.wasm": {
+    "name": "libjpeg",
+    "description": "JPG encoder and decoder",
+    "filters": [
+      "rfjpeg",
+      "jpegdec",
+      "encjpg"
+    ],
+    "help": "This filter encodes and decodes to JPEG using libjpeg.",
+    "support": [
+      "image"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/libjpeg/zipball/1",
+    "filter_source": {
+      "rfjpeg": "reframe_jpeg.c",
+      "jpegdec": "dec_jpeg.c",
+      "encjpg": "enc_jpg.c"
+    },
+    "Format": [
+      "JPEG"
+    ],
+    "licence_required": false,
+    "binaries": 187395600,
+    "owner": "Bevara",
+    "repo": "libjpeg"
+  },
+  "ffmpeg-flac_1.wasm": {
+    "name": "ffmpeg-flac",
+    "description": "ffmpeg flac decoder",
+    "filters": [
+      "rfflac",
+      "ffdec-flac"
+    ],
+    "help": "This is a reduced version of ffmpeg adapted to decode flac content.",
+    "support": [
+      "audio"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/ffmpeg-flac/zipball/1",
+    "filter_source": {
+      "rfflac": "reframe_flac.c",
+      "ffdec-flac": "ff_dec-flac.c"
+    },
+    "Format": [
+      "FLAC"
+    ],
+    "licence_required": false,
+    "binaries": 187395136,
+    "owner": "Bevara",
+    "repo": "ffmpeg-flac"
+  },
+  "libxvid_1.wasm": {
+    "name": "libxvid",
+    "description": "XVid decoder",
+    "filters": [
+      "xviddec",
+      "rfmpgvid"
+    ],
+    "help": "This filter decodes MPEG-4 part 2 (and DivX) through libxvidcore library.",
+    "support": [
+      "video"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/libxvid/zipball/1",
+    "filter_source": {
+      "xviddec": "dec_xvid.c",
+      "rfmpgvid": "reframe_mpegvid.c"
+    },
+    "Format": [
+      "xvid",
+      "MPEG-4 Visual"
+    ],
+    "licence_required": false,
+    "binaries": 187395834,
+    "owner": "Bevara",
+    "repo": "libxvid"
+  },
+  "avidmx_1.wasm": {
+    "name": "avidmx",
+    "description": "AVI demultiplexer",
+    "filters": [
+      "avidmx"
+    ],
+    "help": "This filter demultiplexes AVI.",
+    "support": [
+      "video"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/avidmx/zipball/1",
+    "filter_source": {
+      "avidmx": "dmx_avi.c"
+    },
+    "licence_required": false,
+    "binaries": 187395047,
+    "owner": "Bevara",
+    "repo": "avidmx"
+  },
+  "theora_1.wasm": {
+    "name": "theora",
+    "description": "Theora decoder",
+    "filters": [
+      "theoradec"
+    ],
+    "help": "This filter decodes Theora streams through libtheora library.",
+    "support": [
+      "video"
+    ],
+    "sources": "https://api.github.com/repos/Bevara/theora/zipball/1",
+    "filter_source": {
+      "theoradec": "dec_theora.c"
+    },
+    "Format": [
+      "Theora"
+    ],
+    "licence_required": false,
+    "binaries": 187396073,
+    "owner": "Bevara",
+    "repo": "theora"
+  }
+}
