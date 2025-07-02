@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MP4 demo</title>
+        <style>
+            table {
+              width: 300px;
+              border-collapse: collapse;
+              margin-bottom: 10px;
+            }
+           
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    
+        </style>
+    </head>
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1> Streaming of VR/360 content </h1>
+
+    <p>
+      This demo uses a non-standard content within the MPEG-4 Part 14 container: a 360 content handled by WebCodecs and displayed on an interactive canvas. This page is embedded in the MP4 and is opened by a service worker.
+    </p>
+
+    <p>
+    In most browsers, WebCodecs support is experimental or unavailable. This demo works best on Google Chrome starting from version 94.
+    </p>
+
+
+    <h2> Preview : </h2>
+     <canvas is="universal-canvas_1" data-url="NBA_score_table_2_hd.mp4" interactive vr using="solver_with_webcodecs_1" with="isobmff_1"  use-webcodec ></canvas>
+    
+
+
+<script src="universal-canvas_1.js"></script>
+</body>
+</html>
