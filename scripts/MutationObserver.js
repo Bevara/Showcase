@@ -125,8 +125,7 @@
 
   }
 
-  function launchNoWorker(el, out, script, message) {
-    const core = el.getAttribute("using");
+  function launchNoWorker(el, core, out, script, message) {
     function addLoadEvent(script, func) {
       var oldonload = script.onload;
       if (typeof script.onload != 'function') {
@@ -143,7 +142,6 @@
 
     async function init() {
       const elt = this;
-      const core = elt.getAttribute("using");
       const messageHandlerNoWorker = await window[core]();
       const res = await messageHandlerNoWorker({ data: message });
       processMessages(el, res, messageHandlerNoWorker, out);
@@ -208,7 +206,7 @@
     }
   }
 
-  async function universal_decode(el) {
+  async function decode(el, el_using, el_with) {
     let js = null;
     let wasmBinaryFile = null;
     let dynamicLibraries = [];
@@ -216,20 +214,11 @@
 
     const scriptDirectory = el.getAttribute("script-directory") ? el.getAttribute("script-directory") : "";
 
-    if (el.getAttribute("using")) {
-      js = await addScriptDirectoryAndExtIfNeeded(scriptDirectory, el.getAttribute("using"), ".js");
-      wasmBinaryFile = await addScriptDirectoryAndExtIfNeeded(scriptDirectory, el.getAttribute("using"), ".wasm");
-    }
+    js = await addScriptDirectoryAndExtIfNeeded(scriptDirectory, el_using, ".js");
+    wasmBinaryFile = await addScriptDirectoryAndExtIfNeeded(scriptDirectory, el_using, ".wasm");
 
-    if (el.getAttribute("js")) {
-      //Overwrite js attribute
-      js = await addScriptDirectoryAndExtIfNeeded(scriptDirectory, el.getAttribute("js"), "");
-    }
-
-    if (el.getAttribute("with")) {
-      const all_using = await Promise.all(el.getAttribute("with").split(';').map(x => addScriptDirectoryAndExtIfNeeded(scriptDirectory, x, ".wasm")));
-      dynamicLibraries = dynamicLibraries.concat(all_using);
-    }
+    const all_using = await Promise.all(el_with.split(';').map(x => addScriptDirectoryAndExtIfNeeded(scriptDirectory, x, ".wasm")));
+    dynamicLibraries = dynamicLibraries.concat(all_using);
 
     // Set source
     let src = el.getAttribute("src");
@@ -238,8 +227,6 @@
       el.setAttribute("id", "canvas"); //FIXME : This is only for the demo
     }
       
-
-
     // Set output format
     let out = el.getAttribute("out");
     if (!out) {
@@ -283,7 +270,7 @@
       return;
     }
     try {
-      el.getAttribute("use-worker") == "" ? launchWorker(el, js, out, message) : launchNoWorker(el, out, js, message);
+      el instanceof HTMLCanvasElement ? launchNoWorker(el, el_using, out, js, message): launchWorker(el, js, out, message);
     } catch (e) {
       return;
     }
@@ -291,7 +278,11 @@
 
 
   new MutationObserver(mutations => mutations.forEach(mutation => mutation.addedNodes.forEach(el => {
-    if (el instanceof HTMLImageElement || el instanceof HTMLPictureElement || el instanceof HTMLAudioElement || el instanceof HTMLVideoElement || el instanceof HTMLCanvasElement)
-      universal_decode(el);
+    if (el instanceof HTMLImageElement || el instanceof HTMLPictureElement)
+      decode(el, "solver_with_sdl_1", "libjxl_1");
+    else if(el instanceof HTMLAudioElement )
+      decode(el, "solver_with_sdl_1", "liba52_1");
+    else if( el instanceof HTMLCanvasElement)
+      decode(el, "solver_with_sdl_1", "ogg_1;vorbis_1;theora_1");
   }))).observe(document.documentElement, { subtree: true, childList: true });
 }());

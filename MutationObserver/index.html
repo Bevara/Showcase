@@ -60,21 +60,32 @@ href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p
 using conventional, img, audio and canvas tag. We use MutationObserver to monitor and detect changes in the DOM and decode seamlessly these formats. </p>
 
   <h1> JXL image preview : </h1>
-  <img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" use-worker using="solver_with_sdl_1" with="libjxl_1">
+  <img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" use-worker>
 <p>
-  <pre><code>&lt;img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" using="<a href="https://github.com/Bevara/solver">solver_1</a>" with="<a href="https://github.com/Bevara/libjxl">libjxl_1</a>"&gt;&lt;/img&gt;
+
+In this image, the MutationObserver is using <a href="https://github.com/Bevara/solver">solver_1</a> with <a href="https://github.com/Bevara/libjxl">libjxl_1</a> on :
+
+  <pre><code>&lt;img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" / &gt;
 </code></pre>
+
+
+
 </p>
   <h1> A52 audio preview : </h1>
-  <audio src="../test_sequences/Canyon-5.1-48khz-448kbit.ac3" use-worker using="solver_with_sdl_1" with="liba52_1" controls>  </audio>
+  <audio src="../test_sequences/Canyon-5.1-48khz-448kbit.ac3" use-worker controls>  </audio>
   <p>
-    <pre><code>&lt;audio src="../test_sequences/Canyon-5.1-48khz-448kbit.ac3" using="<a href="https://github.com/Bevara/solver">solver_1</a>" with="<a href="https://github.com/Bevara/liba52">liba52_1</a>" controls&gt; &lt;/audio&gt;
+    The MutationObserver is using <a href="https://github.com/Bevara/solver">solver_1</a> with <a href="https://github.com/Bevara/liba52">liba52_1</a> on :
+
+    <pre><code>&lt;audio src="../test_sequences/Canyon-5.1-48khz-448kbit.ac3" controls&gt; &lt;/audio&gt;
 </code></pre>
+
 </p>
   <h1> OGG video preview : </h1>
-  <canvas data-url="../test_sequences/trailer_1080p.ogg" using="solver_with_sdl_1" with="ogg_1;vorbis_1;theora_1"></canvas>
+  <canvas data-url="../test_sequences/trailer_1080p.ogg"></canvas>
+  
   <p>
-    <pre><code>&lt;canvas data-url="../test_sequences/trailer_1080p.ogg" using="<a href="https://github.com/Bevara/solver">solver_1</a>" with="<a href="https://github.com/Bevara/ogg">ogg_1</a>;<a href="https://github.com/Bevara/vorbis">vorbis_1</a>;<a href="https://github.com/Bevara/theora" >theora_1</a>"&gt; &lt;/canvas&gt;
+    And the MutationObserver is using <a href="https://github.com/Bevara/solver">solver_1</a> with <a href="https://github.com/Bevara/ogg">ogg_1</a>, <a href="https://github.com/Bevara/vorbis">vorbis_1</a> and <a href="https://github.com/Bevara/theora" >theora_1</a> on :
+    <pre><code>&lt;canvas data-url="../test_sequences/trailer_1080p.ogg" &gt; &lt;/canvas&gt;
 </code></pre>
 </p>
 
