@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Render MKV video</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1> Render MKV video using the <code>&lt;video&gt;</code> tag </h1>
+    <p>This demo shows how a DivX Plus video can be played back in modern browsers using a WebAssembly-based filter pipeline : </p>
+    
+    <video is="universal-video_1" src="../test_sequences/Sintel_Trailer1.480p.DivX_Plus_HD.mkv" using="solver_with_webcodecs_1"
+        with="ffdmx_1;isobmff_1" controls></video>
+
+    <p>Before wide H.264 support in devices and browsers, DivX Plus made it easier for consumers to play HD content across different hardware. </p>
+    
+    <h2>Code snippet</h2>
+
+       <p>We repackage the mkv file <a
+            href="https://download.blender.org/durian/trailer/Sintel_Trailer.480p.DivX_Plus_HD.mkv">Sintel_Trailer.480p.DivX_Plus_HD.mkv </a> that contains a
+        H.264 video stream and a Advanced Audio Coding audio stream into an mp4
+        using the <em>universal</em> video tag : </p>
+
+    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="../test_sequences/Sintel_Trailer1.480p.DivX_Plus_HD.mkv" using="<a href="https://github.com/Bevara/solver">solver_1</a>" with="<a href="https://github.com/Bevara/ffdmx">ffdmx_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>"&gt; &lt;/video&gt;
+</code></pre>
+
+
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr class="total-row">
+                <td>Format</td>
+                <td>Matroska </td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>7422470</td>
+            </tr>
+            <tr>
+                <td>Duration</td>
+                <td> 52 sec</td>
+            </tr>
+            <tr>
+                <td>Overall BitRate</td>
+                <td>1137347</td>
+            </tr>
+            <tr class="total-row">
+                <td>Video</td>
+                <td>AVC</td>
+            </tr>
+            <tr>
+                <td>BitRate</td>
+                <td>1000000</td>
+            </tr>
+            <tr>
+                <td>FrameRate</td>
+                <td>24</td>
+            </tr>
+            <tr>
+                <td>Width</td>
+                <td>848</td>
+            </tr>
+            <tr>
+                <td>Height</td>
+                <td>360</td>
+            </tr>
+            <tr>
+                <td>FrameRate</td>
+                <td>25</td>
+            </tr>
+            <tr>
+                <td>FrameCount</td>
+                <td>1253</td>
+            </tr>
+            <tr class="total-row">
+                <td>Audio</td>
+                <td>AAC</td>
+            </tr>
+            <tr>
+                <td>Channels</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>SamplingRate</td>
+                <td>48000</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="universal-video_1.js"></script>
+</body>
+
+</html>
