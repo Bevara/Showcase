@@ -34,6 +34,34 @@
             border: 1px solid #ddd;
             border-radius: 8px;
         }
+
+        .format-group h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .format-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 0 0 1.5rem 0;
+        }
+
+        .format-grid a {
+            display: inline-block;
+            padding: 0.4em 0.9em;
+            background: #eef3fc;
+            border: 1px solid #c9d9f2;
+            border-radius: 999px;
+            color: #0b3d91;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .format-grid a:hover {
+            background: #dde9fb;
+        }
     </style>
 </head>
 
@@ -44,6 +72,61 @@
     <p>Web browsers support only a limited set of audio, video, and image formats.
         This demo shows how to lift those limitations using dynamic WebAssembly-based filter pipelines,
         allowing you to play, render, and convert unsupported formats directly in the browser—no plugins required.</p>
+
+    <div class="demo-section">
+        <h2>Supported formats :</h2>
+        <p>All formats decoded by the player, one demo per format — click a format to see it decoded live in the browser.</p>
+
+        <div class="format-group">
+            <h3>Images</h3>
+            <div class="format-grid">
+                <a href="libjxl/">JPEG XL</a>
+                <a href="jpeg2000/">JPEG 2000</a>
+                <a href="heif/">HEIF</a>
+                <a href="avif/">AVIF</a>
+                <a href="raw/">Camera RAW</a>
+                <a href="tiff/">TIFF</a>
+                <a href="bpg/">BPG</a>
+                <a href="qoi/">QOI</a>
+                <a href="pdf/">PDF</a>
+            </div>
+        </div>
+
+        <div class="format-group">
+            <h3>Audio</h3>
+            <div class="format-grid">
+                <a href="liba52/">Dolby AC-3</a>
+                <a href="flac/">FLAC</a>
+                <a href="mp3/">MP3</a>
+                <a href="aiff/">AIFF</a>
+                <a href="vorbis/">Ogg Vorbis</a>
+                <a href="opus/">Opus</a>
+                <a href="midi/">MIDI</a>
+            </div>
+        </div>
+
+        <div class="format-group">
+            <h3>Video</h3>
+            <div class="format-grid">
+                <a href="mkv/">Matroska</a>
+                <a href="theora/">OGG/Theora</a>
+                <a href="av1/">WebM (AV1)</a>
+                <a href="vp9/">WebM (VP9)</a>
+                <a href="hevc/">MP4 (HEVC)</a>
+                <a href="mpeg2/">MPEG-2</a>
+            </div>
+        </div>
+
+        <div class="format-group">
+            <h3>Canvas (same formats, decoded straight to &lt;canvas&gt; instead of re-encoded to MP4)</h3>
+            <div class="format-grid">
+                <a href="av1-canvas/">WebM (AV1)</a>
+                <a href="vp9-canvas/">WebM (VP9)</a>
+                <a href="hevc-canvas/">MP4 (HEVC)</a>
+                <a href="mpeg2-canvas/">MPEG-2</a>
+            </div>
+        </div>
+    </div>
 
     <div class="demo-section">
         <h2>Universal tags demo :</h2>

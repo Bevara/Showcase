@@ -1,4 +1,8 @@
 
+let start_compilation = 0;
+let end_compilation = 0;
+let end_decoding = 0;
+
 var libgpac = (() => {
   var _scriptDir = typeof document !== 'undefined' && document.currentScript ? document.currentScript.src : undefined;
   if (typeof __filename !== 'undefined') _scriptDir ||= __filename;
@@ -206,7 +210,8 @@ else if (typeof define === 'function' && define['amd'])
 
   async function initSolver() {
 
-    console.log("Start compilation " + performance.now());
+    start_compilation = performance.now();
+    
     let module = null;
 
     let statusElement = null;
@@ -369,6 +374,11 @@ else if (typeof define === 'function' && define['amd'])
             else {
               message["blob"] = new Blob([res], { type: "application/octet-stream" });
             }
+            end_decoding = performance.now(); 
+
+            document.body.prepend(`Compilation time : ${end_compilation - start_compilation}
+              Decoding time : ${end_decoding - end_compilation}`);
+            
 
           } catch (e) {
             message["blob"] = null;
@@ -507,7 +517,8 @@ else if (typeof define === 'function' && define['amd'])
         });
         module.HEAP32[argv_ptr] = 0;
 
-        console.log("Compilation end, start decoding : " + performance.now());
+        end_compilation = performance.now();
+
         //const gpac_em_sig_handler = module.cwrap('gpac_em_sig_handler', null, ['number']);
         //gpac_em_sig_handler(4);
         //setProperty({"graph":m.data.showGraph != null, "report":m.data.showReport  != null, "stats":m.data.showStats  != null})
