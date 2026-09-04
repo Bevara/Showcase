@@ -27,6 +27,14 @@
             border-radius: 4px;
         }
 
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
         table {
             width: 300px;
             border-collapse: collapse;
@@ -53,7 +61,7 @@
 
     <p>BPG (Better Portable Graphics) was proposed as a royalty-bearing-free JPEG replacement built on HEVC intra compression, offering much better compression at equivalent quality. No browser ever adopted it natively. Decoded here with <a href="https://github.com/Bevara/libbpg">libbpg_1</a>.</p>
 
-    <img is="universal-img_1" src="photo.bpg" using="solver_minimal_1" with="libbpg_1" stats />
+    <img is="universal-img_1" src="photo.bpg" using="solver_minimal_1" with="libbpg_1" />
 
     <h2>Code snippet</h2>
     <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="photo.bpg" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"

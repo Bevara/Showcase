@@ -27,6 +27,14 @@
             border-radius: 4px;
         }
 
+        video[is="universal-video_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
         table {
             width: 300px;
             border-collapse: collapse;
@@ -53,14 +61,11 @@
 
     <p>VP9 is Google's royalty-free predecessor to AV1, still widely used on the web (notably by YouTube). This demo demuxes a WebM container with <a href="https://github.com/Bevara/webmdmx">webmdmx_1</a> and decodes the VP9 video stream with <a href="https://github.com/Bevara/libvpx">libvpx_1</a>.</p>
 
-    <video is="universal-video_1" src="UshaikaRiverEmb_640x360.webm" using="solver_minimal_1" with="libvpx_1;webmdmx_1;ffmpeg-x264_1" controls></video>
-
-    <p><em>This pipeline re-encodes the decoded frames to MP4 through an H.264 encoder filter (ffmpeg-x264_1), matching exactly how this decoder is exercised in the project's own automated test suite. That encoder negotiation step is not fully reliable in every browser/GPAC build combination yet, so playback may not render everywhere — this demo still exercises the full demux + decode chain end to end.</em></p>
+    <video is="universal-video_1" src="UshaikaRiverEmb_640x360.webm" using="solver_1" with="libvpx_1;webmdmx_1;isobmff_1;libx264_1" controls></video>
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="UshaikaRiverEmb_640x360.webm" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
-     with="<a href="https://github.com/Bevara/libvpx">libvpx_1</a>;<a href="https://github.com/Bevara/webmdmx">webmdmx_1</a>;<a href="https://github.com/Bevara/ffmpeg-x264">ffmpeg-x264_1</a>" controls&gt; &lt;/video&gt;
-</code></pre>
+
+    <pre><code>&lt;video is="universal-video_1" src="UshaikaRiverEmb_640x360.webm" using="solver_1" with="libvpx_1;webmdmx_1;isobmff_1;libx264_1" controls&gt; &lt;/video&gt;</code></pre>
 
     <h2> Specifications : </h2>
 
@@ -81,12 +86,12 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>solver_1</td>
             </tr>
         </tbody>
     </table>
 
-    <script src="../scripts/universal-video_1.js"></script>
+    <script src="../scripts/universal-video_1.js?v=2"></script>
 </body>
 
 </html>

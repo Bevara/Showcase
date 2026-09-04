@@ -27,6 +27,14 @@
             border-radius: 4px;
         }
 
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
         table {
             width: 300px;
             border-collapse: collapse;
@@ -53,7 +61,7 @@
 
     <p>TIFF supports many internal compression schemes; this sample uses CCITT Group 4 fax compression, a scheme designed for black-and-white document scanning that predates the web and has no native browser support at all. Decoded here with <a href="https://github.com/Bevara/libtiff">libtiff_1</a>.</p>
 
-    <img is="universal-img_1" src="G4.TIF" using="solver_minimal_1" with="libtiff_1" stats />
+    <img is="universal-img_1" src="G4.TIF" using="solver_minimal_1" with="libtiff_1" />
 
     <h2>Code snippet</h2>
     <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="G4.TIF" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"

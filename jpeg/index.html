@@ -27,6 +27,14 @@
             border-radius: 4px;
         }
 
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
         table {
             width: 300px;
             border-collapse: collapse;
@@ -53,7 +61,7 @@
 
     <p>This demo decodes a baseline JPEG (<code>.jpg</code>) file with a dedicated WebAssembly JPEG decoder and re-encodes the result to PNG for canvas display, chaining two filters (<a href="https://github.com/Bevara/libjpeg">libjpeg_1</a> then <a href="https://github.com/Bevara/libpng">libpng_1</a>) in a single <code>with</code> attribute.</p>
 
-    <img is="universal-img_1" src="Freedom.jpg" using="solver_minimal_1" with="libpng_1;libjpeg_1" stats />
+    <img is="universal-img_1" src="Freedom.jpg" using="solver_minimal_1" with="libpng_1;libjpeg_1" />
 
     <h2>Code snippet</h2>
     <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="Freedom.jpg" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"

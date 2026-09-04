@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Decode VVC video (MP4)</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        video[is="universal-video_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Decode VVC video (MP4) using the &lt;video&gt; tag</h1>
+
+    <p>VVC/H.266 is the successor to HEVC, with roughly another 40&nbsp;% bitrate saving at equal quality. No browser decodes it natively today. This demo demuxes the MP4 container with <a href="https://github.com/Bevara/isobmff">isobmff_1</a>, decodes the VVC stream with <a href="https://github.com/Bevara/libOpenVVC">libOpenVVC_1</a> and re-encodes it to H.264 with <a href="https://github.com/Bevara/libx264">libx264_1</a> so that the native &lt;video&gt; element can play it back.</p>
+
+    <p>The source is video-only, so no audio decoder or encoder is needed in the chain. 
+
+    <video is="universal-video_1" src=" ../test_sequences/NovosobornayaSquare_640x360.mp4" using="solver_1" with="libOpenVVC_1;isobmff_1;libx264_1" controls></video>
+
+    <h2>Code snippet</h2>
+
+    <pre><code>&lt;video is="universal-video_1" src="../test_sequences/NovosobornayaSquare_640x360.mp4" using="solver_1" with="libOpenVVC_1;isobmff_1;libx264_1" controls&gt; &lt;/video&gt;</code></pre>
+
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>MP4 (VVC, video only)</td>
+            </tr>
+            <tr>
+                <td>Resolution</td>
+                <td>640x360</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>627 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="../scripts/universal-video_1.js?v=2"></script>
+</body>
+
+</html>

@@ -26,6 +26,14 @@
             border-radius: 4px;
         }
 
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
         table {
             width: 300px;
             border-collapse: collapse;
@@ -55,7 +63,7 @@
         Firefox or Chrome.</p>
 
         <img is="universal-img_1" src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" using="solver_1"
-        with="libjxl_1" stats />
+        with="libjxl_1" />
 
     <p>If your browser supports JPEG XL natively, it may decode directly. Otherwise, the WebAssembly pipeline handles
         the decoding transparently.</p>

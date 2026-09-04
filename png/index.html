@@ -27,6 +27,14 @@
             border-radius: 4px;
         }
 
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
         table {
             width: 300px;
             border-collapse: collapse;
@@ -53,7 +61,7 @@
 
     <p>PNG is decoded natively by every browser already. This demo runs it through the same WebAssembly filter pipeline used for the less common formats on this page, using the exact minimal-footprint solver (<code>solver_minimal_1</code>) the project ships for production embeds — useful as a size/behaviour baseline, and because the same <a href="https://github.com/Bevara/libpng">libpng_1</a> filter is reused as the re-encoding step by other demos (JPEG below, for instance).</p>
 
-    <img is="universal-img_1" src="Freedom.png" using="solver_minimal_1" with="libpng_1" stats />
+    <img is="universal-img_1" src="Freedom.png" using="solver_minimal_1" with="libpng_1" />
 
     <h2>Code snippet</h2>
     <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="Freedom.png" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"

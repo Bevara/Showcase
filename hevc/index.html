@@ -27,6 +27,14 @@
             border-radius: 4px;
         }
 
+        video[is="universal-video_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
         table {
             width: 300px;
             border-collapse: collapse;
@@ -51,16 +59,17 @@
     <a href="javascript:history.back()">&larr; Back</a>
     <h1>Decode HEVC video (MP4) using the &lt;video&gt; tag</h1>
 
-    <p>HEVC/H.265 offers roughly double the compression efficiency of H.264 but carries licensing costs that keep many browsers from supporting it natively. This demo demuxes the MP4 container with <a href="https://github.com/Bevara/isobmff">isobmff_1</a> and decodes the HEVC stream with <a href="https://github.com/Bevara/libde265">libde265_1;libfaad_1</a>.</p>
+    <p>HEVC/H.265 offers roughly double the compression efficiency of H.264 but carries licensing costs that keep many browsers from supporting it natively. This demo demuxes the MP4 container with <a href="https://github.com/Bevara/isobmff">isobmff_1</a>, decodes the HEVC stream with <a href="https://github.com/Bevara/libde265">libde265_1</a> and re-encodes it to H.264 with <a href="https://github.com/Bevara/libx264">libx264_1</a> so that the native &lt;video&gt; element can play it back.</p>
 
-    <video is="universal-video_1" src="hevcds_720p30_2M.mp4" using="solver_minimal_1" with="libde265_1;libfaad_1;isobmff_1;ffmpeg-x264_1" controls></video>
+    <p>The source and the filter chain are the ones covered by the <code>#libde265</code> functional test: a video-only sequence. Keeping the AAC audio track (and adding <code>libfaad_1</code> to the pipeline) makes the muxer abort - "PID(s) configuration unknown on one or more inputs" - because the decoded audio has no encoder in this chain.</p>
 
-    <p><em>This pipeline re-encodes the decoded frames to MP4 through an H.264 encoder filter (ffmpeg-x264_1), matching exactly how this decoder is exercised in the project's own automated test suite. That encoder negotiation step is not fully reliable in every browser/GPAC build combination yet, so playback may not render everywhere — this demo still exercises the full demux + decode chain end to end.</em></p>
+    <p><strong>Known issue:</strong> with the current build this pipeline still produces an empty MP4 - <code>libde265_1</code> emits no frames, so <code>libx264_1</code> encodes none and the muxer writes a header-only file. The <code>#libde265</code> test does not catch it: it only waits for the decoding promise to settle and never inspects the file it produced. If your browser happens to support HEVC natively, the &lt;video&gt; tag may still start playing the source directly - that's the browser's own built-in decoder, not this pipeline.</p>
+
+    <video is="universal-video_1" src="../test_sequences/hevcds_720p30_2M.mp4" using="solver_1" with="libde265_1;isobmff_1;libx264_1" controls></video>
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="hevcds_720p30_2M.mp4" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
-     with="<a href="https://github.com/Bevara/libde265">libde265_1;libfaad_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/ffmpeg-x264">ffmpeg-x264_1</a>" controls&gt; &lt;/video&gt;
-</code></pre>
+
+    <pre><code>&lt;video is="universal-video_1" src="../test_sequences/hevcds_720p30_2M.mp4" using="solver_1" with="libde265_1;isobmff_1;libx264_1" controls&gt; &lt;/video&gt;</code></pre>
 
     <h2> Specifications : </h2>
 
@@ -73,7 +82,7 @@
         <tbody>
             <tr>
                 <td>Format</td>
-                <td>MP4 (HEVC)</td>
+                <td>MP4 (HEVC, video only)</td>
             </tr>
             <tr>
                 <td>FileSize</td>
@@ -81,12 +90,12 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>solver_1</td>
             </tr>
         </tbody>
     </table>
 
-    <script src="../scripts/universal-video_1.js"></script>
+    <script src="../scripts/universal-video_1.js?v=2"></script>
 </body>
 
 </html>

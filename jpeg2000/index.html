@@ -27,6 +27,14 @@
             border-radius: 4px;
         }
 
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
         table {
             width: 300px;
             border-collapse: collapse;
@@ -53,7 +61,7 @@
 
     <p>JPEG 2000 (<code>.jp2</code>/<code>.j2k</code>) offers wavelet-based compression with lossless and progressive modes, but has very limited native browser support. This demo decodes a <code>.jp2</code> file with <a href="https://github.com/Bevara/openjpeg">openjpeg_1</a>.</p>
 
-    <img is="universal-img_1" src="Cevennes2.jp2" using="solver_minimal_1" with="openjpeg_1" stats />
+    <img is="universal-img_1" src="Cevennes2.jp2" using="solver_minimal_1" with="openjpeg_1" />
 
     <h2>Code snippet</h2>
     <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="Cevennes2.jp2" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"

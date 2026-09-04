@@ -27,6 +27,14 @@
             border-radius: 4px;
         }
 
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
         table {
             width: 300px;
             border-collapse: collapse;
@@ -53,7 +61,7 @@
 
     <p>This demo renders the first page of a PDF document to a raster image directly in the browser, usingthe poppler PDF rendering library (<a href="https://github.com/Bevara/poppler">libpoppler_1</a>).</p>
 
-    <img is="universal-img_1" src="minimal-document.pdf" using="solver_minimal_1" with="libpoppler_1" out="rgb" stats />
+    <img is="universal-img_1" src="minimal-document.pdf" using="solver_minimal_1" with="libpoppler_1" out="rgb" />
 
     <h2>Code snippet</h2>
     <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="minimal-document.pdf" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"

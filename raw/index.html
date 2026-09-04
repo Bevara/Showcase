@@ -27,6 +27,14 @@
             border-radius: 4px;
         }
 
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
         table {
             width: 300px;
             border-collapse: collapse;
@@ -53,7 +61,7 @@
 
     <p>Digital cameras write unprocessed sensor data in dozens of manufacturer-specific RAW formats (Sony ARW, Canon CR2, Nikon NEF, Pentax PEF, Panasonic RW2, and more) that browsers cannot open at all. This demo decodes Adobe's open, documented DNG variant with <a href="https://github.com/Bevara/libraw">libraw_1</a>, which also supports the other RAW variants above.</p>
 
-    <img is="universal-img_1" src="RAW_LEICA_M8.DNG" using="solver_minimal_1" with="libraw_1" stats />
+    <img is="universal-img_1" src="RAW_LEICA_M8.DNG" using="solver_minimal_1" with="libraw_1" />
 
     <h2>Code snippet</h2>
     <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="RAW_LEICA_M8.DNG" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"

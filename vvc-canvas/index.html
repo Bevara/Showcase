@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Decode HEVC video (Canvas)</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        canvas[is="universal-canvas_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Decode VVC video (MP4) using the &lt;canvas&gt; tag</h1>
+
+    <p>Same VVC/MP4 source as the <a href="../vvc/">video tag version</a>, but rendered directly to a &lt;canvas&gt; instead of being re-encoded to H.264. No encoder is needed in the chain.</p>
+
+    <canvas is="universal-canvas_1" data-url=" ./test_sequences/NovosobornayaSquare_640x360.mp4" using="solver_1" with="libOpenVVC_1;isobmff_1"> </canvas>
+
+    <h2>Code snippet</h2>
+    <pre><code>&lt;canvas is="<a href="https://github.com/Bevara/player">universal-canvas_1</a>" data-url=" ./test_sequences/NovosobornayaSquare_640x360.mp4" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+     with="<a href="https://github.com/Bevara/libOpenVVC">libOpenVVC_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>"&gt; &lt;/canvas&gt;
+</code></pre>
+
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>MP4 (VVC, video only)</td>
+            </tr>
+            <tr>
+                <td>Resolution</td>
+                <td>640x360</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>627 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="../scripts/universal-canvas_1.js?v=2"></script>
+</body>
+
+</html>

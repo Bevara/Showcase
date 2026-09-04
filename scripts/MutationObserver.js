@@ -279,10 +279,10 @@
 
   new MutationObserver(mutations => mutations.forEach(mutation => mutation.addedNodes.forEach(el => {
     if (el instanceof HTMLImageElement || el instanceof HTMLPictureElement)
-      decode(el, "solver_with_sdl_1", "libjxl_1");
+      decode(el, "solver_1", "libjxl_1");
     else if(el instanceof HTMLAudioElement )
-      decode(el, "solver_with_sdl_1", "liba52_1");
+      decode(el, "solver_1", "liba52_1");
     else if( el instanceof HTMLCanvasElement)
-      decode(el, "solver_with_sdl_1", "ogg_1;vorbis_1;theora_1");
+      decode(el, "solver_1", "ogg_1;vorbis_1;theora_1");
   }))).observe(document.documentElement, { subtree: true, childList: true });
 }());

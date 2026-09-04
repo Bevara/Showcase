@@ -27,6 +27,14 @@
             border-radius: 4px;
         }
 
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
         table {
             width: 300px;
             border-collapse: collapse;
@@ -53,7 +61,7 @@
 
     <p>QOI (“Quite OK Image”) is a modern, deliberately simple lossless format designed to encode and decode much faster than PNG at a comparable size. Decoded here with <a href="https://github.com/Bevara/qoi">libqoi_1</a></p>
 
-    <img is="universal-img_1" src="kodim23.qoi" using="solver_minimal_1" with="libqoi_1" stats />
+    <img is="universal-img_1" src="kodim23.qoi" using="solver_minimal_1" with="libqoi_1" />
 
     <h2>Code snippet</h2>
     <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="kodim23.qoi" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"

@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
     <title>Render MKV video</title>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <style>
@@ -23,6 +24,14 @@
             background: #eee;
             padding: 0.2em 0.4em;
             border-radius: 4px;
+        }
+
+        video[is="universal-video_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
         }
 
         table {
@@ -48,23 +57,16 @@
 <body>
     <a href="javascript:history.back()">&larr; Back</a>
     <h1> Render MKV video using the <code>&lt;video&gt;</code> tag </h1>
-    <p>This demo shows how a DivX Plus video can be played back in modern browsers using a WebAssembly-based filter pipeline : </p>
-    
-    <video is="universal-video_1" src="../test_sequences/Sintel_Trailer.1080p.DivX_Plus_HD.mkv" using="solver_with_webcodecs_1"
-        with="ffdmx_1;isobmff_1" controls bench></video>
 
-    <p>Before wide H.264 support in devices and browsers, DivX Plus made it easier for consumers to play HD content across different hardware. </p>
-    
+    <p>This demo shows how a DivX Plus video can be played back in modern browsers using a WebAssembly-based filter pipeline. This particular source already contains H.264/AAC, so the pipeline repackages (remuxes) rather than re-encodes.</p>
+
+    <p><strong>Known issue:</strong> the underlying GPAC pipeline currently fails on this source ("Cannot find any filter providing encoding for c=avc" - passthrough of an already-AVC track isn't resolving the way it should). No functional test covers the Matroska/<code>ffdmx_1</code> pipeline yet, so this demo is not verified by the test suite. If your browser natively supports this file's H.264/AAC-in-Matroska content, the &lt;video&gt; tag may still appear to play - that's the browser's own built-in decoder, not this pipeline.</p>
+
+    <video is="universal-video_1" src="../test_sequences/Sintel_Trailer.480p.DivX_Plus_HD.mkv" using="solver_1" with="ffdmx_1;isobmff_1" use-webcodec controls></video>
+
     <h2>Code snippet</h2>
 
-       <p>We repackage the mkv file <a
-            href="https://download.blender.org/durian/trailer/Sintel_Trailer.480p.DivX_Plus_HD.mkv">Sintel_Trailer.480p.DivX_Plus_HD.mkv </a> that contains a
-        H.264 video stream and a Advanced Audio Coding audio stream into an mp4
-        using the <em>universal</em> video tag : </p>
-
-    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="../test_sequences/Sintel_Trailer.480p.DivX_Plus_HD.mkv" using="<a href="https://github.com/Bevara/solver">solver_1</a>" with="<a href="https://github.com/Bevara/ffdmx">ffdmx_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>"&gt; &lt;/video&gt;
-</code></pre>
-
+    <pre><code>&lt;video is="universal-video_1" src="../test_sequences/Sintel_Trailer.480p.DivX_Plus_HD.mkv" using="solver_1" with="ffdmx_1;isobmff_1" use-webcodec controls&gt; &lt;/video&gt;</code></pre>
 
     <h2> Specifications : </h2>
 
@@ -77,7 +79,7 @@
         <tbody>
             <tr class="total-row">
                 <td>Format</td>
-                <td>Matroska </td>
+                <td>Matroska</td>
             </tr>
             <tr>
                 <td>FileSize</td>
@@ -85,7 +87,7 @@
             </tr>
             <tr>
                 <td>Duration</td>
-                <td> 52 sec</td>
+                <td>52 sec</td>
             </tr>
             <tr>
                 <td>Overall BitRate</td>
@@ -112,10 +114,6 @@
                 <td>360</td>
             </tr>
             <tr>
-                <td>FrameRate</td>
-                <td>25</td>
-            </tr>
-            <tr>
                 <td>FrameCount</td>
                 <td>1253</td>
             </tr>
@@ -131,10 +129,14 @@
                 <td>SamplingRate</td>
                 <td>48000</td>
             </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
         </tbody>
     </table>
 
-    <script src="universal-video_1.js"></script>
+    <script src="universal-video_1.js?v=2"></script>
 </body>
 
 </html>
