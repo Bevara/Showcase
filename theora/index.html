@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Render OGG/Theora video</title>
+    <title>Decode Ogg/Theora video</title>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <style>
         body {
@@ -47,21 +47,20 @@
 
 <body>
     <a href="javascript:history.back()">&larr; Back</a>
-    <h1> Render OGG/Theora video using the <code>&lt;canvas&gt;</code> tag </h1>
-    <p>This demo shows how an Ogg/Theora video can be played back in modern browsers using a WebAssembly-based filter pipeline. </p>
+    <h1>Decode Ogg/Theora video using the <code>&lt;video&gt;</code> tag</h1>
+    <p>This demo shows how an Ogg/Theora video can be played back in modern browsers using a WebAssembly-based filter pipeline.</p>
     
-    <canvas is="universal-canvas_1" data-url="https://bevara.github.io/Showcase/test_sequences/trailer_1080p.ogg" using="solver_1"
-        with="ogg_1;vorbis_1;theora_1"></canvas>
+    <video is="universal-video_1" src="https://bevara.github.io/Showcase/test_sequences/trailer_1080p.ogg" using="solver_1"
+        with="ogg_1;vorbis_1;theora_1;libx264_1;isobmff_1" use-webcodec controls></video>
 
-    <p>Although this format was once promoted as an open video standard, most major browsers (including Chrome, Firefox, and Safari) no longer natively support it.</p>
+    <p>Although this format was once promoted as an open video standard, most major browsers (including Chrome, Firefox and Safari) no longer support it natively.</p>
     
     <h2>Code snippet</h2>
-    <p>We decode the ogg file <a
-            href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a> that contains a
-        theora video stream and a vorbis audio stream
-        using the <em>universal</em> canvas tag : </p>
+    <p>We decode the Ogg file <a
+            href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a>, which contains a
+        Theora video stream and a Vorbis audio stream, using the <em>universal</em> video tag:</p>
 
-    <pre><code>&lt;canvas is="<a href="https://github.com/Bevara/player">universal-canvas_1</a>" data-url="trailer_1080p.ogg" using="<a href="https://github.com/Bevara/solver">solver_1</a>" with="<a href="https://github.com/Bevara/ogg">ogg_1</a>;<a href="https://github.com/Bevara/vorbis">vorbis_1</a>;<a href="https://github.com/Bevara/theora" >theora_1</a>"&gt; &lt;/canvas&gt;
+    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="trailer_1080p.ogg" using="<a href="https://github.com/Bevara/solver">solver_1</a>" with="<a href="https://github.com/Bevara/ogg">ogg_1</a>;<a href="https://github.com/Bevara/vorbis">vorbis_1</a>;<a href="https://github.com/Bevara/theora">theora_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>" controls&gt; &lt;/video&gt;
 </code></pre>
 
 
@@ -76,7 +75,7 @@
         <tbody>
             <tr class="total-row">
                 <td>Format</td>
-                <td>Ogg </td>
+                <td>Ogg</td>
             </tr>
             <tr>
                 <td>FileSize</td>
@@ -84,7 +83,7 @@
             </tr>
             <tr>
                 <td>Duration</td>
-                <td> 33 sec</td>
+                <td>33 sec</td>
             </tr>
             <tr>
                 <td>Overall BitRate</td>
@@ -109,10 +108,6 @@
             <tr>
                 <td>Height</td>
                 <td>1080</td>
-            </tr>
-            <tr>
-                <td>FrameRate</td>
-                <td>25</td>
             </tr>
             <tr>
                 <td>FrameCount</td>
@@ -140,12 +135,12 @@
             </tr>
             <tr>
                 <td>StreamSize</td>
-                <td>329,9 kB</td>
+                <td>329.9 kB</td>
             </tr>
         </tbody>
     </table>
 
-    <script src="../scripts/universal-canvas_1.js"></script>
+    <script src="../scripts/universal-video_1.js"></script>
 </body>
 
 </html>
