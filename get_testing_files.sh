@@ -3,7 +3,7 @@ curl https://jpegxl.info/images/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl -o ./test_s
 curl https://download.blender.org/peach/trailer/trailer_1080p.ogg -o ./test_sequences/trailer_1080p.ogg
 curl https://download.blender.org/durian/trailer/Sintel_Trailer.480p.DivX_Plus_HD.mkv -o ./test_sequences/Sintel_Trailer.480p.DivX_Plus_HD.mkv
 curl http://download.tsi.telecom-paristech.fr/gpac/tests/live360/NBA_score_table_2_hd.mp4 -o ./test_sequences/NBA_score_table_2_hd.mp4
-curl http://download.tsi.telecom-paristech.fr/gpac/dataset/dash/uhd/mux_sources/hevcds_720p30_2M.mp4 -o ./test_sequences/hevcds_720p30_2M.mp4
+curl -L -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" http://download.tsi.telecom-paristech.fr/gpac/dataset/dash/uhd/mux_sources/hevcds_720p30_2M.mp4 -o ./test_sequences/hevcds_720p30_2M.mp4
 curl https://download.blender.org/durian/trailer/Sintel_Trailer.480p.DivX_Home_Theater.divx -o ./test_sequences/Sintel_Trailer.480p.DivX_Home_Theater.divx
 curl https://www.elecard.com/storage/video/CityHall_640x360.webm -o ./test_sequences/CityHall_640x360.webm
 curl https://dl6.webmfiles.org/elephants-dream.webm -o ./test_sequences/elephants-dream.webm
