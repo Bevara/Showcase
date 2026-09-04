@@ -64,7 +64,7 @@
         using the <em>universal</em> img tag : </p>
     <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img</a>"
      src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl"
-     using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+     using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
      with="<a href="https://github.com/Bevara/libjxl">libjxl_1</a>"&gt;
 &lt;/img&gt;
 </code></pre>
@@ -108,7 +108,7 @@
                 const previewEl_wasm = document.getElementById('wasm_preview');
 
                 previewEl_native.innerHTML = `<img id="nativeimg" src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" />`;
-                previewEl_wasm.innerHTML = `<img is="universal-img_1" id="wasmimg" src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash_1080p.jxl" using="solver_1" with="libjxl_1" bench/>`;
+                previewEl_wasm.innerHTML = `<img is="universal-img_1" id="wasmimg" src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash_1080p.jxl" using="solver_minimal_1" with="libjxl_1" bench/>`;
 
                 const resultEl_wasm = document.getElementById('result_wasm');
                 const resultEl_native = document.getElementById('result_native');

@@ -53,12 +53,12 @@
 
     <p>MIDI files store a sequence of note events rather than audio samples; this demo synthesizes actual audio from them in the browser using a WebAssembly build of TiMidity++ (<a href="https://github.com/Bevara/libmidi">libmidi_1</a>) with a bundled General MIDI patch set.</p>
 
-    <audio is="universal-audio_1" src="test.mid" using="solver_1" with="libmidi_1" controls stats>
+    <audio is="universal-audio_1" src="test.mid" using="solver_minimal_1" with="libmidi_1" controls stats>
     </audio>
 
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="test.mid" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="test.mid" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
         with="<a href="https://github.com/Bevara/libmidi">libmidi_1</a>" controls&gt; &lt;/audio&gt;
 </code></pre>
 
@@ -81,7 +81,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_1</td>
+                <td>solver_minimal_1</td>
             </tr>
         </tbody>
     </table>
