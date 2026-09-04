@@ -65,11 +65,11 @@
 
     <p><strong>Known issue:</strong> with the current build this pipeline still produces an empty MP4 - <code>libde265_1</code> emits no frames, so <code>libx264_1</code> encodes none and the muxer writes a header-only file. The <code>#libde265</code> test does not catch it: it only waits for the decoding promise to settle and never inspects the file it produced. If your browser happens to support HEVC natively, the &lt;video&gt; tag may still start playing the source directly - that's the browser's own built-in decoder, not this pipeline.</p>
 
-    <video is="universal-video_1" src="../test_sequences/hevcds_720p30_2M.mp4" using="solver_1" with="libde265_1;isobmff_1;libx264_1" controls></video>
+    <video is="universal-video_1" src="https://bevara.github.io/Showcase/test_sequences/hevcds_720p30_2M.mp4" using="solver_1" with="libde265_1;isobmff_1;libx264_1" controls></video>
 
     <h2>Code snippet</h2>
 
-    <pre><code>&lt;video is="universal-video_1" src="../test_sequences/hevcds_720p30_2M.mp4" using="solver_1" with="libde265_1;isobmff_1;libx264_1" controls&gt; &lt;/video&gt;</code></pre>
+    <pre><code>&lt;video is="universal-video_1" src="hevcds_720p30_2M.mp4" using="solver_1" with="libde265_1;isobmff_1;libx264_1" controls&gt; &lt;/video&gt;</code></pre>
 
     <h2> Specifications : </h2>
 
