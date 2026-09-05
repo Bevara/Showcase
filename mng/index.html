@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Display MNG and JNG</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Display MNG and JNG using the &lt;img&gt; tag</h1>
+
+    <p>MNG is the animated companion PNG never got: same chunk structure, but able to hold a sequence, and JNG is its single-frame variant carrying JPEG data instead of PNG. Neither is supported by any browser today. Decoded here with <a href="https://github.com/Bevara/libmng">libmng_1</a>.</p>
+
+    <h2>MNG (MNG-VLC, one frame)</h2>
+    <img is="universal-img_1" src="testcard_vlc.mng" using="solver_minimal_1" with="libmng_1" alt="MNG image" />
+
+    <h2>JNG (JPEG data in a PNG-style container)</h2>
+    <img is="universal-img_1" src="testcard.jng" using="solver_minimal_1" with="libmng_1" alt="JNG image" />
+
+    <h2>Code snippet</h2>
+    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard_vlc.mng" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+     with="libmng_1"&gt; &lt;/img&gt;
+</code></pre>
+
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup><col><col></colgroup>
+        <tbody>
+            <tr><td>Format</td><td>MNG-VLC and JNG, 128&times;128</td></tr>
+            <tr><td>Solver</td><td>solver_minimal_1</td></tr>
+        </tbody>
+    </table>
+
+    <script src="../scripts/universal-img_1.js"></script>
+</body>
+
+</html>
