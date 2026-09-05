@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Play tracker modules</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Play tracker modules using the &lt;audio&gt; tag</h1>
+
+    <p>A tracker module is not a sample stream but a score plus its instruments: the pattern data says which sample to play, at which pitch, on which channel. The filter renders it to PCM in the browser with <a href="https://github.com/Bevara/libxmp">libxmp_1</a>, which covers Protracker MOD, Fast Tracker XM, Scream Tracker S3M, Impulse Tracker IT and some ninety other formats.</p>
+
+    <audio is="universal-audio_1" src="ode2ptk.mod" using="solver_minimal_1" with="libxmp_1" controls stats>
+    </audio>
+
+    <h2>Code snippet</h2>
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ode2ptk.mod" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+     with="<a href="https://github.com/Bevara/libxmp">libxmp_1</a>" controls&gt; &lt;/audio&gt;
+</code></pre>
+
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>Protracker MOD (4 channels)</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>23 Ko</td>
+            </tr>
+            <tr>
+                <td>Rendered as</td>
+                <td>16-bit stereo PCM, 44.1 kHz</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_minimal_1</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="../scripts/universal-audio_1.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Play Musepack audio</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Play Musepack audio using the &lt;audio&gt; tag</h1>
+
+    <p>Musepack is a lossy codec derived from MPEG-1 Layer 2, tuned for transparency at high bitrates rather than for low ones. Decoded with <a href="https://github.com/Bevara/libmpc">libmpc_1</a> (libmpcdec, stream versions 7 and 8).</p>
+
+    <audio is="universal-audio_1" src="ff-16b-2c-44100hz.mpc" using="solver_minimal_1" with="libmpc_1" controls stats>
+    </audio>
+
+    <h2>Code snippet</h2>
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ff-16b-2c-44100hz.mpc" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+     with="libmpc_1" controls&gt; &lt;/audio&gt;
+</code></pre>
+
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>Musepack SV8</td>
+            </tr>
+            <tr>
+                <td>Audio</td>
+                <td>16-bit stereo, 44.1 kHz</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>144 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_minimal_1</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="../scripts/universal-audio_1.js"></script>
+</body>
+
+</html>

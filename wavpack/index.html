@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Play WavPack audio</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Play WavPack audio using the &lt;audio&gt; tag</h1>
+
+    <p>WavPack is a lossless codec with a hybrid mode: it can split a file into a small lossy part and a correction file. This decodes the lossless stream with <a href="https://github.com/Bevara/libwavpack">libwavpack_1</a>.</p>
+
+    <audio is="universal-audio_1" src="ff-16b-2c-44100hz.wv" using="solver_minimal_1" with="libwavpack_1" controls stats>
+    </audio>
+
+    <h2>Code snippet</h2>
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ff-16b-2c-44100hz.wv" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+     with="libwavpack_1" controls&gt; &lt;/audio&gt;
+</code></pre>
+
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>WavPack, lossless</td>
+            </tr>
+            <tr>
+                <td>Audio</td>
+                <td>16-bit stereo, 44.1 kHz</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>1.2 Mo</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_minimal_1</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="../scripts/universal-audio_1.js"></script>
+</body>
+
+</html>
