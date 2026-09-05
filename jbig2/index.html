@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Display JBIG2 images</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Display JBIG2 images using the &lt;img&gt; tag</h1>
+
+    <p>JBIG2 (ITU-T T.88) is the successor to JBIG: it recognises repeated symbols across a scanned page and codes each one once. This test image is the one published in annex H of the standard. Decoded here with <a href="https://github.com/Bevara/libjbig2">libjbig2_1</a></p>
+
+    <img is="universal-img_1" src="annex-h.jbig2" using="solver_minimal_1" with="libjbig2_1" alt="JBIG2 test image from annex H" />
+
+    <h2>Code snippet</h2>
+    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="annex-h.jbig2" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+     with="<a href="https://github.com/Bevara/libjbig2">libjbig2_1</a>"&gt; &lt;/img&gt;
+</code></pre>
+
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>JBIG2 (bi-level, standalone stream)</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>1 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_minimal_1</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="../scripts/universal-img_1.js"></script>
+</body>
+
+</html>
