@@ -338,58 +338,6 @@ var libgpac=(()=>{var _scriptName=globalThis.document?.currentScript?.src;return
       let on_done_resolve = null;
       let on_done_reject = null;
 
-      params["gpac_done"] = (code) => {
-        //const props  = getProperty(["width", "height"]);
-        if (code) console.log('(exit code ' + code + ')');
-        const message = {
-          "exit_code": code
-        };
-
-        if (segTimer) {
-          clearInterval(segTimer);
-          segTimer = null;
-          segFlush(true);
-          if (m.data.onProgressDone) m.data.onProgressDone();
-        }
-
-        /* en mode progressif la sortie a deja ete remise segment par segment,
-         * et m.data.dst est un manifeste que personne ne lit */
-        if (m.data.dst && !m.data.progressive) {
-          try {
-            const res = FS.readFile(m.data.dst, { encoding: "binary" });
-            if (m.data.mime_type) {
-              message["blob"] = new Blob([res], { type: m.data.mime_type });
-            }
-
-            else {
-              message["blob"] = new Blob([res], { type: "application/octet-stream" });
-            }
-
-          } catch (e) {
-            message["blob"] = null;
-          }
-        }
-
-        if (ENVIRONMENT_IS_WORKER) {
-          postMessage(message);
-        } else if (ENVIRONMENT_IS_WEB) {
-          on_done_resolve(message);
-        }
-      };
-
-      try {
-        module = await libgpac(params);
-      } catch (e) {
-        console.log(e);
-        if (ENVIRONMENT_IS_WORKER) {
-          postMessage({ exit_code: -1, printErr: "WORKER EXCEPTION in libgpac: " + (e.stack || e) });
-        } else if (ENVIRONMENT_IS_WEB) {
-          if (on_done_reject) on_done_reject(e);
-        }
-        return;
-      }
-      const FS = module['FS'];
-
       /* Lecture progressive par Media Source Extensions.
        *
        * Au lieu de muxer un fichier unique et de rendre un seul blob a la fin,
@@ -439,6 +387,61 @@ var libgpac=(()=>{var _scriptName=globalThis.document?.currentScript?.src;return
         try { FS.mkdir(SEG_DIR); } catch (e) {}
         segTimer = setInterval(() => segFlush(false), 200);
       }
+
+
+
+      params["gpac_done"] = (code) => {
+        //const props  = getProperty(["width", "height"]);
+        if (code) console.log('(exit code ' + code + ')');
+        const message = {
+          "exit_code": code
+        };
+
+        if (segTimer) {
+          clearInterval(segTimer);
+          segTimer = null;
+          //le dernier segment n'a pas de successeur : la fin de session fait foi
+          segFlush(true);
+          if (m.data.onProgressDone) m.data.onProgressDone();
+        }
+
+        //in progressive mode the element is already fed through the SourceBuffer,
+        //there is no final blob to hand back
+        if (m.data.dst && !m.data.progressive) {
+          try {
+            const res = FS.readFile(m.data.dst, { encoding: "binary" });
+            if (m.data.mime_type) {
+              message["blob"] = new Blob([res], { type: m.data.mime_type });
+            }
+
+            else {
+              message["blob"] = new Blob([res], { type: "application/octet-stream" });
+            }
+
+          } catch (e) {
+            message["blob"] = null;
+          }
+        }
+
+        if (ENVIRONMENT_IS_WORKER) {
+          postMessage(message);
+        } else if (ENVIRONMENT_IS_WEB) {
+          on_done_resolve(message);
+        }
+      };
+
+      try {
+        module = await libgpac(params);
+      } catch (e) {
+        console.log(e);
+        if (ENVIRONMENT_IS_WORKER) {
+          postMessage({ exit_code: -1, printErr: "WORKER EXCEPTION in libgpac: " + (e.stack || e) });
+        } else if (ENVIRONMENT_IS_WEB) {
+          if (on_done_reject) on_done_reject(e);
+        }
+        return;
+      }
+      const FS = module['FS'];
 
 
       //From gpac_pre.js
@@ -494,14 +497,19 @@ var libgpac=(()=>{var _scriptName=globalThis.document?.currentScript?.src;return
       // Reframer and resampler
       registerFilter("reframer", "_reframer_register");
       registerFilter("resample", "_resample_register");
-      registerFilter("compositor", "_compositor_register");
 
-      registerFilter("dasher", "_dasher_register");
+      /* Le dasher n'est charge que pour une sortie video progressive : c'est lui
+       * qui decoupe le flux en segments ecrits un a un dans le FS virtuel, que
+       * segFlush() ci-dessus remet a MSE au fur et a mesure. */
+      if (m.data.progressive) {
+        registerFilter("dasher", "_dasher_register");
+      }
 
       if (m.data.src) {
         registerFilter("httpin", "_httpin_register");
 
         if (m.data.interactive || m.data.vr) {
+          registerFilter("compositor", "_compositor_register");
           let interactive_mode = "compositor:player=base:src=" + m.data.src;
           if (m.data.vr) {
             interactive_mode = interactive_mode + "#VR";
@@ -511,10 +519,8 @@ var libgpac=(()=>{var _scriptName=globalThis.document?.currentScript?.src;return
           args.push("-i");
           /* #Representation=1 place toutes les pistes dans une seule
            * representation DASH, donc un seul SourceBuffer cote MSE au lieu
-           * d'un par piste (cf. la doc du dasher : sans cela il produit des
-           * segments non multiplexes). ":gpac:" est le mot-cle d'echappement
-           * documente pour les URL - sans lui les options resteraient collees
-           * a l'URL. */
+           * d'un par piste. ":gpac:" est le mot-cle d'echappement documente
+           * pour les URL - sans lui les options resteraient collees a l'URL. */
           args.push(m.data.progressive ? (m.data.src + ":gpac:#Representation=1") : m.data.src);
         }
       }
@@ -530,22 +536,12 @@ var libgpac=(()=>{var _scriptName=globalThis.document?.currentScript?.src;return
         // output.
         /* En mode progressif, chaque segment doit pouvoir commencer sur une
          * image cle : sans cela le dasher ne peut couper qu'au GOP (250 images
-         * par defaut chez x264, soit 10s) et signale une derive croissante.
-         * gopdur exprime l'intervalle en secondes, donc independamment de la
-         * cadence de la source. */
+         * par defaut chez x264, soit 10 s) et signale une derive croissante.
+         * gopdur exprime l'intervalle en secondes, independamment de la cadence. */
         const constraints = m.data.progressive
           ? m.data.transcode.map(c => c === "c=avc" ? ("c=avc:gopdur=" + (m.data.seg_dur || 1)) : c)
           : m.data.transcode;
-        /* Deux contraintes nues (c=avc et c=aac) se resolvent vers le meme
-         * registre "wcenc" : GPAC ne cree alors qu'une seule instance, celle
-         * du premier codec, et le PID audio ne trouve plus aucune chaine
-         * ("No filter chain found for PID A2 in filter vorbisdec"). Nommer le
-         * filtre explicitement force une instance par codec. On ne le fait que
-         * sous useWebcodec : hors de ce mode, "wcenc" n'est pas enregistre et
-         * le prefixe ferait echouer la session ("Failed to find filter
-         * wcenc:c=avc"). Les encodeurs natifs (encx264, encopus) n'ont pas
-         * besoin de cela, chaque codec ayant son propre registre. */
-        args = args.concat(m.data.useWebcodec ? constraints.map(c => "wcenc:" + c) : constraints);
+        args = args.concat(constraints);
 
         if (m.data.useWebcodec) {
           // enc_webcodec.c's EM_JS output callback holds back every wcenc
@@ -567,24 +563,15 @@ var libgpac=(()=>{var _scriptName=globalThis.document?.currentScript?.src;return
         args.push("-o");
         if (m.data.progressive) {
           /* profile=live rend chaque segment autonome. Le gabarit est fixe ici
-           * parce que segFlush() ci-dessus parcourt les segments par leur nom. */
+           * parce que segFlush() ci-dessus parcourt les segments par leur nom.
+           * sbound=closest : couper au SAP le plus proche de la borne plutot que
+           * de l'imposer - MSE n'exige pas des segments de duree egale, seulement
+           * une timeline contigue. stl : timeline de segments, pour decrire les
+           * durees reelles et eviter un faux signalement de derive. */
           args.push(SEG_DIR + "/live.mpd:profile=live:muxtype=mp4"
             + ":segdur=" + (m.data.seg_dur || 1)
             + ":segext=m4s:initext=mp4:template=seg_$Init=init$$Number$"
-            /* sbound=closest : couper au SAP le plus proche de la borne
-             * theorique plutot que de l'imposer. L'encodeur ne place pas
-             * toujours une image cle exactement sur la borne (entree a
-             * cadence variable), et le dasher signalait alors une derive.
-             * MSE n'exige pas des segments de duree egale, seulement une
-             * timeline contigue. */
             + ":sbound=closest"
-            /* stl : timeline de segments. L'encodeur ne peut pas garantir
-             * une image cle exactement sur chaque borne, donc les durees
-             * varient ; sans stl le dasher part du principe qu'elles sont
-             * fixes et signale une derive a chaque segment. La timeline
-             * decrit les durees reelles. Le manifeste n'est de toute facon
-             * pas lu ici - seuls les segments le sont - donc c'est sans
-             * effet sur la lecture, cela supprime juste le faux positif. */
             + ":stl");
         } else {
           args.push(m.data.dst_opts ? (m.data.dst + ":" + m.data.dst_opts) : m.data.dst);
@@ -609,12 +596,7 @@ var libgpac=(()=>{var _scriptName=globalThis.document?.currentScript?.src;return
       }
 
       if (m.data.useWebcodec) {
-        /* Seul l'encodeur est necessaire. Enregistrer "wcdec" le met en
-         * concurrence sur les PID d'entree : sur une source que WebCodecs
-         * ne sait pas decoder (Theora ici), il capte le PID, echoue
-         * ("Failed to initialize for codec theora"), est mis sur liste
-         * noire, et la reconnexion qui suit fait echouer la session. */
-        //registerFilter("wcdec", "_wcdec_register");
+        registerFilter("wcdec", "_wcdec_register");
         registerFilter("wcenc", "_wcenc_register");
         registerFilter("webgrab", "_webgrab_register");
       }
