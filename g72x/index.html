@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Play G.711 and G.72x audio</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Play G.711, G.721 and G.723 audio using the &lt;audio&gt; tag</h1>
+    <p>The G.711 / G.721 / G.723 family is the telephony ADPCM lineage, and Sun released the reference implementation into the public domain. None of these codecs has a container of its own, and a bare bitstream does not say which of them you are holding &mdash; 3, 4 and 5 bits per sample divide too many stream lengths for a guess to be safe. Sun's own <code>.au</code> format says so in one header word, so <a href="https://github.com/Bevara/libg711">libg711_1</a> reads that: mu-law (encoding 1), A-law (27), G.721 at 32 kbit/s (23) and G.723 at 24 or 40 kbit/s (25, 26). This clip is G.721. The two companding laws match ffmpeg's independent decoders with no differing sample at all; the three ADPCM rates match the same Sun code built natively, likewise exactly.</p>
+    <audio is="universal-audio_1" src="testcard_g721.au" using="solver_minimal_1" with="libg711_1" controls></audio>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="testcard_g721.au" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+        with="<a href="https://github.com/Bevara/libg711">libg711_1</a>" controls&gt; &lt;/audio&gt;
+</code></pre>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>G.721 ADPCM 32 kbit/s in a Sun .au, 8 kHz mono, 10 s</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>39 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_minimal_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-audio_1.js"></script>
+</body>
+
+</html>

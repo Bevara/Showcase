@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Play iLBC speech</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Play iLBC speech using the &lt;audio&gt; tag</h1>
+    <p>iLBC (RFC 3951) is a narrowband speech codec built for packet loss: every frame decodes on its own, so a lost one costs exactly one frame and nothing after it. This demo uses <a href="https://github.com/Bevara/libilbc">libilbc_1</a>, which packages WebRTC's fixed-point implementation. The file opens with a nine-byte header naming the mode &mdash; 20 ms frames of 38 bytes here &mdash; and the filter reads it rather than guessing, since 38 and 50 bytes divide too many stream lengths for a guess to be safe. Being fixed-point, the decode is bit-exact: not one sample of 80&nbsp;160 differs from the same library built natively.</p>
+    <audio is="universal-audio_1" src="testcard.lbc" using="solver_minimal_1" with="libilbc_1" controls></audio>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="testcard.lbc" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+        with="<a href="https://github.com/Bevara/libilbc">libilbc_1</a>" controls&gt; &lt;/audio&gt;
+</code></pre>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>iLBC 20 ms mode (15.2 kbit/s), 8 kHz mono, 10 s</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>19 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_minimal_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-audio_1.js"></script>
+</body>
+
+</html>
