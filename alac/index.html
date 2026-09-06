@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Play Apple Lossless audio</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Play Apple Lossless (ALAC) audio using the &lt;audio&gt; tag</h1>
+    <p>ALAC is Apple's lossless codec, carried in an MP4/M4A container. This demo shows a two-filter chain: <a href="https://github.com/Bevara/isobmff">isobmff_1</a> demuxes the M4A and hands the ALAC packets to <a href="https://github.com/Bevara/libalac">libalac_1</a>, which decodes them &mdash; the decoder never sees the container. Being lossless, the output was checked against the audio that was encoded: not one sample of 882&nbsp;000 differs.</p>
+    <audio is="universal-audio_1" src="testcard.m4a" using="solver_1" with="isobmff_1;libalac_1" controls></audio>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="testcard.m4a" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+        with="<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libalac">libalac_1</a>" controls&gt; &lt;/audio&gt;
+</code></pre>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>ALAC lossless in M4A, 44.1 kHz stereo, 10 s</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>476 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-audio_1.js"></script>
+</body>
+
+</html>

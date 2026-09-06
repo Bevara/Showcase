@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Play LC3 audio</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Play LC3 audio using the &lt;audio&gt; tag</h1>
+    <p>LC3 is the codec of Bluetooth LE Audio, standardised to replace SBC at a fraction of its bitrate. This demo uses Google's <a href="https://github.com/Bevara/liblc3">liblc3_1</a> on an LC3 file with its own header. Against the upstream <code>dlc3</code> decoder, 97 samples of 960&nbsp;000 differ, by at most 1 &mdash; floating-point rounding in the WebAssembly build.</p>
+    <audio is="universal-audio_1" src="testcard.lc3" using="solver_minimal_1" with="liblc3_1" controls></audio>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="testcard.lc3" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+        with="<a href="https://github.com/Bevara/liblc3">liblc3_1</a>" controls&gt; &lt;/audio&gt;
+</code></pre>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>LC3, 48 kHz stereo, 10 s</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>119 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_minimal_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-audio_1.js"></script>
+</body>
+
+</html>

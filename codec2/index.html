@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Play Codec 2 speech</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Play Codec 2 speech using the &lt;audio&gt; tag</h1>
+    <p>Codec 2 is a very-low-bitrate speech codec &mdash; 700 bit/s to 3200 bit/s &mdash; used mostly in amateur digital voice. Ten seconds of speech fit in under 2 Ko. Decoded by <a href="https://github.com/Bevara/libcodec2">libcodec2_1</a>. A <code>.c2</code> file opens with a seven-byte header naming the mode; headerless <code>.bin</code> streams say nothing about which mode they use and are refused rather than guessed at.</p>
+    <audio is="universal-audio_1" src="testcard.c2" using="solver_minimal_1" with="libcodec2_1" controls></audio>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="testcard.c2" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+        with="<a href="https://github.com/Bevara/libcodec2">libcodec2_1</a>" controls&gt; &lt;/audio&gt;
+</code></pre>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>Codec 2 (mode from the file header), 8 kHz mono, 10 s</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>1.7 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_minimal_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-audio_1.js"></script>
+</body>
+
+</html>

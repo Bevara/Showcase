@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Play GSM 06.10 audio</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Play GSM 06.10 audio using the &lt;audio&gt; tag</h1>
+    <p>GSM 06.10 full-rate is the speech codec of second-generation mobile telephony, and the <code>.gsm</code> files it leaves behind are still met in voicemail and telephony archives. The stream is headerless: 33-byte frames, one after another, 8 kHz mono by definition. Decoded by <a href="https://github.com/Bevara/libgsm">libgsm_1</a> &mdash; not one sample of 80&nbsp;160 differs from ffmpeg's decoder.</p>
+    <audio is="universal-audio_1" src="testcard.gsm" using="solver_minimal_1" with="libgsm_1" controls></audio>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="testcard.gsm" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+        with="<a href="https://github.com/Bevara/libgsm">libgsm_1</a>" controls&gt; &lt;/audio&gt;
+</code></pre>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>GSM 06.10 full rate, 8 kHz mono, 10 s</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>16 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_minimal_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-audio_1.js"></script>
+</body>
+
+</html>

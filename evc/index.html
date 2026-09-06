@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Decode MPEG-5 EVC video</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Decode MPEG-5 EVC video using the &lt;video&gt; tag</h1>
+    <p>MPEG-5 EVC (Essential Video Coding) was standardised as a royalty-friendly alternative to HEVC. Its elementary stream is not delimited by start codes: each NAL unit is prefixed by its own 4-byte length. <a href="https://github.com/Bevara/libxevd">libxevd_1</a> decodes it &mdash; on top of xevd, the reference decoder &mdash; and <a href="https://github.com/Bevara/libx264">libx264_1</a> with <a href="https://github.com/Bevara/isobmff">isobmff_1</a> produce the MP4. All 50 frames come out, matching a natively built xevd to ~61 dB PSNR.</p>
+    <video is="universal-video_1" src="testcard.evc" using="solver_1" with="libxevd_1;isobmff_1;libx264_1" controls></video>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="testcard.evc" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+        with="<a href="https://github.com/Bevara/libxevd">libxevd_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>" controls&gt; &lt;/video&gt;
+</code></pre>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>EVC raw elementary stream, 320x180, 25 fps, 50 frames</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>7.4 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-video_1.js"></script>
+</body>
+
+</html>

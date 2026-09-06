@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Decode AVS3 video</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Decode AVS3 video using the &lt;video&gt; tag</h1>
+    <p>AVS3 is the current Chinese national standard, contemporary with AV1 and VVC. Like AVS2 it arrives as a raw elementary stream, decoded here by <a href="https://github.com/Bevara/libuavs3d">libuavs3d_1</a> and re-encoded to MP4 by <a href="https://github.com/Bevara/libx264">libx264_1</a> and <a href="https://github.com/Bevara/isobmff">isobmff_1</a> for the &lt;video&gt; element. Note that the clip plays for well under a second: the file holds 600 picture start codes but only 10 frames come out of it. That is the file, not the filter &mdash; uavs3d's own <code>uavs3dec</code>, built natively from the same sources, decodes exactly the same 10 frames and then stops.</p>
+    <video is="universal-video_1" src="SFTI_640x360.avs3" using="solver_1" with="libuavs3d_1;isobmff_1;libx264_1" controls></video>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="SFTI_640x360.avs3" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+        with="<a href="https://github.com/Bevara/libuavs3d">libuavs3d_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>" controls&gt; &lt;/video&gt;
+</code></pre>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>AVS3 raw elementary stream, 640x360, 10 decodable frames</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>492 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-video_1.js"></script>
+</body>
+
+</html>
