@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Display PCX, TGA, SGI, PNM and XBM images</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        img[is="universal-img_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Display simple bitmap formats using the &lt;img&gt; tag</h1>
+    <p>Five formats that predate modern compression and are still met daily: ZSoft PCX, Truevision TGA, SGI/RGB, the Netpbm family (PBM/PGM/PPM) and the X11 bitmap. Each is a header plus raw samples or a byte-oriented run-length scheme, so this filter carries its own decoders rather than a third-party library. Decoded here with <a href="https://github.com/Bevara/simpleimg">simpleimg_1</a></p>
+    <img is="universal-img_1" src="testcard.pcx" using="solver_minimal_1" with="simpleimg_1" alt="PCX picture" />
+    <img is="universal-img_1" src="testcard.tga" using="solver_minimal_1" with="simpleimg_1" alt="TGA picture" />
+    <img is="universal-img_1" src="testcard.sgi" using="solver_minimal_1" with="simpleimg_1" alt="SGI picture" />
+    <img is="universal-img_1" src="testcard.ppm" using="solver_minimal_1" with="simpleimg_1" alt="PPM picture" />
+    <img is="universal-img_1" src="testcard.xbm" using="solver_minimal_1" with="simpleimg_1" alt="XBM picture" />
+    <h2>Code snippet</h2>
+    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard.pcx" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+     with="<a href="https://github.com/Bevara/simpleimg">simpleimg_1</a>"&gt; &lt;/img&gt;
+&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard.tga" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+     with="<a href="https://github.com/Bevara/simpleimg">simpleimg_1</a>"&gt; &lt;/img&gt;
+&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard.sgi" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+     with="<a href="https://github.com/Bevara/simpleimg">simpleimg_1</a>"&gt; &lt;/img&gt;
+&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard.ppm" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+     with="<a href="https://github.com/Bevara/simpleimg">simpleimg_1</a>"&gt; &lt;/img&gt;
+&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard.xbm" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+     with="<a href="https://github.com/Bevara/simpleimg">simpleimg_1</a>"&gt; &lt;/img&gt;
+</code></pre>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>PCX 24-bit RLE, TGA 24-bit RLE, SGI RGB, PPM (P6) and XBM, 256&times;256</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>845 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_minimal_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-img_1.js"></script>
+</body>
+
+</html>

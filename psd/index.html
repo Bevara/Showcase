@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Display retro computer images</title>
+    <title>Display Photoshop documents</title>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <style>
         body {
@@ -57,23 +57,14 @@
 
 <body>
     <a href="javascript:history.back()">&larr; Back</a>
-    <h1>Display Amiga and Atari pictures using the &lt;img&gt; tag</h1>
-
-    <p>RECOIL decodes several hundred picture formats from 8 and 16-bit machines. Three are shown here: an Amiga IFF/ILBM file with its interleaved bitplanes, an Atari ST Degas PI1 file with its 3-bit-per-channel ST palette, and a Microsoft Paint 1.0 MSP bitmap — not a retro computer format, but nothing else in the player decodes it. Decoded here with <a href="https://github.com/Bevara/librecoil">librecoil_1</a></p>
-
-    <img is="universal-img_1" src="testcard_uncompressed.iff" using="solver_minimal_1" with="librecoil_1" alt="Amiga IFF/ILBM picture" />
-    <img is="universal-img_1" src="testcard.pi1" using="solver_minimal_1" with="librecoil_1" alt="Atari ST Degas picture" />
-    <img is="universal-img_1" src="testcard.msp" using="solver_minimal_1" with="librecoil_1" alt="Microsoft Paint MSP bitmap" />
-
+    <h1>Display Photoshop documents using the &lt;img&gt; tag</h1>
+    <p>A PSD file stores its layers plus, when saved with &ldquo;Maximize Compatibility&rdquo;, a flattened copy of the finished image. That merged image is what is decoded here, out of a PackBits-compressed document. Decoded here with <a href="https://github.com/Bevara/libpsd">libpsd_1</a></p>
+    <img is="universal-img_1" src="testcard_rle.psd" using="solver_minimal_1" with="libpsd_1" alt="Photoshop PSD document" />
     <h2>Code snippet</h2>
-    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard_uncompressed.iff" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
-     with="<a href="https://github.com/Bevara/librecoil">librecoil_1</a>"&gt; &lt;/img&gt;
-&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard.pi1" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
-     with="<a href="https://github.com/Bevara/librecoil">librecoil_1</a>"&gt; &lt;/img&gt;
+    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard_rle.psd" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+     with="<a href="https://github.com/Bevara/libpsd">libpsd_1</a>"&gt; &lt;/img&gt;
 </code></pre>
-
     <h2> Specifications : </h2>
-
     <p>The specifications of the test sequence are : </p>
     <table>
         <colgroup>
@@ -83,11 +74,11 @@
         <tbody>
             <tr>
                 <td>Format</td>
-                <td>IFF/ILBM (16 colours), Degas PI1 (320×200) and MSP (256×256, bilevel)</td>
+                <td>PSD, 256&times;256, RGB 8-bit, PackBits</td>
             </tr>
             <tr>
                 <td>FileSize</td>
-                <td>71 Ko</td>
+                <td>195 Ko</td>
             </tr>
             <tr>
                 <td>Solver</td>
@@ -95,7 +86,6 @@
             </tr>
         </tbody>
     </table>
-
     <script src="../scripts/universal-img_1.js"></script>
 </body>
 
