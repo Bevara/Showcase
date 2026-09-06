@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>MPEG-4 BIFS scene</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Render an MPEG-4 BIFS scene into a &lt;canvas&gt;</h1>
+    <p>MPEG-4 BIFS (Binary Format for Scenes, ISO/IEC 14496-11) is the scene description of MPEG-4: a scene graph of 2D and 3D nodes, animated and interactive, that a player composes rather than decodes. This demo takes the textual form of it - BT syntax - and hands it to <a href="https://github.com/Bevara/btplay">btplay_1</a>, GPAC's scene loader, which builds the graph the compositor then draws straight into the canvas. There is no video track here at all: what you see is composed on the spot from a 1 Ko text file.</p>
+    <canvas id="scene" is="universal-canvas_1" using="solver_1" with="btplay_1" interactive width="320" height="240"></canvas>
+    <script>
+    /* data-url must be absolute: the compositor resolves it inside GPAC's own
+       virtual filesystem, where a relative path has nothing to resolve against
+       and the session reports "Cannot find filter for service" in a loop. */
+    document.getElementById('scene').setAttribute('data-url', new URL('scene2.bt', location.href).href);
+    </script>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;canvas is="<a href="https://github.com/Bevara/player">universal-canvas_1</a>" data-url="scene2.bt" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+        with="btplay_1" interactive&gt; &lt;/canvas&gt;
+</code></pre>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup><col><col></colgroup>
+        <tbody>
+            <tr><td>Format</td><td>MPEG-4 BIFS, BT syntax (ISO/IEC 14496-11)</td></tr>
+            <tr><td>FileSize</td><td>&lt; 1 Ko</td></tr>
+            <tr><td>Solver</td><td>solver_1</td></tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-canvas_1.js"></script>
+</body>
+
+</html>

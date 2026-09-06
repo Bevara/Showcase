@@ -1,0 +1,15 @@
+#VRML V2.0 utf8
+
+Background { skyColor [ 0.12 0.12 0.28 ] }
+Viewpoint { position 0 0 8 }
+DirectionalLight { direction -0.5 -0.5 -1 intensity 1 }
+
+Transform {
+  rotation 0.4 1 0.2 0.7
+  children [
+    Shape {
+      appearance Appearance { material Material { diffuseColor 0.9 0.55 0.1 } }
+      geometry Box { size 2.4 2.4 2.4 }
+    }
+  ]
+}
