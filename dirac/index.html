@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Decode Dirac video</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Decode Dirac video using the &lt;video&gt; tag</h1>
+    <p>Dirac is the BBC's wavelet codec. The signal is a raw elementary stream - a chain of parse units, each opening with a 13-byte "BBCD" header - decoded here by <a href="https://github.com/Bevara/libschro">libschro_1</a>, on top of schroedinger, and re-encoded to MP4 by <a href="https://github.com/Bevara/libx264">libx264_1</a> with <a href="https://github.com/Bevara/isobmff">isobmff_1</a> for the &lt;video&gt; element. Note what this does <em>not</em> cover: schroedinger predates VC-2's high-quality profile, which is what today's VC-2 encoders emit, and would decode those pictures into a uniform grey - so the filter refuses them rather than pretending. This clip is Dirac core syntax, inter-coded.</p>
+    <video is="universal-video_1" src="testcard.drc" using="solver_1" with="libschro_1;isobmff_1;libx264_1" controls></video>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="testcard.drc" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+        with="<a href="https://github.com/Bevara/libschro">libschro_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>" controls&gt; &lt;/video&gt;
+</code></pre>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>Dirac raw elementary stream, 320x180, 25 fps, 50 frames</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>176 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-video_1.js"></script>
+</body>
+
+</html>
