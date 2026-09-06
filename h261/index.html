@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Decode H.261 video</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Decode H.261 video using the &lt;video&gt; tag</h1>
+    <p>H.261 is the first of the ITU-T video recommendations, published in 1988 for videoconferencing over ISDN, and every later one - H.262, H.263, H.264 - is a descendant of the block-based hybrid design it introduced. It is also the only one of the four with no free standalone decoder: <a href="https://github.com/Bevara/ffmpeg-h26x">ffmpeg-h26x_1</a> is a build of FFmpeg reduced to the H.261 and H.263 decoders alone, which is why it weighs under a megabyte rather than the several that a full libavcodec would.</p>
+    <p>The stream sits in an AVI, because H.261 predates every container GPAC muxes. <a href="https://github.com/Bevara/avidmx">avidmx_1</a> now recognises the <code>H261</code> compressor fourcc and tags the pid with it; nothing else in the chain is specific to this format. All 50 frames come out at 59.4 dB PSNR against a native FFmpeg decode.</p>
+    <video is="universal-video_1" src="testcard.avi" using="solver_1" with="avidmx_1;ffmpeg-h26x_1;isobmff_1;libx264_1" controls></video>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="testcard.avi" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+        with="<a href="https://github.com/Bevara/avidmx">avidmx_1</a>;<a href="https://github.com/Bevara/ffmpeg-h26x">ffmpeg-h26x_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>" controls&gt; &lt;/video&gt;
+</code></pre>
+    <p>H.261 allows only two picture sizes, QCIF (176x144) and CIF (352x288), and has no notion of a key frame: the decoder logs <em>first frame is no keyframe</em> on any H.261 stream, which is a statement about the format rather than about this file.</p>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>H.261 in AVI, 352x288 (CIF), 25 fps, 50 frames</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>124 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-video_1.js"></script>
+</body>
+
+</html>

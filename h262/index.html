@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Decode H.262 video</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Decode H.262 video using the &lt;video&gt; tag</h1>
+    <p>H.262 and MPEG-2 Video are the same specification, published jointly by the ITU-T and ISO in 1995 - the format DVDs and digital television were built on. This demo feeds a raw elementary stream, with no container at all: <a href="https://github.com/Bevara/libmpeg2">libmpeg2_1</a> carries its own reframer, splits the stream on the sequence and picture start codes and emits one raw frame per picture, and <a href="https://github.com/Bevara/libx264">libx264_1</a> with <a href="https://github.com/Bevara/isobmff">isobmff_1</a> then build the MP4 the &lt;video&gt; element plays. All 50 frames come out at 61.5 dB PSNR against a native decode.</p>
+    <video is="universal-video_1" src="testcard.m2v" using="solver_1" with="libmpeg2_1;isobmff_1;libx264_1" controls></video>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="testcard.m2v" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+        with="<a href="https://github.com/Bevara/libmpeg2">libmpeg2_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>" controls&gt; &lt;/video&gt;
+</code></pre>
+    <p>The <a href="../mpeg2/">MPEG-2 demo</a> uses the same decoder on a longer sequence, and <a href="../mpeg2-canvas/">the canvas version</a> renders it without re-encoding.</p>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>H.262 raw elementary stream, 352x288, 25 fps, 50 frames</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>130 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-video_1.js"></script>
+</body>
+
+</html>
