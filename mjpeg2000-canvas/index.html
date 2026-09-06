@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Decode Motion JPEG 2000 video (Canvas)</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        canvas[is="universal-canvas_1"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Decode Motion JPEG 2000 video using the &lt;canvas&gt; tag</h1>
+
+    <p>Motion JPEG 2000 (ISO/IEC 15444-3) stores each frame as an independent JPEG 2000 picture, so the still-image decoder of the <a href="../jpeg2000/">JPEG 2000 demo</a> is reused unchanged: <a href="https://github.com/Bevara/isobmff">isobmff_1</a> demultiplexes the <code>mjp2</code> track and <a href="https://github.com/Bevara/openjpeg">openjpeg_1</a> expands one frame per sample into the compositor. Each sample here is a complete JP2 file rather than a bare codestream, so the decoder walks the boxes to find the <code>jp2c</code> payload and reads the colour space from <code>colr</code> &mdash; sYCC in this sequence, which comes out as 4:2:0 with no conversion at all.</p>
+
+    <canvas is="universal-canvas_1" data-url="https://bevara.github.io/Showcase/mjpeg2000-canvas/testcard_j2k.mov" using="solver_1" with="isobmff_1;openjpeg_1"> </canvas>
+
+    <h2>Code snippet</h2>
+    <pre><code>&lt;canvas is="<a href="https://github.com/Bevara/player">universal-canvas_1</a>" data-url="testcard_j2k.mov" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+     with="<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/openjpeg">openjpeg_1</a>"&gt; &lt;/canvas&gt;
+</code></pre>
+
+    <h2> Specifications : </h2>
+
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>Motion JPEG 2000 (mjp2), 320x180, 25 fps, 50 frames</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>411 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="../scripts/universal-canvas_1.js"></script>
+</body>
+
+</html>

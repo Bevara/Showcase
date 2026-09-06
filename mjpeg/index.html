@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Decode Motion JPEG video</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Decode Motion JPEG video using the &lt;video&gt; tag</h1>
+    <p>Motion JPEG is not a video codec in its own right: every frame is a complete baseline JPEG image, and the container simply plays them in sequence. That makes it a good illustration of what a filter chain buys you, because no new decoder is involved &mdash; <a href="https://github.com/Bevara/avidmx">avidmx_1</a> splits the AVI and tags the <code>MJPG</code> stream as JPEG, the ordinary <a href="https://github.com/Bevara/libjpeg">libjpeg_1</a> image decoder expands each frame, <a href="https://github.com/Bevara/rgbyuv">rgbyuv_1</a> converts its RGB output to 4:2:0, and <a href="https://github.com/Bevara/libx264">libx264_1</a> with <a href="https://github.com/Bevara/isobmff">isobmff_1</a> produce the MP4 the &lt;video&gt; element plays. All 50 frames come out at 48.8 dB PSNR against a native ffmpeg decode.</p>
+    <video is="universal-video_1" src="testcard.avi" using="solver_1" with="avidmx_1;libjpeg_1;rgbyuv_1;isobmff_1;libx264_1" controls></video>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="testcard.avi" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+        with="<a href="https://github.com/Bevara/avidmx">avidmx_1</a>;<a href="https://github.com/Bevara/libjpeg">libjpeg_1</a>;<a href="https://github.com/Bevara/rgbyuv">rgbyuv_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>" controls&gt; &lt;/video&gt;
+</code></pre>
+    <p>The same stream can also be rendered <a href="../mjpeg-canvas/">straight to a canvas</a>, which skips the re-encoding step entirely.</p>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>Motion JPEG in AVI, 320x180, 25 fps, 50 frames</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>316 Ko</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-video_1.js"></script>
+</body>
+
+</html>
