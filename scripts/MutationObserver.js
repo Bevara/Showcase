@@ -226,7 +226,16 @@
       src = el.getAttribute("data-url"); // canvas is using a special attribute since its not standard
       el.setAttribute("id", "canvas"); //FIXME : This is only for the demo
     }
-      
+
+    // The attribute goes straight to GPAC, which opens the source itself and
+    // resolves nothing: a page-relative path reaches it as it stands and comes
+    // back as "Requested URL is not valid or cannot be found".
+    try {
+      src = new URL(src, document.baseURI).href;
+    } catch (e) {
+      // An address we cannot parse is left alone rather than mangled.
+    }
+
     // Set output format
     let out = el.getAttribute("out");
     if (!out) {
@@ -277,11 +286,38 @@
   }
 
 
+
+  /* A video is not decoded here: its progressive playback needs the MSE
+   * plumbing, the codec negotiation and the segment handling that live in the
+   * universal-video tag. Rather than duplicating them, the observer hands the
+   * element over - a customized built-in only upgrades when the parser or
+   * createElement builds it, so the plain <video> is swapped for one the tag
+   * owns, carrying the same attributes. */
+  function upgradeToUniversalVideo(el, using, with_list) {
+    if (el.getAttribute("is")) return; // already ours, do not recurse
+    const upgraded = document.createElement("video", { is: "universal-video_1" });
+    for (const attr of Array.from(el.attributes)) {
+      upgraded.setAttribute(attr.name, attr.value);
+    }
+    upgraded.setAttribute("is", "universal-video_1");
+    upgraded.setAttribute("using", using);
+    upgraded.setAttribute("with", with_list);
+    /* The wasm sit next to the page, and the tag would otherwise look for them
+     * next to the script that defined it. */
+    if (!upgraded.getAttribute("script-directory")) {
+      upgraded.setAttribute("script-directory", new URL(".", document.baseURI).href);
+    }
+    el.replaceWith(upgraded);
+  }
+
   new MutationObserver(mutations => mutations.forEach(mutation => mutation.addedNodes.forEach(el => {
     if (el instanceof HTMLImageElement || el instanceof HTMLPictureElement)
       decode(el, "solver_1", "libjxl_1");
     else if(el instanceof HTMLAudioElement )
       decode(el, "solver_1", "liba52_1");
+    else if (el instanceof HTMLVideoElement)
+      upgradeToUniversalVideo(el, "solver_1",
+        "ogg_1;vorbis_1;theora_1;isobmff_1;libx264_1;libopusenc_1");
     else if( el instanceof HTMLCanvasElement)
       decode(el, "solver_1", "ogg_1;vorbis_1;theora_1");
   }))).observe(document.documentElement, { subtree: true, childList: true });

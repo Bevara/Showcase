@@ -80,8 +80,7 @@ function tagFor(tracks, ext) {
 }
 
 function buildTag(tag, url, accessors) {
-    // The compositor reads data-url, and only from an absolute address:
-    // it resolves the source inside GPAC's own virtual filesystem.
+    // The compositor reads data-url, and only from an absolute address
     const source = tag === 'canvas' ? 'data-url' : 'src';
     const controls = tag === 'audio' ? ' controls' : '';
     const open = `<${tag} is="universal-${tag}_1" ${source}="${url}" using="${SOLVER[tag]}" ` +
@@ -155,12 +154,9 @@ async function test(source) {
         return;
     }
 
-    // A video is decoded by GPAC, which opens the source itself: a local
-    // file has no URL it can read, so the pipeline is only offered for
-    // something served over http.
     if (tag === 'canvas' && source.local) {
         setVerdict('no', 'This is a video, and a video cannot be decoded from a dropped file: ' +
-            'Put the file somewhere reachable over http and paste its address above.');
+            'Put the file somewhere reachable over https and paste its address above.');
         return;
     }
 

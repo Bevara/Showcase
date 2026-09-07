@@ -43,9 +43,9 @@
             font-weight: bold;
         }
     </style>
+    <script src="../scripts/universal-video_1.js"></script>
+    <script src="../scripts/MutationObserver.js"></script>
   </head>
-  <script src="../scripts/MutationObserver.js"></script>
-</head>
 <body>
   <a href="javascript:history.back()">&larr; Back</a>
   <h1>Using filter pipelines with MutationObserver</h1>
@@ -57,7 +57,7 @@ href="https://samples.ffmpeg.org/A-codecs/AC3/Canyon-5.1-48khz-448kbit.ac3">Cany
 
 and the the ogg file <a
 href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a>
-using conventional, img, audio and canvas tag. We use MutationObserver to monitor and detect changes in the DOM and decode seamlessly these formats. </p>
+using conventional, img, audio and video tag. We use MutationObserver to monitor and detect changes in the DOM and decode seamlessly these formats. </p>
 
   <h1> JXL image preview : </h1>
   <img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" use-worker>
@@ -80,12 +80,18 @@ In this image, the MutationObserver is using <a href="https://github.com/Bevara/
 </code></pre>
 
 </p>
-  <h1> OGG video preview : </h1>
-  <canvas data-url="../test_sequences/trailer_1080p.ogg"></canvas>
+  <h1> OGG video preview (progressive) : </h1>
+  <video src="../test_sequences/trailer_1080p.ogg" progressive controls></video>
   
   <p>
-    And the MutationObserver is using <a href="https://github.com/Bevara/solver">solver_1</a> with <a href="https://github.com/Bevara/ogg">ogg_1</a>, <a href="https://github.com/Bevara/vorbis">vorbis_1</a> and <a href="https://github.com/Bevara/theora" >theora_1</a> on :
-    <pre><code>&lt;canvas data-url="../test_sequences/trailer_1080p.ogg" &gt; &lt;/canvas&gt;
+    The MutationObserver plays the stream progressively, so
+    playback starts on the first segment instead of waiting for the whole 27 MB file. It uses
+    <a href="https://github.com/Bevara/solver">solver_1</a> with <a href="https://github.com/Bevara/ogg">ogg_1</a>,
+    <a href="https://github.com/Bevara/vorbis">vorbis_1</a> and <a href="https://github.com/Bevara/theora">theora_1</a>
+    to decode, then <a href="https://github.com/Bevara/libx264">libx264_1</a>,
+    <a href="https://github.com/Bevara/libopusenc">libopusenc_1</a> and
+    <a href="https://github.com/Bevara/isobmff">isobmff_1</a> to produce what Media Source Extension accepts, on :
+    <pre><code>&lt;video src="../test_sequences/trailer_1080p.ogg" progressive controls&gt; &lt;/video&gt;
 </code></pre>
 </p>
 
