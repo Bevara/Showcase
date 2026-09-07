@@ -62,6 +62,148 @@
         .format-grid a:hover {
             background: #dde9fb;
         }
+
+        .try-it {
+            border-left: 4px solid #0b3d91;
+        }
+
+        .try-it p {
+            margin: 0.5rem 0 1rem 0;
+        }
+
+        .try-it a.cta {
+            display: inline-block;
+            padding: 0.6em 1.2em;
+            background: #0b3d91;
+            border-radius: 6px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .try-it a.cta:hover {
+            background: #0a3170;
+        }
+
+        /* --- Test your own file --- */
+        #drop {
+            border: 2px dashed #9bb;
+            border-radius: 8px;
+            padding: 2rem 1rem;
+            text-align: center;
+            background: #fbfcfe;
+            cursor: pointer;
+            transition: border-color .15s, background .15s;
+        }
+
+        #drop.over {
+            border-color: #0b3d91;
+            background: #eef3fb;
+        }
+
+        #drop p {
+            margin: 0.3em 0;
+        }
+
+        .hint {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        #url-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        #url {
+            flex: 1;
+            padding: 0.5em;
+            border: 1px solid #9bb;
+            border-radius: 4px;
+            font: inherit;
+        }
+
+        #url-form button {
+            padding: 0.5em 1em;
+            border: 0;
+            border-radius: 4px;
+            background: #0b3d91;
+            color: #fff;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .try-it h3 {
+            color: #0b3d91;
+        }
+
+        .try-it table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        .try-it th,
+        .try-it td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .try-it th {
+            width: 12em;
+            white-space: nowrap;
+        }
+
+        .try-it pre code {
+            display: block;
+            padding: 0.8em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .verdict {
+            padding: 0.8em 1em;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .verdict.ok {
+            background: #e6f4ea;
+            border: 1px solid #34a853;
+            color: #17603a;
+        }
+
+        .verdict.no {
+            background: #fce8e6;
+            border: 1px solid #d93025;
+            color: #8c1d16;
+        }
+
+        .verdict.busy {
+            background: #fff4e5;
+            border: 1px solid #e8a33d;
+            color: #7a4f0b;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        #preview video[is^="universal"],
+        #preview canvas[is^="universal"],
+        #preview img[is^="universal"] {
+            display: block;
+            max-width: 768px;
+            max-height: 512px;
+            width: auto;
+            height: auto;
+            background: #fff;
+        }
+
     </style>
 </head>
 
@@ -74,7 +216,7 @@
         allowing you to play, render, and convert unsupported formats directly in the browser—no plugins required.</p>
 
     <div class="demo-section">
-        <h2>Supported formats :</h2>
+        <h2>Supported formats</h2>
         <p>All formats decoded by the player, one demo per format — click a format to see it decoded live in the browser.</p>
 
         <div class="format-group">
@@ -184,38 +326,95 @@
         </div>
     </div>
 
-    <div class="demo-section">
-        <h2>Universal tags demo :</h2>
-        <ul>
-            <li><a href="libjxl/">Display JPEG XL images using the <code>&lt;img&gt;</code> tag</a></li>
-            <li><a href="liba52/">Play Dolby AC-3 audio using the <code>&lt;audio&gt;</code> tag</a></li>
-            <li><a href="mkv/">Play MKV using the <code>&lt;video&gt;</code> tag</a></li>
-            <li><a href="theora/">Render OGG/Theora video using the <code>&lt;canvas&gt;</code> tag</a></li>
-        </ul>
+    <div class="demo-section try-it">
+        <h2>Test your own file</h2>
+        <p>Your format is not listed above? Find out whether Bevara decodes it anyway. The page identifies the
+            format with <a href="https://mediaarea.net/en/MediaInfo">MediaInfo</a>, looks for accessors that
+            declare it, and previews the result right below. Nothing is uploaded: a dropped file is read in your
+            browser, and the decoding is done by the right combination of accessors.</p>
+
+        <div id="drop" tabindex="0" role="button" aria-label="Choose a picture or a sound file to test">
+            <p><strong>Drop a picture or a sound file here</strong></p>
+            <p class="hint">or click to browse</p>
+            <input id="file" type="file" hidden>
+        </div>
+
+        <p class="hint">Video takes a different route. It has to be reachable over https:</p>
+
+        <form id="url-form">
+            <input id="url" type="url" value="https://bevara.github.io/Showcase/test_sequences/trailer_1080p.ogg" aria-label="Video URL">
+            <button type="submit">Test this URL</button>
+        </form>
+
+        <section id="preview-section" hidden>
+            <h3>Preview</h3>
+            <div id="preview"></div>
+
+             <h3>Code snippet</h3>
+            <pre><code id="snippet"></code></pre>
+
+        </section>
         
-        <h2>Open source tools :</h2>
-        <ul>
-            <li><a href="sandbox/">Bevara Access : An easy-to-use tool to create a decoding and presentation pipeline. </a></li>
-        </ul>
+        <section id="report" hidden>
+            <h3>Result</h3>
+            <p id="verdict" class="verdict"></p>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>File</th>
+                        <td id="r-file"></td>
+                    </tr>
+                    <tr>
+                        <th>Detected format</th>
+                        <td id="r-format"></td>
+                    </tr>
+                    <tr>
+                        <th>Matched accessors</th>
+                        <td id="r-libs"></td>
+                    </tr>
+                    <tr>
+                        <th>Tag</th>
+                        <td id="r-tag"></td>
+                    </tr>
+                    <tr>
+                        <th>Solver</th>
+                        <td id="r-solver"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
-        <h2>Benchmarks :</h2>
-        <ul>
-            <li><a href="img_bench/">Native versus Wasm-based Image decoding</a></li>
-            <li><a href="video_bench/">Native versus Wasm-based Video decoding</a></li>
-        </ul>
+    </div>
+    <div class="demo-section">
+        <section>
+            <h2>Test our advanced tools</h2>
+            <ul>
+                <li><a href="sandbox/">Bevara IDE : An easy-to-use tool to analyze a decoding and presentation pipeline. </a></li>
+                <li><a href="https://marketplace.visualstudio.com/items?itemName=Bevara.bevara-access">Bevara Access : a Visual Studio Code extension to provide platform-independent support for data formats. </a></li>
+            </ul>
+            
+        </section>
 
+        
+    </div>
 
-        <h2>Some other integration examples :</h2>
-        <ul>
-            <li><a href="MutationObserver/">Using filter pipelines with MutationObserver</a></li>
-            <li><a href="ServiceWorker/">Embedding filter pipelines within containers</a></li>
-        </ul>
+    <div class="demo-section">
+        <section>
+            <h2>Some other integration examples</h2>
+            <ul>
+                <li><a href="MutationObserver/">Using filter pipelines with MutationObserver</a></li>
+                <li><a href="ServiceWorker/">Embedding filter pipelines within containers</a></li>
+            </ul>
+        </section>
     </div>
 
     <p>The sample files and formats have been selected because they are license-free to use. All demos are downloaded in their entirety, please be patient, especially if you have a slow connection.
     </p>
     <p>For further details on these demos, please consult our <a href="https://bevara.com/">official website</a> and the <a href="https://bevara.com/documentation/">accompanying documentation</a>. </p>
 
+    <script src="test/mediainfo.min.js"></script>
+    <script src="accessors/universal-tags_1.js"></script>
+    <script src="test/app.js"></script>
 </body>
 
 </html>
