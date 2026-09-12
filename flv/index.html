@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Play FLV</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 300px;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total-row {
+            border-top: 2px solid black;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <a href="javascript:history.back()">&larr; Back</a>
+    <h1>Play an FLV file using the &lt;video&gt; tag</h1>
+    <p>FLV is the container Flash used, and what most FLV files in the wild hold is not the H.264 and AAC that RTMP carries today but the codecs Flash shipped with: <strong>Sorenson H.263</strong> for the picture and <strong>MP3</strong> for the sound. This file is one of those. <a href="https://github.com/Bevara/flvdmx">flvdmx_1</a> walks the tag stream and emits one pid per track with the codec named &mdash; the picture size read from the Sorenson picture header, the sampling rate from the MP3 frame header, since the tag's own 2-bit rate field cannot say 48&nbsp;kHz. <a href="https://github.com/Bevara/ffmpeg-h26x">ffmpeg-h26x_1</a> decodes the video (Sorenson H.263 is a variant of H.263, and adds 3&nbsp;Ko to the module), <a href="https://github.com/Bevara/libx264">libx264_1</a> re-encodes it, and <a href="https://github.com/Bevara/isobmff">isobmff_1</a> writes the MP4 the &lt;video&gt; element plays &mdash; with the MP3 stored as it is, no decoder needed. All 1116 frames come out, and the audio in the output is bit-identical to the source.</p>
+    <video is="universal-video_1" src="ocean.flv" using="solver_1" with="flvdmx_1;ffmpeg-h26x_1;isobmff_1;libx264_1" controls></video>
+    <h2>Code snippet</h2>
+    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="ocean.flv" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+        with="<a href="https://github.com/Bevara/flvdmx">flvdmx_1</a>;<a href="https://github.com/Bevara/ffmpeg-h26x">ffmpeg-h26x_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>" controls&gt; &lt;/video&gt;
+</code></pre>
+    <p>The same demultiplexer handles the other FLV flavour, AVC with AAC, which then goes through <a href="https://github.com/Bevara/h264bsd">h264bsd_1</a> instead: <code>with="flvdmx_1;h264bsd_1;isobmff_1;libx264_1"</code>. VP6, Screen Video and Nellymoser have no decoder here and are skipped with a warning.</p>
+    <h2> Specifications : </h2>
+    <p>The specifications of the test sequence are : </p>
+    <table>
+        <colgroup>
+            <col>
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Format</td>
+                <td>FLV, Sorenson H.263 960x400 at 24 fps, 1116 frames, MP3 48 kHz stereo, 46 s</td>
+            </tr>
+            <tr>
+                <td>FileSize</td>
+                <td>7,1 Mo</td>
+            </tr>
+            <tr>
+                <td>Solver</td>
+                <td>solver_1</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../scripts/universal-video_1.js"></script>
+</body>
+
+</html>
