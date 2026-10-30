@@ -27,7 +27,13 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    # Pinned, not ubuntu-latest: gpac was removed from the Ubuntu archive after
+    # 24.04 (it is absent from 25.10 onwards, so from 26.04 LTS too), and
+    # ubuntu-latest now resolves to 26.04. 24.04 still ships gpac 2.2.1, which
+    # provides the MP4Box used by get_testing_files.sh. When 24.04 runners are
+    # retired, MP4Box will have to come from GPAC's own packages or a source
+    # build instead.
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
