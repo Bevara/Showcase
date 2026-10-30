@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bevara Universal Media - browser extension demo</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        h1,
+        h2 {
+            color: #0b3d91;
+        }
+
+        code {
+            background: #eee;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        pre code {
+            display: block;
+            padding: 0.8em;
+            overflow-x: auto;
+        }
+
+        .demo-section {
+            margin-top: 2rem;
+            padding: 1rem 1.25rem;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        /* Install call to action */
+        .install {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 1rem 1.25rem;
+            background: #eef3fc;
+            border: 1px solid #c9d9f2;
+            border-radius: 8px;
+        }
+
+        .install a.cta {
+            display: inline-block;
+            padding: 0.6em 1.2em;
+            background: #0b3d91;
+            color: #fff;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Status banner, filled in by status.js from what is on the page */
+        #status {
+            margin-top: 1rem;
+            padding: 0.8em 1em;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-size: 0.95rem;
+        }
+
+        #status.on {
+            background: #e7f6ec;
+            border-color: #1a7f37;
+            color: #14532d;
+        }
+
+        #status.off {
+            background: #fdf3e7;
+            border-color: #9a6700;
+            color: #6b4700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .item {
+            border: 1px solid #e3e3e3;
+            border-radius: 6px;
+            padding: 0.6rem;
+            background: #fff;
+        }
+
+        .item h3 {
+            margin: 0 0 0.1rem;
+            font-size: 0.95rem;
+            color: #0b3d91;
+        }
+
+        .item p {
+            margin: 0 0 0.5rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .item img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            background: #f4f4f4;
+            border-radius: 4px;
+        }
+
+        .item audio {
+            width: 100%;
+        }
+
+        .audio-list .item {
+            display: block;
+        }
+
+        video {
+            width: 100%;
+            max-width: 640px;
+            background: #000;
+            border-radius: 4px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 6px 10px;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: #f4f6fa;
+        }
+
+        .note {
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../">&larr; Back</a>
+    <h1>Opening your own browser to new formats</h1>
+
+    <p>Every other demo on this site asks the <em>page</em> to carry the decoder: the markup names a solver and a
+        set of accessors, and the page works for everyone who visits it. This one asks nothing of the page. The
+        markup below is plain HTML — ordinary <code>&lt;img&gt;</code>, <code>&lt;audio&gt;</code> and
+        <code>&lt;video&gt;</code> tags, no Bevara attributes, no scripts, no WebAssembly — exactly what a site that
+        never heard of Bevara would write:</p>
+
+    <pre><code>&lt;img src="testcard.psd"&gt;
+&lt;audio src="testcard.gsm" controls&gt;&lt;/audio&gt;</code></pre>
+
+    <p>So, in a stock browser, most of this page is broken. Install the <strong>Bevara Universal Media</strong>
+        extension and it is not: the extension watches the page, notices each element the browser cannot decode, and
+        hands it to a WebAssembly pipeline fetched from the
+        <a href="https://registry.bevara.ddns.net">Bevara filter registry</a>, which gives the browser back a format it
+        does play — PNG for images, WAV for audio, MP4/H.264 for video.</p>
+
+    <div class="install">
+        <a class="cta" href="https://chromewebstore.google.com/detail/bevara-universal-media/cgfhhhdalbhfammimblcclkjghpaicdl">Install
+            from the Chrome Web Store</a>
+        <span class="note">Chrome, Edge, Brave and other Chromium browsers. Then reload this page.</span>
+    </div>
+
+    <div id="status">Checking what this browser does with the files below…</div>
+
+    <div class="demo-section">
+        <h2>Images</h2>
+        <p class="note">Formats no mainstream browser decodes on its own, plus a few only one of them does.
+            An empty frame is the browser giving up; a picture is the extension stepping in.</p>
+
+        <div class="grid">
+            <div class="item">
+                <h3>JPEG XL</h3>
+                <p>.jxl — not in Chrome</p>
+                <img src="../test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl" alt="JPEG XL photograph">
+            </div>
+            <div class="item">
+                <h3>Photoshop</h3>
+                <p>.psd — no browser</p>
+                <img src="../psd/testcard_rle.psd" alt="PSD test card">
+            </div>
+            <div class="item">
+                <h3>GIMP</h3>
+                <p>.xcf — no browser</p>
+                <img src="../xcf/testcard_rle.xcf" alt="XCF test card">
+            </div>
+            <div class="item">
+                <h3>JPEG 2000</h3>
+                <p>.jp2 — Safari only</p>
+                <img src="../jpeg2000/Cevennes2.jp2" alt="JPEG 2000 landscape">
+            </div>
+            <div class="item">
+                <h3>TIFF</h3>
+                <p>.tif — Safari only</p>
+                <img src="../tiff/G4.TIF" alt="TIFF fax page">
+            </div>
+            <div class="item">
+                <h3>JPEG XR</h3>
+                <p>.jxr — no browser since IE</p>
+                <img src="../jxr/testcard.jxr" alt="JPEG XR test card">
+            </div>
+            <div class="item">
+                <h3>JPEG-LS</h3>
+                <p>.jls — no browser</p>
+                <img src="../jpegls/banny_hp0.jls" alt="JPEG-LS image">
+            </div>
+            <div class="item">
+                <h3>FLIF</h3>
+                <p>.flif — no browser</p>
+                <img src="../flif/testcard.flif" alt="FLIF test card">
+            </div>
+            <div class="item">
+                <h3>PGF</h3>
+                <p>.pgf — no browser</p>
+                <img src="../pgf/testcard_lossless.pgf" alt="PGF test card">
+            </div>
+            <div class="item">
+                <h3>DirectDraw Surface</h3>
+                <p>.dds — no browser</p>
+                <img src="../dds/kodim23_bc1.dds" alt="DDS texture">
+            </div>
+            <div class="item">
+                <h3>Camera raw</h3>
+                <p>.DNG — no browser</p>
+                <img src="../raw/RAW_LEICA_M8.DNG" alt="Leica M8 raw photograph">
+            </div>
+            <div class="item">
+                <h3>MNG</h3>
+                <p>.mng — dropped long ago</p>
+                <img src="../mng/testcard_vlc.mng" alt="MNG animation">
+            </div>
+            <div class="item">
+                <h3>JBIG</h3>
+                <p>.jbg — no browser</p>
+                <img src="../jbig/testcard.jbg" alt="JBIG bi-level image">
+            </div>
+            <div class="item">
+                <h3>Apple icon</h3>
+                <p>.icns — no browser</p>
+                <img src="../icns/test1.icns" alt="ICNS icon">
+            </div>
+            <div class="item">
+                <h3>PCX</h3>
+                <p>.pcx — no browser</p>
+                <img src="../bitmaps/testcard.pcx" alt="PCX test card">
+            </div>
+            <div class="item">
+                <h3>Amiga IFF</h3>
+                <p>.iff — no browser</p>
+                <img src="../retro/testcard_uncompressed.iff" alt="Amiga IFF/ILBM picture">
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Audio</h2>
+        <p class="note">A player with no sound, or no player at all, is the browser giving up.</p>
+
+        <div class="grid audio-list">
+            <div class="item">
+                <h3>AC-3</h3>
+                <p>.ac3 — Dolby Digital</p>
+                <audio src="../test_sequences/Canyon-5.1-48khz-448kbit.ac3" controls></audio>
+            </div>
+            <div class="item">
+                <h3>Speex</h3>
+                <p>.spx — speech codec</p>
+                <audio src="../speex/testcard_wb.spx" controls></audio>
+            </div>
+            <div class="item">
+                <h3>Musepack</h3>
+                <p>.mpc</p>
+                <audio src="../musepack/ff-16b-2c-44100hz.mpc" controls></audio>
+            </div>
+            <div class="item">
+                <h3>WavPack</h3>
+                <p>.wv — lossless</p>
+                <audio src="../wavpack/ff-16b-2c-44100hz.wv" controls></audio>
+            </div>
+            <div class="item">
+                <h3>True Audio</h3>
+                <p>.tta — lossless</p>
+                <audio src="../tta/testcard.tta" controls></audio>
+            </div>
+            <div class="item">
+                <h3>GSM 06.10</h3>
+                <p>.gsm — telephony</p>
+                <audio src="../gsm/testcard.gsm" controls></audio>
+            </div>
+            <div class="item">
+                <h3>G.721</h3>
+                <p>.au — Sun/NeXT ADPCM</p>
+                <audio src="../g72x/testcard_g721.au" controls></audio>
+            </div>
+            <div class="item">
+                <h3>iLBC</h3>
+                <p>.lbc — internet speech</p>
+                <audio src="../ilbc/testcard.lbc" controls></audio>
+            </div>
+            <div class="item">
+                <h3>Codec 2</h3>
+                <p>.c2 — 3.2 kbit/s speech</p>
+                <audio src="../codec2/testcard.c2" controls></audio>
+            </div>
+            <div class="item">
+                <h3>MIDI</h3>
+                <p>.mid — synthesised</p>
+                <audio src="../midi/test.mid" controls></audio>
+            </div>
+            <div class="item">
+                <h3>Amiga tracker</h3>
+                <p>.mod — ProTracker</p>
+                <audio src="../tracker/ode2ptk.mod" controls></audio>
+            </div>
+            <div class="item">
+                <h3>AIFF</h3>
+                <p>.aif — Apple/SGI</p>
+                <audio src="../aiff/M1F1-int16-AFsp.aif" controls></audio>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Video — one more switch to flip</h2>
+        <p>Video is different. Whatever the source format, the result has to be re-encoded into something the browser
+            plays, and the only encoder for that today is H.264, whose patents are pooled. The extension will not use a
+            patent-encumbered accessor unless you say so: every accessor in the registry declares a patent status, and
+            only <em>royalty-free</em> and <em>expired</em> ones are used by default. (HEVC is a case apart: Safari on
+            Apple platforms, and recent Chrome on Apple hardware, decode it themselves, so the extension never sees
+            it there.)</p>
+        <p>To play the three files below, open the extension's options and tick
+            <strong>Use patent-encumbered accessors</strong>, then reload. Everything above keeps working either way.</p>
+
+        <h3>VVC (H.266) in MP4</h3>
+        <video src="../test_sequences/NovosobornayaSquare_640x360.mp4" controls></video>
+        <p class="note">The successor to HEVC. No browser decodes it.</p>
+
+        <h3>MPEG-2</h3>
+        <video src="../test_sequences/sample_1280x720_surfing_with_audio.mpeg" controls></video>
+        <p class="note">Twenty-five years of broadcast and DVD, and no browser reads it.</p>
+
+        <h3>Ogg/Theora</h3>
+        <video src="../test_sequences/trailer_1080p.ogg" controls></video>
+        <p class="note">A subtler failure: Chrome dropped Theora in version 123, so it still parses the container
+            and plays the Vorbis soundtrack while the picture never appears. Theora itself is royalty-free — it is
+            only the H.264 encoder on the way out that is not. With the option on, playback starts on the first
+            transcoded segment rather than at the end of the file.</p>
+    </div>
+
+    <div class="demo-section">
+        <h2>What the extension actually did</h2>
+        <p>Click the extension's toolbar icon: the badge counts the elements it took over on this page, and the popup
+            lists them with the format it recognised, the registry it used and the patent status of the accessors
+            involved. Anything it declined to touch is listed too, with the reason — a decoder not published, or a
+            patent status you have not allowed.</p>
+        <table>
+            <thead>
+                <tr><th>On this page</th><th>Count</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Elements with a plain <code>src</code></td><td id="r-total">—</td></tr>
+                <tr><td>Decoded by the extension</td><td id="r-taken">—</td></tr>
+                <tr><td>Played by the browser on its own</td><td id="r-native">—</td></tr>
+                <tr><td>Still failing</td><td id="r-failed">—</td></tr>
+            </tbody>
+        </table>
+        <p class="note" id="r-note"></p>
+    </div>
+
+    <div class="demo-section">
+        <h2>How it works</h2>
+        <p>This is the MutationObserver approach of the
+            <a href="../MutationObserver/">companion demo</a>, moved out of the page and into the browser. A content
+            script watches the DOM; for each <code>&lt;img&gt;</code>, <code>&lt;audio&gt;</code> and
+            <code>&lt;video&gt;</code> it identifies the format from the MIME type, the extension, or the file's first
+            bytes, and asks <code>canPlayType()</code> whether the browser can cope. A format no browser decodes is
+            taken over at once; a format the browser <em>might</em> decode is left alone until it actually fails, so
+            the browser always gets the first try.</p>
+        <p>The accessors are not bundled in the extension: the catalogue and the modules come from the
+            registry, which means a format published there becomes playable without updating the extension.</p>
+        <p>The source of the extension, and the three ways of integrating these pipelines into a page, are described
+            in the <a href="https://bevara.com/documentation/">documentation</a>.</p>
+    </div>
+
+    <p class="note">The sample files and formats have been selected because they are licence-free to use. All demos are
+        downloaded in their entirety, please be patient, especially if you have a slow connection.</p>
+
+    <script src="status.js"></script>
+</body>
+
+</html>
