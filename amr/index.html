@@ -53,11 +53,11 @@
 
     <p>AMR is the speech codec of GSM and UMTS calls: 8 kHz narrowband, down to 4.75 kbit/s. Browsers do not decode it; this one goes through <a href="https://github.com/Bevara/libamr">libamr_1</a>, built on opencore-amr, which also handles the 16 kHz wideband variant.</p>
 
-    <audio is="universal-audio_1" src="ff-16b-1c-8000hz.amr" using="solver_minimal_1" with="libamr_1" controls stats>
+    <audio is="universal-audio_1" src="ff-16b-1c-8000hz.amr" using="mm_solver_minimal_1.0.1" with="libamr_1" controls stats>
     </audio>
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ff-16b-1c-8000hz.amr" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ff-16b-1c-8000hz.amr" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
      with="libamr_1" controls&gt; &lt;/audio&gt;
 </code></pre>
 
@@ -84,7 +84,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>mm_solver_minimal_1.0.1</td>
             </tr>
         </tbody>
     </table>

@@ -53,11 +53,11 @@
 
     <p>MP3 decoding here uses the mpg123 engine compiled to WebAssembly (<a href="https://github.com/Bevara/libmpg123">libmpg123_1</a>), independent of whatever MP3 support (or licensing constraints) the host browser or platform has.</p>
 
-    <audio is="universal-audio_1" src="ff-16b-1c-44100hz.mp3" using="solver_minimal_1" with="libmpg123_1" controls stats>
+    <audio is="universal-audio_1" src="ff-16b-1c-44100hz.mp3" using="mm_solver_minimal_1.0.1" with="libmpg123_1" controls stats>
     </audio>
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ff-16b-1c-44100hz.mp3" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ff-16b-1c-44100hz.mp3" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
         with="<a href="https://github.com/Bevara/libmpg123">libmpg123_1</a>" controls&gt; &lt;/audio&gt;
 </code></pre>
 
@@ -80,7 +80,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>mm_solver_minimal_1.0.1</td>
             </tr>
         </tbody>
     </table>

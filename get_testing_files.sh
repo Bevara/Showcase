@@ -14,8 +14,8 @@ MP4Box -add './test_sequences/trailer_1080p.ogg'  -new ./ServiceWorker/trailer_1
 -set-meta html \
 -add-item ./ServiceWorker/theora/content.html:name=index.html:mime=text/html:id=1 \
 -add-item ./scripts/universal-canvas_1.js:name=universal-canvas_1.js:mime=text/javascript:id=2 \
--add-item ./theora_bench/solver_1.js:name=solver_1.js:mime=text/javascript:id=3 \
--add-item ./theora_bench/solver_1.wasm:name=solver_1.wasm:mime=application/wasm:id=4 \
+-add-item ./theora_bench/mm_solver_1.0.1.js:name=mm_solver_1.0.1.js:mime=text/javascript:id=3 \
+-add-item ./theora_bench/mm_solver_1.0.1.wasm:name=mm_solver_1.0.1.wasm:mime=application/wasm:id=4 \
 -add-item ./ServiceWorker/theora/isobmff_1.wasm:name=isobmff_1.wasm:mime=application/wasm:id=5 \
 -add-item ./theora_bench/theora_1.wasm:name=theora_1.wasm:mime=application/wasm:id=6 \
 -add-item ./theora_bench/vorbis_1.wasm:name=vorbis_1.wasm:mime=application/wasm:id=7 \
@@ -25,7 +25,7 @@ MP4Box -add './test_sequences/NBA_score_table_2_hd.mp4' -new ./ServiceWorker/NBA
 -set-meta html \
 -add-item ./ServiceWorker/360/content.html:name=index.html:mime=text/html:id=1 \
 -add-item ./scripts/universal-canvas_1.js:name=universal-canvas_1.js:mime=text/javascript:id=2 \
--add-item ./ServiceWorker/360/solver_1.js:name=solver_1.js:mime=text/javascript:id=3 \
--add-item ./ServiceWorker/360/solver_1.wasm:name=solver_1.wasm:mime=application/wasm:id=4 \
+-add-item ./ServiceWorker/360/mm_solver_1.0.1.js:name=mm_solver_1.0.1.js:mime=text/javascript:id=3 \
+-add-item ./ServiceWorker/360/mm_solver_1.0.1.wasm:name=mm_solver_1.0.1.wasm:mime=application/wasm:id=4 \
 -add-item ./ServiceWorker/360/isobmff_1.wasm:name=isobmff_1.wasm:mime=application/wasm:id=5 \
 -set-primary 1 

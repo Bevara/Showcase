@@ -59,12 +59,12 @@
     <a href="javascript:history.back()">&larr; Back</a>
     <h1>Display PNG images using the &lt;img&gt; tag</h1>
 
-    <p>PNG is decoded natively by every browser already. This demo runs it through the same WebAssembly filter pipeline used for the less common formats on this page, using the exact minimal-footprint solver (<code>solver_minimal_1</code>) the project ships for production embeds — useful as a size/behaviour baseline, and because the same <a href="https://github.com/Bevara/libpng">libpng_1</a> filter is reused as the re-encoding step by other demos (JPEG below, for instance).</p>
+    <p>PNG is decoded natively by every browser already. This demo runs it through the same WebAssembly filter pipeline used for the less common formats on this page, using the exact minimal-footprint solver (<code>mm_solver_minimal_1.0.1</code>) the project ships for production embeds — useful as a size/behaviour baseline, and because the same <a href="https://github.com/Bevara/libpng">libpng_1</a> filter is reused as the re-encoding step by other demos (JPEG below, for instance).</p>
 
-    <img is="universal-img_1" src="Freedom.png" using="solver_minimal_1" with="libpng_1" />
+    <img is="universal-img_1" src="Freedom.png" using="mm_solver_minimal_1.0.1" with="libpng_1" />
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="Freedom.png" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="Freedom.png" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
      with="<a href="https://github.com/Bevara/libpng">libpng_1</a>"&gt; &lt;/img&gt;
 </code></pre>
 
@@ -87,7 +87,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>mm_solver_minimal_1.0.1</td>
             </tr>
         </tbody>
     </table>

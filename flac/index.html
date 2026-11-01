@@ -53,11 +53,11 @@
 
     <p>FLAC is a widely supported lossless audio codec; this demo decodes it through the project's own WebAssembly decoder (<a href="https://github.com/Bevara/libflac">libflac_1</a>) rather than relying on the browser's built-in support, so the same pipeline can be reused for formats browsers can't handle at all.</p>
 
-    <audio is="universal-audio_1" src="recit16bit.flac" using="solver_minimal_1" with="libflac_1" controls stats>
+    <audio is="universal-audio_1" src="recit16bit.flac" using="mm_solver_minimal_1.0.1" with="libflac_1" controls stats>
     </audio>
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="recit16bit.flac" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="recit16bit.flac" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
         with="<a href="https://github.com/Bevara/libflac">libflac_1</a>" controls&gt; &lt;/audio&gt;
 </code></pre>
 
@@ -80,7 +80,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>mm_solver_minimal_1.0.1</td>
             </tr>
         </tbody>
     </table>

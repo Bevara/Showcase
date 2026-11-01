@@ -61,10 +61,10 @@
 
     <p>DDS (DirectDraw Surface) is the container GPUs consume directly: pixels stay compressed in 4×4 blocks (BC1 to BC7) all the way to the texture unit. The filter decompresses the blocks back to RGB. Decoded here with <a href="https://github.com/Bevara/libdds">libdds_1</a></p>
 
-    <img is="universal-img_1" src="kodim23_bc1.dds" using="solver_minimal_1" with="libdds_1" alt="DDS texture, BC1 compressed" />
+    <img is="universal-img_1" src="kodim23_bc1.dds" using="mm_solver_minimal_1.0.1" with="libdds_1" alt="DDS texture, BC1 compressed" />
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="kodim23_bc1.dds" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="kodim23_bc1.dds" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
      with="<a href="https://github.com/Bevara/libdds">libdds_1</a>"&gt; &lt;/img&gt;
 </code></pre>
 
@@ -87,7 +87,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>mm_solver_minimal_1.0.1</td>
             </tr>
         </tbody>
     </table>

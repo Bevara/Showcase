@@ -61,10 +61,10 @@
 
     <p>The same Motion JPEG frames as the <a href="../mjpeg/">video tag version</a>, this time in a QuickTime container and drawn directly to a &lt;canvas&gt;. Rendering to a canvas shortens the chain: there is no MP4 to produce, so neither the colour conversion nor the H.264 encoder is needed &mdash; <a href="https://github.com/Bevara/isobmff">isobmff_1</a> demultiplexes the file and <a href="https://github.com/Bevara/libjpeg">libjpeg_1</a> expands each frame straight into the compositor.</p>
 
-    <canvas is="universal-canvas_1" data-url="https://bevara.github.io/Showcase/mjpeg-canvas/testcard.mov" using="solver_1" with="isobmff_1;libjpeg_1"> </canvas>
+    <canvas is="universal-canvas_1" data-url="https://bevara.github.io/Showcase/mjpeg-canvas/testcard.mov" using="mm_solver_1.0.1" with="isobmff_1;libjpeg_1"> </canvas>
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;canvas is="<a href="https://github.com/Bevara/player">universal-canvas_1</a>" data-url="testcard.mov" using="<a href="https://github.com/Bevara/solver">solver_1</a>"
+    <pre><code>&lt;canvas is="<a href="https://github.com/Bevara/player">universal-canvas_1</a>" data-url="testcard.mov" using="<a href="https://github.com/Bevara/solver">mm_solver_1.0.1</a>"
      with="<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libjpeg">libjpeg_1</a>"&gt; &lt;/canvas&gt;
 </code></pre>
 
@@ -87,7 +87,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_1</td>
+                <td>mm_solver_1.0.1</td>
             </tr>
         </tbody>
     </table>

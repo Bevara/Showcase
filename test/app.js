@@ -11,7 +11,7 @@ const SCRIPT_DIRECTORY = new URL('../accessors/', HERE).href;
 const MEDIAINFO_WASM = new URL('MediaInfoModule.wasm', HERE).href;
 // The showcase demos pair the light solver with the still-picture and
 // sound tags, and the full one with the tags the compositor drives.
-const SOLVER = { img: 'solver_minimal_1', audio: 'solver_minimal_1', canvas: 'solver_1' };
+const SOLVER = { img: 'mm_solver_minimal_1.0.1', audio: 'mm_solver_minimal_1.0.1', canvas: 'mm_solver_1.0.1' };
 
 const el = (id) => document.getElementById(id);
 const drop = el('drop');

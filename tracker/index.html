@@ -53,11 +53,11 @@
 
     <p>A tracker module is not a sample stream but a score plus its instruments: the pattern data says which sample to play, at which pitch, on which channel. The filter renders it to PCM in the browser with <a href="https://github.com/Bevara/libxmp">libxmp_1</a>, which covers Protracker MOD, Fast Tracker XM, Scream Tracker S3M, Impulse Tracker IT and some ninety other formats.</p>
 
-    <audio is="universal-audio_1" src="ode2ptk.mod" using="solver_minimal_1" with="libxmp_1" controls stats>
+    <audio is="universal-audio_1" src="ode2ptk.mod" using="mm_solver_minimal_1.0.1" with="libxmp_1" controls stats>
     </audio>
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ode2ptk.mod" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ode2ptk.mod" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
      with="<a href="https://github.com/Bevara/libxmp">libxmp_1</a>" controls&gt; &lt;/audio&gt;
 </code></pre>
 
@@ -84,7 +84,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>mm_solver_minimal_1.0.1</td>
             </tr>
         </tbody>
     </table>

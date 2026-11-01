@@ -312,13 +312,13 @@
 
   new MutationObserver(mutations => mutations.forEach(mutation => mutation.addedNodes.forEach(el => {
     if (el instanceof HTMLImageElement || el instanceof HTMLPictureElement)
-      decode(el, "solver_1", "libjxl_1");
+      decode(el, "mm_solver_1.0.1", "libjxl_1");
     else if(el instanceof HTMLAudioElement )
-      decode(el, "solver_1", "liba52_1");
+      decode(el, "mm_solver_1.0.1", "liba52_1");
     else if (el instanceof HTMLVideoElement)
-      upgradeToUniversalVideo(el, "solver_1",
+      upgradeToUniversalVideo(el, "mm_solver_1.0.1",
         "ogg_1;vorbis_1;theora_1;isobmff_1;libx264_1;libopusenc_1");
     else if( el instanceof HTMLCanvasElement)
-      decode(el, "solver_1", "ogg_1;vorbis_1;theora_1");
+      decode(el, "mm_solver_1.0.1", "ogg_1;vorbis_1;theora_1");
   }))).observe(document.documentElement, { subtree: true, childList: true });
 }());

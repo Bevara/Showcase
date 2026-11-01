@@ -59,12 +59,12 @@
     <a href="javascript:history.back()">&larr; Back</a>
     <h1>Display JPEG XR images using the &lt;img&gt; tag</h1>
     <p>JPEG XR (ITU-T T.832), which Microsoft shipped as HD Photo, is a wavelet-free transform codec offering lossless and high-dynamic-range coding. Two files are shown: a lossless one, which decodes back to the encoder&#39;s input byte for byte, and the same picture at quality 0.6. Decoded here with <a href="https://github.com/Bevara/libjxr">libjxr_1</a></p>
-    <img is="universal-img_1" src="testcard.jxr" using="solver_minimal_1" with="libjxr_1" alt="JPEG XR lossless" />
-    <img is="universal-img_1" src="testcard_lossy_q06.jxr" using="solver_minimal_1" with="libjxr_1" alt="JPEG XR at quality 0.6" />
+    <img is="universal-img_1" src="testcard.jxr" using="mm_solver_minimal_1.0.1" with="libjxr_1" alt="JPEG XR lossless" />
+    <img is="universal-img_1" src="testcard_lossy_q06.jxr" using="mm_solver_minimal_1.0.1" with="libjxr_1" alt="JPEG XR at quality 0.6" />
     <h2>Code snippet</h2>
-    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard.jxr" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard.jxr" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
      with="<a href="https://github.com/Bevara/libjxr">libjxr_1</a>"&gt; &lt;/img&gt;
-&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard_lossy_q06.jxr" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard_lossy_q06.jxr" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
      with="<a href="https://github.com/Bevara/libjxr">libjxr_1</a>"&gt; &lt;/img&gt;
 </code></pre>
     <h2> Specifications : </h2>
@@ -85,7 +85,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>mm_solver_minimal_1.0.1</td>
             </tr>
         </tbody>
     </table>

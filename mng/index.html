@@ -62,13 +62,13 @@
     <p>MNG is the animated companion PNG never got: same chunk structure, but able to hold a sequence, and JNG is its single-frame variant carrying JPEG data instead of PNG. Neither is supported by any browser today. Decoded here with <a href="https://github.com/Bevara/libmng">libmng_1</a>.</p>
 
     <h2>MNG (MNG-VLC, one frame)</h2>
-    <img is="universal-img_1" src="testcard_vlc.mng" using="solver_minimal_1" with="libmng_1" alt="MNG image" />
+    <img is="universal-img_1" src="testcard_vlc.mng" using="mm_solver_minimal_1.0.1" with="libmng_1" alt="MNG image" />
 
     <h2>JNG (JPEG data in a PNG-style container)</h2>
-    <img is="universal-img_1" src="testcard.jng" using="solver_minimal_1" with="libmng_1" alt="JNG image" />
+    <img is="universal-img_1" src="testcard.jng" using="mm_solver_minimal_1.0.1" with="libmng_1" alt="JNG image" />
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard_vlc.mng" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard_vlc.mng" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
      with="libmng_1"&gt; &lt;/img&gt;
 </code></pre>
 
@@ -79,7 +79,7 @@
         <colgroup><col><col></colgroup>
         <tbody>
             <tr><td>Format</td><td>MNG-VLC and JNG, 128&times;128</td></tr>
-            <tr><td>Solver</td><td>solver_minimal_1</td></tr>
+            <tr><td>Solver</td><td>mm_solver_minimal_1.0.1</td></tr>
         </tbody>
     </table>
 

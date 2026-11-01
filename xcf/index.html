@@ -59,9 +59,9 @@
     <a href="javascript:history.back()">&larr; Back</a>
     <h1>Display GIMP documents using the &lt;img&gt; tag</h1>
     <p>XCF is GIMP&#39;s native format: a canvas plus a stack of layers, each stored as tiles. The filter composites the visible layers onto the canvas and hands over the result. Decoded here with <a href="https://github.com/Bevara/libxcf">libxcf_1</a></p>
-    <img is="universal-img_1" src="testcard_rle.xcf" using="solver_minimal_1" with="libxcf_1" alt="GIMP XCF document" />
+    <img is="universal-img_1" src="testcard_rle.xcf" using="mm_solver_minimal_1.0.1" with="libxcf_1" alt="GIMP XCF document" />
     <h2>Code snippet</h2>
-    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard_rle.xcf" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;img is="<a href="https://github.com/Bevara/player">universal-img_1</a>" src="testcard_rle.xcf" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
      with="<a href="https://github.com/Bevara/libxcf">libxcf_1</a>"&gt; &lt;/img&gt;
 </code></pre>
     <h2> Specifications : </h2>
@@ -82,7 +82,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>mm_solver_minimal_1.0.1</td>
             </tr>
         </tbody>
     </table>

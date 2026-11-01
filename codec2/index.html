@@ -52,9 +52,9 @@
     <a href="javascript:history.back()">&larr; Back</a>
     <h1>Play Codec 2 speech using the &lt;audio&gt; tag</h1>
     <p>Codec 2 is a very-low-bitrate speech codec &mdash; 700 bit/s to 3200 bit/s &mdash; used mostly in amateur digital voice. Ten seconds of speech fit in under 2 Ko. Decoded by <a href="https://github.com/Bevara/libcodec2">libcodec2_1</a>. A <code>.c2</code> file opens with a seven-byte header naming the mode; headerless <code>.bin</code> streams say nothing about which mode they use and are refused rather than guessed at.</p>
-    <audio is="universal-audio_1" src="testcard.c2" using="solver_minimal_1" with="libcodec2_1" controls></audio>
+    <audio is="universal-audio_1" src="testcard.c2" using="mm_solver_minimal_1.0.1" with="libcodec2_1" controls></audio>
     <h2>Code snippet</h2>
-    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="testcard.c2" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="testcard.c2" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
         with="<a href="https://github.com/Bevara/libcodec2">libcodec2_1</a>" controls&gt; &lt;/audio&gt;
 </code></pre>
     <h2> Specifications : </h2>
@@ -75,7 +75,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>mm_solver_minimal_1.0.1</td>
             </tr>
         </tbody>
     </table>

@@ -52,9 +52,9 @@
     <a href="javascript:history.back()">&larr; Back</a>
     <h1>Play iLBC speech using the &lt;audio&gt; tag</h1>
     <p>iLBC (RFC 3951) is a narrowband speech codec built for packet loss: every frame decodes on its own, so a lost one costs exactly one frame and nothing after it. This demo uses <a href="https://github.com/Bevara/libilbc">libilbc_1</a>, which packages WebRTC's fixed-point implementation. The file opens with a nine-byte header naming the mode &mdash; 20 ms frames of 38 bytes here &mdash; and the filter reads it rather than guessing, since 38 and 50 bytes divide too many stream lengths for a guess to be safe. Being fixed-point, the decode is bit-exact: not one sample of 80&nbsp;160 differs from the same library built natively.</p>
-    <audio is="universal-audio_1" src="testcard.lbc" using="solver_minimal_1" with="libilbc_1" controls></audio>
+    <audio is="universal-audio_1" src="testcard.lbc" using="mm_solver_minimal_1.0.1" with="libilbc_1" controls></audio>
     <h2>Code snippet</h2>
-    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="testcard.lbc" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="testcard.lbc" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
         with="<a href="https://github.com/Bevara/libilbc">libilbc_1</a>" controls&gt; &lt;/audio&gt;
 </code></pre>
     <h2> Specifications : </h2>
@@ -75,7 +75,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>solver_minimal_1</td>
+                <td>mm_solver_minimal_1.0.1</td>
             </tr>
         </tbody>
     </table>

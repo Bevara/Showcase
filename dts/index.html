@@ -53,11 +53,11 @@
 
     <p>DTS Coherent Acoustics is the surround codec of cinema and Blu-ray discs; no browser decodes it. This one goes through <a href="https://github.com/Bevara/libdca">libdca_1</a>, built on <a href="https://github.com/foo86/dcadec">dcadec</a> - a standalone DTS decoder, not an ffmpeg wrapper.</p>
 
-    <audio is="universal-audio_1" src="ff-16b-2c-48000hz.dts" using="solver_minimal_1" with="libdca_1" controls stats>
+    <audio is="universal-audio_1" src="ff-16b-2c-48000hz.dts" using="mm_solver_minimal_1.0.1" with="libdca_1" controls stats>
     </audio>
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ff-16b-2c-48000hz.dts" using="<a href="https://github.com/Bevara/solver">solver_minimal_1</a>"
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ff-16b-2c-48000hz.dts" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
      with="libdca_1" controls&gt; &lt;/audio&gt;
 </code></pre>
 
@@ -73,7 +73,7 @@
             <tr><td>Format</td><td>DTS core (Coherent Acoustics)</td></tr>
             <tr><td>Audio</td><td>16-bit stereo, 48 kHz</td></tr>
             <tr><td>FileSize</td><td>1.7 Mo</td></tr>
-            <tr><td>Solver</td><td>solver_minimal_1</td></tr>
+            <tr><td>Solver</td><td>mm_solver_minimal_1.0.1</td></tr>
         </tbody>
     </table>
 
