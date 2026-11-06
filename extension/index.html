@@ -342,30 +342,27 @@
     </div>
 
     <div class="demo-section">
-        <h2>Video — one more switch to flip</h2>
-        <p>Video is different. Whatever the source format, the result has to be re-encoded into something the browser
-            plays, and the only encoder for that today is H.264, whose patents are pooled. The extension will not use a
-            patent-encumbered accessor unless you say so: every accessor in the registry declares a patent status, and
-            only <em>royalty-free</em> and <em>expired</em> ones are used by default. (HEVC is a case apart: Safari on
-            Apple platforms, and recent Chrome on Apple hardware, decode it themselves, so the extension never sees
-            it there.)</p>
-        <p>To play the three files below, open the extension's options and tick
-            <strong>Use patent-encumbered accessors</strong>, then reload. Everything above keeps working either way.</p>
+        <h2>Video</h2>
+        <p>Video is different from a picture or a sound: whatever the source format, the result has to be
+            re-encoded into something the browser plays. The only encoder for that is H.264, whose patents are
+            pooled — so rather than download a patent-encumbered encoder, the extension hands the job to the
+            one your browser already ships, through WebCodecs. Nothing encumbered is fetched, and these play
+            with the extension's default settings.</p>
 
-        <h3>VVC (H.266) in MP4</h3>
-        <video src="../test_sequences/NovosobornayaSquare_640x360.mp4" controls></video>
-        <p class="note">The successor to HEVC. No browser decodes it.</p>
+        <h3>Ogg / Theora</h3>
+        <video src="theora_short.ogv" controls></video>
+        <p class="note">Decoded by <code>theora_1</code>, re-encoded by your browser. Chrome dropped Theora in
+            version 123, so without the extension this shows a player that never paints a picture.</p>
 
-        <h3>MPEG-2</h3>
-        <video src="../test_sequences/sample_1280x720_surfing_with_audio.mpeg" controls></video>
-        <p class="note">Twenty-five years of broadcast and DVD, and no browser reads it.</p>
+        <h3>Dirac</h3>
+        <video src="dirac_testcard.drc" controls></video>
+        <p class="note">A raw Dirac elementary stream, no container at all. No browser reads it.</p>
 
-        <h3>Ogg/Theora</h3>
-        <video src="../test_sequences/trailer_1080p.ogg" controls></video>
-        <p class="note">A subtler failure: Chrome dropped Theora in version 123, so it still parses the container
-            and plays the Vorbis soundtrack while the picture never appears. Theora itself is royalty-free — it is
-            only the H.264 encoder on the way out that is not. With the option on, playback starts on the first
-            transcoded segment rather than at the end of the file.</p>
+        <p class="note"><strong>Two limits worth knowing.</strong> The re-encoded video has no sound — the
+            solver cannot yet put an audio track through WebCodecs. And a long source comes out truncated:
+            the session is cut short while the encoder is still working, so the clips here are deliberately
+            short. Formats whose <em>decoder</em> is itself patent-encumbered — HEVC, VVC, AV1, VP9, AVS,
+            EVC — stay out of reach until you allow encumbered accessors in the options.</p>
     </div>
 
     <div class="demo-section">

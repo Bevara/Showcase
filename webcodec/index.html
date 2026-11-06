@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Royalty-free video, encoded with WebCodecs</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        body { font-family: system-ui, sans-serif; line-height: 1.6; max-width: 900px;
+               margin: 0 auto; padding: 2rem; background: #f9f9f9; color: #333; }
+        h1, h2 { color: #0b3d91; }
+        code { background: #eee; padding: 0.2em 0.4em; border-radius: 4px; }
+        pre code { display: block; padding: 0.8em; overflow-x: auto; }
+        .demo-section { margin-top: 2rem; padding: 1rem 1.25rem; background: #fff;
+                        border: 1px solid #ddd; border-radius: 8px; }
+        video { width: 100%; max-width: 640px; background: #000; border-radius: 4px; }
+        table { border-collapse: collapse; margin-top: 1rem; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; font-size: .9rem; }
+        th { background: #f4f6fa; }
+        .note { font-size: .9rem; color: #666; }
+        .ok { color: #1a7f37; font-weight: 600; }
+        .no { color: #b42318; font-weight: 600; }
+        .slot { min-height: 60px; }
+        .status { margin: 0; padding: .7em .9em; background: #f4f6fa; border: 1px solid #dde3ef;
+                  border-radius: 4px; font-size: .9rem; color: #555; }
+        .status.failed { background: #fdecea; border-color: #f0b4ae; color: #b42318; }
+    </style>
+    <script src="../accessors/universal-tags_1.js"></script>
+</head>
+
+<body>
+    <a href="../">&larr; Back</a>
+    <h1>Royalty-free video, end to end</h1>
+
+    <p>Playing a format the browser does not know takes two steps: decoding it, and re-encoding the
+        result into something the browser does play. The decoders below are royalty-free — Theora and
+        Dirac both are — but the usual encoder is not: H.264 is pooled, and <code>libx264</code> is
+        published as <em>licence-required</em>.</p>
+
+    <p>So the encoding is handed to the browser itself. <code>mm_solver</code> carries GPAC's WebCodecs
+        filters as built-ins, and <code>use-webcodec="enc"</code> asks for the <strong>encoder
+        only</strong>: the picture is decoded by the WebAssembly accessor named in <code>with</code>,
+        then encoded to H.264 by the codec your browser already ships. Nothing patent-encumbered is
+        downloaded.</p>
+
+    <p class="note">The <code>"enc"</code> matters. A bare <code>use-webcodec</code> also registers the
+        WebCodecs <em>decoder</em>, which puts itself forward for the input track, fails on a codec
+        WebCodecs does not know — Theora, for one — and does not hand back to the accessor you asked
+        for.</p>
+
+    <div class="demo-section">
+        <h2>Ogg / Theora</h2>
+        <div class="slot" data-src="theora_short.ogv" data-with="ogg_1;theora_1;isobmff_1">
+            <p class="status">waiting…</p>
+        </div>
+        <p class="note">Decoded by <a href="https://github.com/Bevara/theora">theora_1</a> through
+            <a href="https://github.com/Bevara/ogg">ogg_1</a>, multiplexed by
+            <a href="https://github.com/Bevara/isobmff">isobmff_1</a>, encoded by the browser:</p>
+        <pre><code>&lt;video is="universal-video_1" src="theora_short.ogv"
+       using="mm_solver_1.0.3" with="ogg_1;theora_1;isobmff_1"
+       use-webcodec="enc" controls&gt;&lt;/video&gt;</code></pre>
+    </div>
+
+    <div class="demo-section">
+        <h2>Dirac</h2>
+        <div class="slot" data-src="dirac_testcard.drc" data-with="libschro_1;isobmff_1">
+            <p class="status">waiting…</p>
+        </div>
+        <p class="note">Decoded by <a href="https://github.com/Bevara/libschro">libschro_1</a>, a raw
+            Dirac elementary stream with no container at all.</p>
+    </div>
+
+    <div class="demo-section">
+        <h2>What works, and what does not yet</h2>
+        <p>Measured against <code>mm_solver 1.0.2</code>, this is where the WebCodecs encoder stands
+            for the four royalty-free video families:</p>
+        <table>
+            <thead><tr><th>Format</th><th>Decoder</th><th>Through WebCodecs</th></tr></thead>
+            <tbody>
+                <tr><td>Theora</td><td><code>theora_1</code></td>
+                    <td class="ok">works on short clips</td></tr>
+                <tr><td>Dirac</td><td><code>libschro_1</code></td>
+                    <td class="ok">works</td></tr>
+                <tr><td>MPEG-1 / MPEG-2</td><td><code>libmpeg2_1</code></td>
+                    <td class="no">refused: <code>Failed to connect mpeg2vdec to wcenc: Bad Parameter</code></td></tr>
+                <tr><td>Motion JPEG</td><td><code>libjpeg_1</code></td>
+                    <td class="no">refused: <code>Filter not found for the desired type</code></td></tr>
+            </tbody>
+        </table>
+        <p class="note">The two refusals are in the encoder, not in the decoders, and neither can be
+            worked around from the page. <code>wcenc</code> requires <code>WIDTH</code> and
+            <code>HEIGHT</code> on its input at connection time, which <code>mpeg2vdec</code> only
+            knows after parsing a sequence header; and no pixel-format conversion resolves between
+            <code>libjpeg</code>'s output and what the encoder accepts.</p>
+        <p class="note">The clips here are deliberately short. A long or large source starves the
+            session while the asynchronous WebCodecs callbacks are in flight, GPAC reports
+            <code>No data received from fetch for 5000 ms with an idle session</code> and ends early,
+            leaving a truncated file — the same 1080p Theora runs complete at 4 seconds and stops after
+            1 second when given 33.</p>
+    </div>
+
+    <div class="demo-section">
+        <h2>The same thing, without touching the page</h2>
+        <p>The <a href="../extension/">browser extension</a> applies this to any site: it watches for
+            media the browser cannot decode and runs the same pipelines, with the same rule that only
+            royalty-free accessors are used unless you say otherwise.</p>
+    </div>
+
+    <p class="note">The sample files and formats have been selected because they are licence-free to
+        use. All demos are downloaded in their entirety, please be patient.</p>
+
+    <script>
+    /* One pipeline at a time.
+     *
+     * Each of these decodes in WebAssembly and encodes through WebCodecs, and
+     * both are CPU-bound. Started together they starve each other: whichever
+     * loses the race goes quiet long enough for GPAC to report "No data
+     * received from fetch for 5000 ms with an idle session" and end early,
+     * leaving a truncated or empty file. So the players are built in turn,
+     * each waiting for the one before it. */
+    (async () => {
+      /* The accessors sit next to this page rather than being pulled from
+       * the registry: a worker script has to be same-origin, and decoding on
+       * the main thread instead starves the WebCodecs callbacks - the Dirac
+       * clip never completes that way. */
+      /* An absolute URL: the tag resolves script-directory through urlExist,
+       * which parses it with new URL() and rejects a relative path. */
+      const REG = new URL(".", location.href).href;
+      for (const slot of document.querySelectorAll(".slot")) {
+        const status = slot.querySelector(".status");
+        status.textContent = "decoding and re-encoding…";
+        const v = document.createElement("video", { is: "universal-video_1" });
+        v.setAttribute("is", "universal-video_1");
+        v.setAttribute("using", "mm_solver_1.0.3");
+        v.setAttribute("with", slot.dataset.with);
+        v.setAttribute("script-directory", REG);
+        v.setAttribute("use-webcodec", "enc");
+        v.setAttribute("use-worker", "");
+        v.setAttribute("controls", "");
+        v.setAttribute("src", slot.dataset.src);
+        slot.appendChild(v);
+        try {
+          const out = await v.decodingPromise;
+          if (!out) throw new Error("the pipeline produced no output");
+          /* decodingPromise resolves when the blob is attached, not when the
+           * browser has accepted it - wait for the metadata to be sure. */
+          await new Promise((res, rej) => {
+            if (v.readyState >= 1) return res();
+            v.addEventListener("loadedmetadata", res, { once: true });
+            v.addEventListener("error", () => rej(new Error("the browser refused the result")), { once: true });
+            setTimeout(() => (v.readyState >= 1 ? res() : rej(new Error("timed out"))), 20000);
+          });
+          status.remove();
+        } catch (e) {
+          status.className = "status failed";
+          status.textContent = "This one did not come through: " + (e.message || e)
+            + ". The console carries the pipeline's own report.";
+          v.remove();
+        }
+      }
+    })();
+    </script>
+</body>
+
+</html>
