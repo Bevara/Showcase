@@ -1,0 +1,49 @@
+:root { --brand:#3574ba; --brand-light:#5698d2; --ink:#333; --pale:#eee; }
+* { box-sizing: border-box; }
+body { font-family: system-ui, sans-serif; line-height: 1.6; max-width: 1000px; margin: 0 auto;
+       padding: 2rem; background: #f9f9f9; color: var(--ink); }
+h1, h2 { color: #0b3d91; }
+h2 { margin-top: 0; }
+code { background: var(--pale); padding: .2em .4em; border-radius: 4px; }
+pre code { display: block; padding: .8em; overflow-x: auto; }
+.note { font-size: .9rem; color: #666; }
+section { margin-top: 2rem; padding: 1rem 1.25rem; background: #fff; border: 1px solid #ddd; border-radius: 8px; }
+
+/* scoreboard */
+#board { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .75rem; margin-top: 1.5rem; }
+.score { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: .9rem 1rem; text-align: center; }
+.score .n { display: block; font-size: 2.2rem; font-weight: 700; line-height: 1.1; color: var(--ink); }
+.score .l { font-size: .8rem; color: #666; }
+.score.bevara { border-color: var(--brand); background: #eef3fc; }
+.score.bevara .n { color: var(--brand); }
+.score.out .n { color: #9a6700; }
+.score.tot { background: #f4f4f4; }
+.verdict { margin-top: .6rem; font-size: .95rem; }
+.verdict.on { color: #14532d; }
+
+.install { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-top: 1rem;
+           padding: 1rem 1.25rem; background: #eef3fc; border: 1px solid #c9d9f2; border-radius: 8px; }
+.install a.cta { display: inline-block; padding: .6em 1.2em; background: var(--brand); color: #fff;
+                 border-radius: 6px; text-decoration: none; font-weight: 600; white-space: nowrap; }
+
+/* cards */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.card { margin: 0; border: 1px solid #e3e3e3; border-radius: 6px; padding: .6rem; background: #fff; }
+.card figcaption { display: flex; align-items: center; gap: .4rem; font-size: .9rem; margin-bottom: .45rem; }
+.card figcaption b { color: #0b3d91; }
+.card .ext { color: #999; font-size: .8rem; }
+.card .badge { margin-left: auto; font-size: .72rem; padding: .15em .55em; border-radius: 999px;
+               background: var(--pale); color: #666; white-space: nowrap; }
+.card.native .badge { background: #e7f6ec; color: #14532d; }
+.card.bevara .badge { background: var(--brand); color: #fff; }
+.card.out .badge { background: #fdf3e7; color: #9a6700; }
+.card img { width: 100%; height: 130px; object-fit: contain; background: #f4f4f4; border-radius: 4px; }
+.card audio, .card video { width: 100%; }
+.card video { height: 130px; background: #000; border-radius: 4px; }
+
+.live { font-size: .9rem; background: #f4f6fa; border: 1px solid #dde3ef; border-radius: 6px; padding: .7em .9em; }
+
+/* video section: wider cards, each with a line saying why it matters */
+.grid.videos { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.grid.videos video { height: 160px; }
+.card .why { font-size: .78rem; color: #777; margin: .45rem 0 0; line-height: 1.35; }
