@@ -38,11 +38,9 @@
 
     <section id="video">
       <h2>Video, decoded and re-encoded live</h2>
-      <p class="note">Video is the hardest case and the best demonstration. Whatever the source, the result has to
+      <p class="note">Video is the the best demonstration. Whatever the source, the result has to
          be handed back to the browser as something it plays, so each of these is decoded by a WebAssembly
-         accessor and then <b>re-encoded to H.264 by your own browser</b>, through WebCodecs. Nothing
-         patent-encumbered is downloaded, and these play with the extension's default settings — no option to
-         tick.</p>
+         accessor and then <b>re-encoded to H.264 by your own browser</b>, through WebCodecs.</p>
       <div class="grid videos">
       <figure class="card" data-fmt="v0" data-kind="video">
         <figcaption><b>Ogg / Theora</b><span class="ext">.ogv</span><span class="badge">…</span></figcaption>
@@ -70,10 +68,6 @@
         <p class="why">A lossless intermediate codec, common in editing archives.</p>
       </figure>
       </div>
-      <p class="note">Two limits, both in the solver and both being worked on: the re-encoded video has no sound,
-         and a long source comes out truncated — which is why these clips are short. Formats whose <em>decoder</em>
-         is itself patent-encumbered (HEVC, VVC, AV1, VP9, AVS, EVC) stay out of reach until you allow encumbered
-         accessors in the options; you will find them below, reported as unavailable.</p>
     </section>
 
     <section>
