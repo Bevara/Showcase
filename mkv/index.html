@@ -62,11 +62,11 @@
 
     <p><strong>Known issue:</strong> the underlying GPAC pipeline currently fails on this source ("Cannot find any filter providing encoding for c=avc" - passthrough of an already-AVC track isn't resolving the way it should). No functional test covers the Matroska/<code>ffdmx_1</code> pipeline yet, so this demo is not verified by the test suite. If your browser natively supports this file's H.264/AAC-in-Matroska content, the &lt;video&gt; tag may still appear to play - that's the browser's own built-in decoder, not this pipeline.</p>
 
-    <video is="universal-video_1" src="../test_sequences/Sintel_Trailer.480p.DivX_Plus_HD.mkv" using="mm_solver_1.0.1" with="ffdmx_1;isobmff_1" use-webcodec controls></video>
+    <video is="universal-video_1" src="../test_sequences/Sintel_Trailer.480p.DivX_Plus_HD.mkv" using="mm_solver_1.0.4" with="ffdmx_1;isobmff_1" use-webcodec controls></video>
 
     <h2>Code snippet</h2>
 
-    <pre><code>&lt;video is="universal-video_1" src="../test_sequences/Sintel_Trailer.480p.DivX_Plus_HD.mkv" using="mm_solver_1.0.1" with="ffdmx_1;isobmff_1" use-webcodec controls&gt; &lt;/video&gt;</code></pre>
+    <pre><code>&lt;video is="universal-video_1" src="../test_sequences/Sintel_Trailer.480p.DivX_Plus_HD.mkv" using="mm_solver_1.0.4" with="ffdmx_1;isobmff_1" use-webcodec controls&gt; &lt;/video&gt;</code></pre>
 
     <h2> Specifications : </h2>
 
@@ -131,7 +131,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>mm_solver_1.0.1</td>
+                <td>mm_solver_1.0.4</td>
             </tr>
         </tbody>
     </table>

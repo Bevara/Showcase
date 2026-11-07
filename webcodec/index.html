@@ -58,7 +58,7 @@
             <a href="https://github.com/Bevara/ogg">ogg_1</a>, multiplexed by
             <a href="https://github.com/Bevara/isobmff">isobmff_1</a>, encoded by the browser:</p>
         <pre><code>&lt;video is="universal-video_1" src="theora_short.ogv"
-       using="mm_solver_1.0.3" with="ogg_1;theora_1;isobmff_1"
+       using="mm_solver_1.0.4" with="ogg_1;theora_1;isobmff_1"
        use-webcodec="enc" controls&gt;&lt;/video&gt;</code></pre>
     </div>
 
@@ -132,7 +132,7 @@
         status.textContent = "decoding and re-encoding…";
         const v = document.createElement("video", { is: "universal-video_1" });
         v.setAttribute("is", "universal-video_1");
-        v.setAttribute("using", "mm_solver_1.0.3");
+        v.setAttribute("using", "mm_solver_1.0.4");
         v.setAttribute("with", slot.dataset.with);
         v.setAttribute("script-directory", REG);
         v.setAttribute("use-webcodec", "enc");

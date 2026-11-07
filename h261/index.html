@@ -53,9 +53,9 @@
     <h1>Decode H.261 video using the &lt;video&gt; tag</h1>
     <p>H.261 is the first of the ITU-T video recommendations, published in 1988 for videoconferencing over ISDN, and every later one - H.262, H.263, H.264 - is a descendant of the block-based hybrid design it introduced. It is also the only one of the four with no free standalone decoder: <a href="https://github.com/Bevara/ffmpeg-h26x">ffmpeg-h26x_1</a> is a build of FFmpeg reduced to the H.261 and H.263 decoders alone, which is why it weighs under a megabyte rather than the several that a full libavcodec would.</p>
     <p>The stream sits in an AVI, because H.261 predates every container GPAC muxes. <a href="https://github.com/Bevara/avidmx">avidmx_1</a> now recognises the <code>H261</code> compressor fourcc and tags the pid with it; nothing else in the chain is specific to this format. All 50 frames come out at 59.4 dB PSNR against a native FFmpeg decode.</p>
-    <video is="universal-video_1" src="testcard.avi" using="mm_solver_1.0.1" with="avidmx_1;ffmpeg-h26x_1;isobmff_1;libx264_1" controls></video>
+    <video is="universal-video_1" src="testcard.avi" using="mm_solver_1.0.4" with="avidmx_1;ffmpeg-h26x_1;isobmff_1;libx264_1" controls></video>
     <h2>Code snippet</h2>
-    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="testcard.avi" using="<a href="https://github.com/Bevara/solver">mm_solver_1.0.1</a>"
+    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="testcard.avi" using="<a href="https://github.com/Bevara/solver">mm_solver_1.0.4</a>"
         with="<a href="https://github.com/Bevara/avidmx">avidmx_1</a>;<a href="https://github.com/Bevara/ffmpeg-h26x">ffmpeg-h26x_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>" controls&gt; &lt;/video&gt;
 </code></pre>
     <p>H.261 allows only two picture sizes, QCIF (176x144) and CIF (352x288), and has no notion of a key frame: the decoder logs <em>first frame is no keyframe</em> on any H.261 stream, which is a statement about the format rather than about this file.</p>
@@ -77,7 +77,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>mm_solver_1.0.1</td>
+                <td>mm_solver_1.0.4</td>
             </tr>
         </tbody>
     </table>
