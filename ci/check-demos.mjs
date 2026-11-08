@@ -204,17 +204,27 @@ const IN_PAGE = `async (timeout) => {
         new Promise((_, rj) => setTimeout(() => rj(new Error('decode timed out after ' + timeout + 'ms')), timeout))
       ]);
       /* The promise resolves even when the source 404s, so the result has to
-       * be weighed. Prefer what the element itself says - the tag may revoke
-       * its object URL as soon as it has handed it to the browser, and
-       * fetching a revoked blob fails although the decode worked. */
+       * be weighed. Ask the element, not the URL: the tag may revoke its
+       * object URL as soon as the browser has it, and fetching a revoked blob
+       * fails although the decode worked - that is how theora reported
+       * "Failed to fetch" on a demo that plays. Give the element a few seconds
+       * to reach metadata, since the promise can resolve before it has.
+       */
       let size = 0, how = '';
-      const nat = el.naturalWidth || el.videoWidth || 0;
-      const dur = Number.isFinite(el.duration) ? el.duration : 0;
-      if (nat > 0) { size = nat; how = 'naturalWidth/videoWidth ' + nat; }
-      else if (dur > 0) { size = dur; how = 'duration ' + dur.toFixed(2) + 's'; }
-      else if (url) {
+      const deadline = Date.now() + 10000;
+      while (Date.now() < deadline) {
+        const nat = el.naturalWidth || el.videoWidth || 0;
+        const dur = Number.isFinite(el.duration) ? el.duration : 0;
+        if (nat > 0) { size = nat; how = 'naturalWidth/videoWidth ' + nat; break; }
+        if (dur > 0) { size = dur; how = 'duration ' + dur.toFixed(2) + 's'; break; }
+        if ((el.readyState || 0) >= 1) { size = 1; how = 'readyState ' + el.readyState; break; }
+        await new Promise(s => setTimeout(s, 250));
+      }
+      /* Nothing visible or audible to measure - an <audio> tag that never
+       * reaches metadata still has the decoded bytes behind its URL. */
+      if (!size && url) {
         try { size = (await (await fetch(url)).arrayBuffer()).byteLength; how = size + ' bytes'; }
-        catch (e) { out.push({ label, ok: false, why: 'result unreadable: ' + e.message }); continue; }
+        catch (e) { out.push({ label, ok: false, why: 'nothing decoded, and the result URL is gone: ' + e.message }); continue; }
       }
       out.push({ label, ok: size > 0, why: size > 0 ? '' : 'decoded to an empty result', how });
     } catch (e) { out.push({ label, ok: false, why: String(e && e.message || e) }); }
@@ -232,7 +242,15 @@ async function checkDecode(demos, base) {
       /* A container gets 64 MB of /dev/shm and Chromium moves response bodies
        * through shared memory, which silently breaks fetches of a few hundred
        * KB - exactly what the media in these demos weigh. */
-      '--disable-dev-shm-usage'
+      '--disable-dev-shm-usage',
+      /* The 3D demos (bifs, vrml) and the canvas ones render through WebGL,
+       * which has no GPU on a build agent. Without this they draw nothing and
+       * the canvas check reports the agent's lack of a GPU as a broken demo -
+       * bifs, hevc-canvas, video_bench and xvid-canvas all failed that way on
+       * Jenkins while passing on a laptop. */
+      '--enable-unsafe-swiftshader',
+      '--use-gl=angle',
+      '--use-angle=swiftshader'
     ]
   });
   const results = [];
@@ -253,6 +271,10 @@ async function checkDecode(demos, base) {
       for (const t of tags.filter(x => x.canvas)) {
         const idx = tags.indexOf(t);
         const handle = await page.$(`[data-bevara-check="${idx}"]`);
+        /* An element outside the viewport, or with a zero box, cannot be
+         * screenshotted at all - "canvas could not be captured" was that, not
+         * a broken demo. */
+        try { await handle.evaluate(e => e.scrollIntoView({ block: 'center' })); } catch {}
         let shot = null;
         const deadline = Date.now() + DEMO_TIMEOUT;
         while (Date.now() < deadline) {
