@@ -72,7 +72,8 @@ async function discover() {
         using: m[1],
         with: (attrOf(m[0], 'with') || '').split(';').map(s => s.trim()).filter(Boolean),
         scriptDirectory: attrOf(m[0], 'script-directory'),
-        src: attrOf(m[0], 'src') || attrOf(m[0], 'data-src')
+        /* a canvas tag names its source with data-url */
+        src: attrOf(m[0], 'src') || attrOf(m[0], 'data-src') || attrOf(m[0], 'data-url')
       });
     }
     if (tags.length) demos.push({ name, tags });
@@ -195,7 +196,7 @@ const IN_PAGE = `async (timeout) => {
     .filter(e => (e.getAttribute('is') || '').startsWith('universal'));
   const out = [];
   for (const el of els) {
-    const label = el.tagName.toLowerCase() + ' ' + (el.getAttribute('src') || el.getAttribute('data-src') || '?').split('/').pop();
+    const label = el.tagName.toLowerCase() + ' ' + (el.getAttribute('src') || el.getAttribute('data-src') || el.getAttribute('data-url') || '?').split('/').pop();
     // a canvas tag streams for as long as the page lives and never settles:
     // leave it to the screenshot check outside the page
     if (el.tagName.toLowerCase() === 'canvas') {
