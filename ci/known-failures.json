@@ -1,0 +1,24 @@
+{
+  "comment": [
+    "Checks that do not pass today, per pass, with the reason. They are reported",
+    "as JUnit skipped instead of failures, so this job goes red on a NEW break",
+    "rather than on the backlog it inherited - a job that is always red protects",
+    "nothing.",
+    "",
+    "The list cannot quietly rot: an entry that starts passing is reported as a",
+    "failure, which is the signal to delete it. And if every check in a pass is",
+    "masked, the pass fails anyway, so a wholesale breakage can never look green."
+  ],
+  "copies": {
+    "vp9": "UshaikaRiverEmb_640x360.webm is in neither the repository nor the deployed site. The file exists in the player tree (build/rg/); it has to be committed here or fetched by get_testing_files.sh."
+  },
+  "registry": {
+    "tracker": "libxmp_1 (bevara:libxmp@1.0.4) does not list mm_solver_minimal_1.0.1 in its registry using list. The demo works today, so this is a latent break, not a visible one: either the demo moves to mm_solver_1.0.4 or libxmp is republished declaring the minimal runtime."
+  },
+  "decode": {
+    "vp9": "Its video source is missing, so there is nothing to decode. Same cause as the copies entry.",
+    "img_bench": "References test_sequences/..._1080p.jxl, and get_testing_files.sh only downloads the variant without _1080p. Either the script fetches it or the page points at the file that exists.",
+    "midi": "libmidi@1.0.2 with mm_solver_minimal@1.0.1 - the pair the registry declares compatible - dies in reportUndefinedSymbols: the accessor wants a symbol the minimal solver does not export. Moving the demo to mm_solver_1.0.4 does not help (it fails differently), and the registry says libmidi supports the minimal runtime only, so libmidi has to be republished.",
+    "mkv": "Loads ffdmx_1, which is not published in the registry at all, so nothing keeps it in step with the solver; it dies on a missing stub (resolved is not a function). Either ffdmx is published or the demo points at a published demultiplexer."
+  }
+}

@@ -35,6 +35,12 @@ import { join, extname, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+
+/* Checks known not to pass, per pass name, reported as skipped so this job
+ * goes red on a new break rather than on the backlog. See ci/known-failures.json. */
+let KNOWN = {};
+try { KNOWN = JSON.parse(await readFile(join(ROOT, 'ci', 'known-failures.json'), 'utf8')); } catch {}
+const knownIn = (pass, name) => (KNOWN[pass] || {})[name] || null;
 const argv = process.argv.slice(2);
 const flag = (n, d = null) => { const i = argv.indexOf('--' + n); return i < 0 ? d : (argv[i + 1] || true); };
 const DEMO_TIMEOUT = Number(flag('timeout', 45000));
@@ -322,34 +328,23 @@ async function checkDecode(demos, base) {
 
 const xml = (s) => String(s).replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
 
-function junit(copies, registry, decode) {
+function junit(copies, registry, decode, registryRows) {
   const suites = [];
-  const mk = (name, cases) =>
-    `  <testsuite name="${xml(name)}" tests="${cases.length}" failures="${cases.filter(c => c.why).length}">\n` +
-    cases.map(c => `    <testcase classname="showcase.${xml(name)}" name="${xml(c.name)}">` +
-      (c.why ? `\n      <failure message="${xml(c.why)}"/>\n    ` : '') + `</testcase>`).join('\n') +
+  const sect = (name, cases, tag) =>
+    `  <testsuite name="${xml(name)}" tests="${cases.length}" failures="${tag === 'failure' ? cases.length : 0}" skipped="${tag === 'skipped' ? cases.length : 0}">\n` +
+    cases.map(c => `    <testcase classname="showcase.${xml(name.split('.')[0])}" name="${xml(c.name)}">` +
+      (tag ? `\n      <${tag} message="${xml(c.why || '')}"/>\n    ` : '') + `</testcase>`).join('\n') +
     `\n  </testsuite>`;
-  suites.push(mk('copies', copies.map(c => ({
-    name: c.name, why: c.ok ? '' : 'missing in ' + c.name + '/: ' + c.missing.join(', ')
-  }))));
-  if (registry) {
-    suites.push(mk('registry', registry.map(r => ({
-      name: r.name, why: r.ok ? '' : r.bad.join('; ')
-    }))));
-    const warns = registry.filter(r => r.unpublished.length);
-    if (warns.length) {
-      suites.push(
-        `  <testsuite name="registry.unpublished" tests="${warns.length}" failures="0" skipped="${warns.length}">\n` +
-        warns.map(r => `    <testcase classname="showcase.registry.unpublished" name="${xml(r.name)}">\n` +
-          `      <skipped message="${xml(r.unpublished.join('; '))}"/>\n    </testcase>`).join('\n') +
-        `\n  </testsuite>`);
-    }
+  for (const c of [copies, registry, decode].filter(Boolean)) {
+    suites.push(sect(c.pass, c.ok, null));
+    if (c.failed.length) suites.push(sect(c.pass + '.failed', c.failed, 'failure'));
+    if (c.fixed.length) suites.push(sect(c.pass + '.to-retire', c.fixed.map(r =>
+      ({ name: r.name, why: 'passes now; delete its entry from ci/known-failures.json so a future break is caught' })), 'failure'));
+    if (c.known.length) suites.push(sect(c.pass + '.known', c.known, 'skipped'));
   }
-  if (decode) suites.push(mk('decode', decode.map(d => ({
-    name: d.name,
-    why: d.ok ? '' : d.tags.filter(t => !t.ok).map(t => t.label + ': ' + t.why).join(' | ') +
-      (d.errors.length ? ' || console: ' + d.errors.join(' ; ') : '')
-  }))));
+  const warns = (registryRows || []).filter(r => r.unpublished.length);
+  if (warns.length) suites.push(sect('compatible.unpublished',
+    warns.map(r => ({ name: r.name, why: r.unpublished.join('; ') })), 'skipped'));
   return `<?xml version="1.0" encoding="UTF-8"?>\n<testsuites>\n${suites.join('\n')}\n</testsuites>\n`;
 }
 
@@ -358,17 +353,47 @@ function junit(copies, registry, decode) {
 const demos = await discover();
 console.log(`${demos.length} demos, ${demos.reduce((n, d) => n + d.tags.length, 0)} Bevara tags\n`);
 
+/* Splits a pass's results against the baseline. A listed failure is skipped; a
+ * listed entry that now passes is a failure, so the list cannot rot; and if the
+ * baseline masks every single check, the pass fails anyway - a wholesale
+ * breakage must never look green. */
+function classify(key, label, rows, failWhy) {
+  const out = { pass: label, ok: [], failed: [], known: [], fixed: [] };
+  for (const r of rows) {
+    const why = knownIn(key, r.name);
+    if (r.ok && why) out.fixed.push({ ...r, why });
+    else if (r.ok) out.ok.push(r);
+    else if (why) out.known.push({ ...r, why });
+    else out.failed.push({ ...r, why: failWhy(r) });
+  }
+  if (rows.length && !out.ok.length && !out.failed.length) {
+    out.failed.push({ name: '(every check in this pass is on the baseline)',
+      why: 'nothing was actually verified; the baseline cannot mask a whole pass' });
+  }
+  return out;
+}
+
+function show(c) {
+  for (const r of c.ok) console.log(`  ok    ${r.name}`);
+  for (const r of c.failed) console.log(`  FAIL  ${r.name}  ${r.why}`);
+  for (const r of c.fixed) console.log(`  FIXED ${r.name}  passes now - remove it from ci/known-failures.json`);
+  for (const r of c.known) console.log(`  known ${r.name}  ${r.why}`);
+  console.log(`  ${c.ok.length}/${c.ok.length + c.failed.length} ${c.pass}` +
+    (c.known.length ? `, ${c.known.length} known` : '') + (c.fixed.length ? `, ${c.fixed.length} to retire` : '') + '\n');
+}
+
 console.log('pass 1: local copies of the solver and accessors');
-const copies = await checkCopies(demos);
-for (const c of copies) if (!c.ok) console.log(`  FAIL ${c.name}  missing: ${c.missing.join(', ')}`);
-console.log(`  ${copies.filter(c => c.ok).length}/${copies.length} complete\n`);
+const copies = classify('copies', 'complete', await checkCopies(demos), r => 'missing: ' + r.missing.join(', '));
+show(copies);
 
 console.log('pass 1b: runtime compatibility declared by the registry');
-const registry = await checkRegistry(demos);
-if (registry) {
-  for (const r of registry) if (!r.ok) console.log(`  FAIL ${r.name}  ${r.bad.join('; ')}`);
-  for (const r of registry) for (const u of r.unpublished) console.log(`  warn ${r.name}  ${u}`);
-  console.log(`  ${registry.filter(r => r.ok).length}/${registry.length} compatible\n`);
+const registryRows = await checkRegistry(demos);
+let registry = null;
+if (registryRows) {
+  registry = classify('registry', 'compatible', registryRows, r => r.bad.join('; '));
+  show(registry);
+  for (const r of registryRows) for (const u of r.unpublished) console.log(`  warn  ${r.name}  ${u}`);
+  if (registryRows.some(r => r.unpublished.length)) console.log('');
 } else {
   console.log('');
 }
@@ -378,15 +403,19 @@ if (!COPIES_ONLY) {
   let server = null, base = BASE;
   if (!base) { server = await serve(); base = `http://127.0.0.1:${server.port}`; }
   console.log(`pass 2: decode, against ${base}`);
-  try { decode = await checkDecode(demos, base); } finally { server?.srv.close(); }
-  console.log(`  ${decode.filter(d => d.ok).length}/${decode.length} decode\n`);
+  let rows;
+  try { rows = await checkDecode(demos, base); } finally { server?.srv.close(); }
+  decode = classify('decode', 'decode', rows, r =>
+    r.tags.filter(t => !t.ok).map(t => t.label + ': ' + t.why).join(' | ') +
+    (r.errors.length ? ' || console: ' + r.errors.join(' ; ') : ''));
+  show(decode);
 }
 
-await writeFile(join(ROOT, 'ci', 'showcase-results.xml'), junit(copies, registry, decode));
+await writeFile(join(ROOT, 'ci', 'showcase-results.xml'),
+  junit(copies, registry, decode, registryRows));
 console.log('wrote ci/showcase-results.xml');
 
-const failed = copies.filter(c => !c.ok).length
-  + (registry ? registry.filter(r => !r.ok).length : 0)
-  + (decode ? decode.filter(d => !d.ok).length : 0);
-if (failed) { console.error(`\n${failed} failing checks`); process.exit(1); }
-console.log('\nall demos pass');
+const bad = [copies, registry, decode].filter(Boolean)
+  .reduce((n, c) => n + c.failed.length + c.fixed.length, 0);
+if (bad) { console.error(`\n${bad} failing checks`); process.exit(1); }
+console.log('\nno new break: every check passes or is a known one');

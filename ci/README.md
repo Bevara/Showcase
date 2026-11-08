@@ -57,6 +57,25 @@ Console errors, page errors and failed requests are collected per demo and
 reported with the failure, so the JUnit entry says what went wrong rather than
 just that something did.
 
+## The baseline
+
+`known-failures.json` lists, per pass, the checks that do not pass today, with
+the reason. They are reported as JUnit skipped rather than failures, so this job
+goes red on a **new** break instead of on the backlog it inherited - a job that
+is always red protects nothing.
+
+Two guards keep that from becoming a way to hide things:
+
+- an entry that starts passing is reported as a failure, naming itself, which is
+  the signal to delete it; the list cannot quietly rot.
+- if the baseline masks every check in a pass, that pass fails anyway. A
+  wholesale breakage can never look green.
+
+Today the baseline holds `vp9` and `img_bench` (missing media), `midi`
+(`libmidi` to republish), `mkv` (`ffdmx` never published) and `tracker` (a
+declared incompatibility that happens to work). Each entry says what would
+retire it.
+
 ## Running it
 
 ```sh
