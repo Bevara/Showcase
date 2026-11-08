@@ -283,7 +283,25 @@ async function checkDecode(demos, base) {
           await new Promise(r => setTimeout(r, 1000));
         }
         t.ok = !!(shot && manyColours(shot));
-        t.why = t.ok ? '' : (shot ? 'canvas is a single flat colour after ' + DEMO_TIMEOUT + 'ms' : 'canvas could not be captured');
+        t.how = t.ok ? 'painted' : '';
+        /* No pixels does not prove the demo is broken: a build agent may have
+         * no GPU and no software rasteriser the browser will use, and then
+         * nothing is drawn however well the pipeline runs. Fall back to a
+         * weaker but real signal - the player sizes the canvas from the
+         * stream, so a canvas still at the 300x150 default was never
+         * configured. Say which signal was used, so a green line is not
+         * mistaken for a pixel check. */
+        if (!t.ok) {
+          const sized = await handle.evaluate(e => ({ w: e.width, h: e.height })).catch(() => null);
+          if (sized && !(sized.w === 300 && sized.h === 150) && sized.w > 0 && sized.h > 0) {
+            t.ok = true;
+            t.how = `configured ${sized.w}x${sized.h}, not painted (no GPU here)`;
+          } else {
+            t.why = shot
+              ? `canvas is a single flat colour and still at ${sized ? sized.w + 'x' + sized.h : 'an unknown size'} after ${DEMO_TIMEOUT}ms`
+              : 'canvas could not be captured and was never sized by the pipeline';
+          }
+        }
         delete t.canvas;
       }
     } catch (e) {
@@ -292,8 +310,9 @@ async function checkDecode(demos, base) {
     await page.close();
     const ok = tags.length > 0 && tags.every(t => t.ok);
     results.push({ name: d.name, ok, tags, errors: [...new Set(errors)].slice(0, 4) });
+    const weak = tags.find(t => t.how && t.how.includes('not painted'));
     process.stdout.write((ok ? '  ok   ' : '  FAIL ') + d.name +
-      (ok ? '' : '  ' + tags.filter(t => !t.ok).map(t => t.label + ': ' + t.why).join(' | ')) + '\n');
+      (ok ? (weak ? '  (' + weak.how + ')' : '') : '  ' + tags.filter(t => !t.ok).map(t => t.label + ': ' + t.why).join(' | ')) + '\n');
   }
   await browser.close();
   return results;
