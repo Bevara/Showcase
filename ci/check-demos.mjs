@@ -151,6 +151,36 @@ async function checkRegistry(demos) {
   return results;
 }
 
+/* ---------- is the deployed site the commit under test? ---------- */
+
+/* The Pages workflow writes the commit it was built from into deployed.txt.
+ * When this run knows which commit it is checking (Jenkins sets GIT_COMMIT)
+ * and is aimed at a deployed site, wait until the two agree: publishing takes
+ * minutes, because the workflow downloads the media first, and a fixed sleep
+ * let build #9 test the previous deployment. Gives up after --deploy-timeout
+ * (15 min) and says so, rather than testing the wrong site in silence. */
+async function waitForDeployment(base) {
+  const want = process.env.GIT_COMMIT;
+  if (!BASE || !want) return;
+  const limit = Number(flag('deploy-timeout', 15 * 60 * 1000));
+  const t0 = Date.now();
+  let seen = null;
+  while (Date.now() - t0 < limit) {
+    try {
+      const r = await fetch(`${base}/deployed.txt?t=${Date.now()}`, { cache: 'no-store' });
+      seen = r.ok ? (await r.text()).trim() : `HTTP ${r.status}`;
+      if (seen === want) {
+        console.log(`deployed site is at ${want.slice(0, 7)} (waited ${Math.round((Date.now() - t0) / 1000)} s)\n`);
+        return;
+      }
+    } catch (e) { seen = String(e.message || e); }
+    await new Promise(r => setTimeout(r, 15000));
+  }
+  console.error(`the deployed site never reached ${want.slice(0, 7)} within ${Math.round(limit / 60000)} min (deployed.txt says: ${String(seen).slice(0, 60)}).`);
+  console.error('Refusing to check demos against a site that is not the commit under test.');
+  process.exit(1);
+}
+
 /* ---------- static server ---------- */
 
 const MIME = {
@@ -403,6 +433,7 @@ let decode = null;
 if (!COPIES_ONLY) {
   let server = null, base = BASE;
   if (!base) { server = await serve(); base = `http://127.0.0.1:${server.port}`; }
+  await waitForDeployment(base);
   console.log(`pass 2: decode, against ${base}`);
   let rows;
   try { rows = await checkDecode(demos, base); } finally { server?.srv.close(); }

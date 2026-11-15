@@ -45,6 +45,13 @@ jobs:
         run: MP4Box -version
       - name: Run get_testing_files.sh
         run: ./get_testing_files.sh
+      # Stamps the published site with the commit it was built from. The Jenkins
+      # job that checks the demos reads this before it starts: fetching the media
+      # above takes minutes, so "wait 90 seconds" let it test a site that was
+      # still the previous deployment - and report a demo as broken, then as
+      # fixed, on two consecutive builds with nothing changed in between.
+      - name: Stamp the deployed commit
+        run: echo "${{ github.sha }}" > deployed.txt
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

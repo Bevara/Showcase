@@ -111,10 +111,13 @@ A freestyle job, same shape as the `player` one.
   node ci/check-demos.mjs --timeout 60000
   ```
 
-  Add `--base https://bevara.github.io/Showcase` as a second step if you also
-  want the published site checked after Pages has caught up; it lags a push by
-  a minute or so, so keep it separate from the pre-publish check rather than
-  replacing it.
+  The job runs it with `--base https://bevara.github.io/Showcase`, against
+  what visitors get. Publishing lags a push by several minutes, because the
+  Pages workflow downloads the media first, so the script does not sleep and
+  hope: the workflow stamps the site with its commit (`deployed.txt`), and when
+  `GIT_COMMIT` is set - Jenkins sets it - the decode pass waits until the
+  deployed site reports that very commit, or gives up after `--deploy-timeout`
+  (15 min) and fails rather than test the previous deployment.
 
 - **Post-build**: publish JUnit results from `ci/showcase-results.xml`. Each
   demo then shows up as its own test under `showcase.copies`,
