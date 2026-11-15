@@ -84,6 +84,18 @@ async function discover() {
 /* ---------- pass 1: copies ---------- */
 
 async function checkCopies(demos) {
+  /* The solvers and accessors are fetched at build time, so a bare checkout
+   * does not hold them: against a deployed site (--base) the question is
+   * whether the site serves each file, asked with a HEAD request; without
+   * --base it is whether scripts/fetch-accessors.mjs has put it on disk. */
+  const remote = !!BASE;
+  const seen = new Map();
+  const present = async (dir, f) => {
+    if (!remote) return existsSync(join(ROOT, dir, f));
+    const url = `${String(BASE).replace(/\/+$/, '')}/${dir}/${f}`;
+    if (!seen.has(url)) seen.set(url, fetch(url, { method: 'HEAD' }).then(r => r.ok, () => false));
+    return seen.get(url);
+  };
   const results = [];
   for (const d of demos) {
     const missing = [];
@@ -95,9 +107,12 @@ async function checkCopies(demos) {
       // One above it lives in test_sequences/, which is gitignored and filled
       // by get_testing_files.sh, so its absence says nothing about this commit.
       if (t.src && !/^(https?:|blob:|data:)/.test(t.src) && !t.src.startsWith('..')) need.push(t.src);
-      for (const f of need) if (!existsSync(join(ROOT, d.name, f))) missing.push(f);
+      for (const f of need) if (!(await present(d.name, f))) missing.push(f);
     }
     results.push({ name: d.name, ok: missing.length === 0, missing: [...new Set(missing)] });
+  }
+  if (!remote && results.length && results.every(r => !r.ok)) {
+    console.log('  (nothing found on disk: run "node scripts/fetch-accessors.mjs" first)');
   }
   return results;
 }
@@ -413,7 +428,7 @@ function show(c) {
     (c.known.length ? `, ${c.known.length} known` : '') + (c.fixed.length ? `, ${c.fixed.length} to retire` : '') + '\n');
 }
 
-console.log('pass 1: local copies of the solver and accessors');
+console.log(BASE ? `pass 1: solver and accessors served by ${BASE}` : 'pass 1: solver and accessors on disk');
 const copies = classify('copies', 'complete', await checkCopies(demos), r => 'missing: ' + r.missing.join(', '));
 show(copies);
 

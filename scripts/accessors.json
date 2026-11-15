@@ -1,0 +1,58 @@
+{
+  "comment": [
+    "What scripts/fetch-accessors.mjs cannot read off a page.",
+    "",
+    "mirror: a directory that receives every accessor and solver the registry",
+    "publishes. test/ and sandbox/ read it, and the root page takes its tags there.",
+    "",
+    "extra: directories whose page builds its tags from JavaScript, so that no",
+    "element in the HTML states what it needs. Module names as pages spell them.",
+    "",
+    "local: accessors the registry does not publish. They cannot be fetched, so",
+    "they stay committed where they are used; the script fails if a demo needs",
+    "one that is missing. Each line here is a debt - publishing the accessor",
+    "retires it.",
+    "",
+    "override: files a directory keeps from the repository although the registry",
+    "publishes that name, because the published build does not work there. Same",
+    "debt as local, one step worse: the registry copy is known to be broken."
+  ],
+  "mirror": "accessors",
+  "extra": {
+    "MutationObserver": [
+      "mm_solver_1.0.5",
+      "isobmff_1",
+      "liba52_1",
+      "libjxl_1",
+      "libopusenc_1",
+      "libx264_1",
+      "ogg_1",
+      "theora_1",
+      "vorbis_1"
+    ]
+  },
+  "local": [
+    "ffdmx_1.wasm",
+    "libape_1.wasm",
+    "libjbig2_1.wasm",
+    "libpoppler_1.wasm",
+    "libqoi_1.wasm",
+    "libmupdf_1.wasm",
+    "libmp3lame_1.wasm",
+    "libisac_1.wasm",
+    "libsilk_1.wasm",
+    "libx265_1.wasm",
+    "ffmpeg-hevc_1.wasm",
+    "ffmpeg-x264_1.wasm"
+  ],
+  "override": {
+    "pgf": {
+      "files": [
+        "libpgf_1.wasm",
+        "mm_solver_minimal_1.0.1.js",
+        "mm_solver_minimal_1.0.1.wasm"
+      ],
+      "why": "bevara:libpgf@1.0.5 as published needs _ZSt7nothrow (std::nothrow), which mm_solver_minimal_1.0.1 does not export: 'UndefinedSymbols: 1 symbol required by libpgf_1.wasm is not exported by this solver'. The pair committed here predates that and decodes. The libpgf in the player tree works with the minimal solver too - publishing it retires this entry."
+    }
+  }
+}

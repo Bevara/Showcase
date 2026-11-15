@@ -10,22 +10,27 @@ curl https://dl6.webmfiles.org/elephants-dream.webm -o ./test_sequences/elephant
 curl https://filesamples.com/samples/video/mpeg/sample_1280x720_surfing_with_audio.mpeg -o ./test_sequences/sample_1280x720_surfing_with_audio.mpeg
 curl https://dl.photoprism.app/samples/Formats/Video/H.266-VVC/NovosobornayaSquare_640x360.mp4 -o ./test_sequences/NovosobornayaSquare_640x360.mp4
 
-MP4Box -add './test_sequences/trailer_1080p.ogg'  -new ./ServiceWorker/trailer_1080p.mp4 \
--set-meta html \
--add-item ./ServiceWorker/theora/content.html:name=index.html:mime=text/html:id=1 \
--add-item ./scripts/universal-canvas_1.js:name=universal-canvas_1.js:mime=text/javascript:id=2 \
--add-item ./theora_bench/mm_solver_1.0.1.js:name=mm_solver_1.0.1.js:mime=text/javascript:id=3 \
--add-item ./theora_bench/mm_solver_1.0.1.wasm:name=mm_solver_1.0.1.wasm:mime=application/wasm:id=4 \
--add-item ./ServiceWorker/theora/isobmff_1.wasm:name=isobmff_1.wasm:mime=application/wasm:id=5 \
--add-item ./theora_bench/theora_1.wasm:name=theora_1.wasm:mime=application/wasm:id=6 \
--add-item ./theora_bench/vorbis_1.wasm:name=vorbis_1.wasm:mime=application/wasm:id=7 \
--set-primary 1 
+# The two ServiceWorker demos are MP4 files that carry their own page, tag
+# script, solver and accessors as items. What goes in is whatever
+# scripts/fetch-accessors.mjs placed in the demo's directory, which is what its
+# content.html asks for - not names written here: this script used to spell
+# mm_solver_1.0.1, the pages moved on, and the packages carried a solver their
+# page no longer named.
+package() {   # <source media> <output mp4> <ServiceWorker directory>
+  ls "$3"/mm_solver_*.wasm >/dev/null 2>&1 || {
+    echo "no solver in $3: run 'node scripts/fetch-accessors.mjs' first" >&2; return 1; }
+  items="-add-item $3/content.html:name=index.html:mime=text/html:id=1"
+  items="$items -add-item ./scripts/universal-canvas_1.js:name=universal-canvas_1.js:mime=text/javascript:id=2"
+  id=3
+  for f in "$3"/*.js "$3"/*.wasm; do
+    [ -e "$f" ] || continue
+    case "$f" in *.js) mime=text/javascript ;; *) mime=application/wasm ;; esac
+    items="$items -add-item $f:name=$(basename "$f"):mime=$mime:id=$id"
+    id=$((id + 1))
+  done
+  # shellcheck disable=SC2086
+  MP4Box -add "$1" -new "$2" -set-meta html $items -set-primary 1
+}
 
-MP4Box -add './test_sequences/NBA_score_table_2_hd.mp4' -new ./ServiceWorker/NBA_score_table_2_hd.mp4 \
--set-meta html \
--add-item ./ServiceWorker/360/content.html:name=index.html:mime=text/html:id=1 \
--add-item ./scripts/universal-canvas_1.js:name=universal-canvas_1.js:mime=text/javascript:id=2 \
--add-item ./ServiceWorker/360/mm_solver_1.0.1.js:name=mm_solver_1.0.1.js:mime=text/javascript:id=3 \
--add-item ./ServiceWorker/360/mm_solver_1.0.1.wasm:name=mm_solver_1.0.1.wasm:mime=application/wasm:id=4 \
--add-item ./ServiceWorker/360/isobmff_1.wasm:name=isobmff_1.wasm:mime=application/wasm:id=5 \
--set-primary 1 
+package ./test_sequences/trailer_1080p.ogg ./ServiceWorker/trailer_1080p.mp4 ./ServiceWorker/theora
+package ./test_sequences/NBA_score_table_2_hd.mp4 ./ServiceWorker/NBA_score_table_2_hd.mp4 ./ServiceWorker/360 

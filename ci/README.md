@@ -18,6 +18,11 @@ Nothing in the page says so: the tag simply never produces an image.
 
 ## The two passes
 
+The solvers and accessors are fetched from the registry at build time
+(`scripts/fetch-accessors.mjs`), so a bare checkout does not hold them. Against
+a deployed site (`--base`) the first pass asks the site for each file with a
+HEAD request; without `--base` it looks on disk, after the fetch script has run.
+
 **1. copies** - for each demo, check its folder actually contains
 `<using>.js`, `<using>.wasm` and one `.wasm` per name in `with=`, plus any
 source file the page references inside its own folder. No browser, runs in
