@@ -1,0 +1,172 @@
+{
+  "comment": [
+    "Descriptors of the accessors in accessors/ that the registry does not publish",
+    "(scripts/accessors.json, \"local\"). The registry's index cannot describe them, so",
+    "\"Test your own file\" reads this next to it and says, for these, that the build is",
+    "local. \"using\" comes from the accessor's manifest in the player tree; null means",
+    "it was not found there and the tester then assumes the full solver only.",
+    "Publishing an accessor removes its entry here and in accessors.json.",
+    "Where the manifest stopped at mm_solver_1.0.4, 1.0.5 is added here: its dynamic-linking",
+    "surface is identical to 1.0.4's (checked on both binaries), which is the evidence the",
+    "\"using\" rule asks for.",
+    "Encoders (ffmpeg-x264, libx265, libmp3lame) are left out: they declare the format they",
+    "produce, and the tester, which only assembles decoding pipelines, would otherwise pick",
+    "them as decoders - ffmpeg-x264_1 claiming AVC broke the H.264 test that way."
+  ],
+  "accessors": [
+    {
+      "file": "libape_1.wasm",
+      "name": "libape",
+      "formats": [],
+      "support": [
+        "audio"
+      ],
+      "extensions": [
+        "ape"
+      ],
+      "using": [
+        "mm_solver_minimal_1.0.1",
+        "mm_solver_1.0.1",
+        "mm_solver_1.0.2",
+        "mm_solver_1.0.3",
+        "mm_solver_1.0.4",
+        "mm_solver_1.0.5"
+      ]
+    },
+    {
+      "file": "libjbig2_1.wasm",
+      "name": "libjbig2",
+      "formats": [],
+      "support": [
+        "image"
+      ],
+      "extensions": [
+        "jb2",
+        "jbig2"
+      ],
+      "using": [
+        "mm_solver_minimal_1.0.1",
+        "mm_solver_1.0.1",
+        "mm_solver_1.0.2",
+        "mm_solver_1.0.3",
+        "mm_solver_1.0.4",
+        "mm_solver_1.0.5"
+      ]
+    },
+    {
+      "file": "libpoppler_1.wasm",
+      "name": "libpoppler",
+      "formats": [],
+      "support": [
+        "image"
+      ],
+      "extensions": [
+        "pdf"
+      ],
+      "using": [
+        "mm_solver_1.0.1",
+        "mm_solver_1.0.2",
+        "mm_solver_1.0.3",
+        "mm_solver_1.0.4",
+        "mm_solver_1.0.5"
+      ]
+    },
+    {
+      "file": "libqoi_1.wasm",
+      "name": "libqoi",
+      "formats": [],
+      "support": [
+        "image"
+      ],
+      "extensions": [
+        "qoi"
+      ],
+      "using": [
+        "mm_solver_minimal_1.0.1",
+        "mm_solver_1.0.1",
+        "mm_solver_1.0.2",
+        "mm_solver_1.0.3",
+        "mm_solver_1.0.4",
+        "mm_solver_1.0.5"
+      ]
+    },
+    {
+      "file": "libmupdf_1.wasm",
+      "name": "libmupdf",
+      "formats": [],
+      "support": [
+        "image"
+      ],
+      "extensions": [
+        "cbz",
+        "epub",
+        "oxps",
+        "xps"
+      ],
+      "using": [
+        "mm_solver_1.0.1",
+        "mm_solver_1.0.2",
+        "mm_solver_1.0.3",
+        "mm_solver_1.0.4",
+        "mm_solver_1.0.5"
+      ]
+    },
+    {
+      "file": "libisac_1.wasm",
+      "name": "libisac",
+      "formats": [],
+      "support": [
+        "audio"
+      ],
+      "extensions": [
+        "isac"
+      ],
+      "using": [
+        "mm_solver_minimal_1.0.1",
+        "mm_solver_1.0.1",
+        "mm_solver_1.0.2",
+        "mm_solver_1.0.3",
+        "mm_solver_1.0.4",
+        "mm_solver_1.0.5"
+      ]
+    },
+    {
+      "file": "libsilk_1.wasm",
+      "name": "libsilk",
+      "formats": [],
+      "support": [
+        "audio"
+      ],
+      "extensions": [
+        "silk"
+      ],
+      "using": [
+        "mm_solver_minimal_1.0.1",
+        "mm_solver_1.0.1",
+        "mm_solver_1.0.2",
+        "mm_solver_1.0.3",
+        "mm_solver_1.0.4",
+        "mm_solver_1.0.5"
+      ]
+    },
+    {
+      "file": "ffmpeg-hevc_1.wasm",
+      "name": "ffmpeg-hevc",
+      "formats": [
+        "HEVC"
+      ],
+      "support": [
+        "image",
+        "video"
+      ],
+      "extensions": [],
+      "using": [
+        "mm_solver_1.0.1",
+        "mm_solver_1.0.2",
+        "mm_solver_1.0.3",
+        "mm_solver_1.0.4",
+        "mm_solver_1.0.5"
+      ]
+    }
+  ]
+}

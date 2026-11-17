@@ -11,7 +11,8 @@ curl https://filesamples.com/samples/video/mpeg/sample_1280x720_surfing_with_aud
 curl https://dl.photoprism.app/samples/Formats/Video/H.266-VVC/NovosobornayaSquare_640x360.mp4 -o ./test_sequences/NovosobornayaSquare_640x360.mp4
 
 # The two ServiceWorker demos are MP4 files that carry their own page, tag
-# script, solver and accessors as items. What goes in is whatever
+# script, solver and accessors as items (the tag script included: the page asks
+# for it beside itself, so the fetch puts it there). What goes in is whatever
 # scripts/fetch-accessors.mjs placed in the demo's directory, which is what its
 # content.html asks for - not names written here: this script used to spell
 # mm_solver_1.0.1, the pages moved on, and the packages carried a solver their
@@ -20,8 +21,7 @@ package() {   # <source media> <output mp4> <ServiceWorker directory>
   ls "$3"/mm_solver_*.wasm >/dev/null 2>&1 || {
     echo "no solver in $3: run 'node scripts/fetch-accessors.mjs' first" >&2; return 1; }
   items="-add-item $3/content.html:name=index.html:mime=text/html:id=1"
-  items="$items -add-item ./scripts/universal-canvas_1.js:name=universal-canvas_1.js:mime=text/javascript:id=2"
-  id=3
+  id=2
   for f in "$3"/*.js "$3"/*.wasm; do
     [ -e "$f" ] || continue
     case "$f" in *.js) mime=text/javascript ;; *) mime=application/wasm ;; esac

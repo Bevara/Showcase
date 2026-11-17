@@ -8,6 +8,9 @@ test_sequences/
 # committed.
 *.wasm
 mm_solver_*.js
+# the scripts that define the elements, published as bevara:universal-tags
+universal-*_1.js
+art-player_*.js
 accessors/fetched.json
 accessors/index.json
 .cache/

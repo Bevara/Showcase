@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /*
- * Fetches the solvers and accessors the demos need from the Bevara registry.
+ * Fetches the solvers, the accessors and the tag scripts the demos need from
+ * the Bevara registry.
  *
  * The .wasm files (and each solver's .js, which is the other half of the same
  * artefact) used to be committed: 340 binaries, 436 MB, for 94 distinct files,
@@ -20,7 +21,11 @@
  * libx264_1.wasm next to the page, because no page sets script-directory and
  * the tags then resolve those names against the page's own directory. A tag
  * whose script-directory is an absolute URL loads from there and needs nothing
- * here. scripts/accessors.json covers what no tag states: pages that build
+ * here. The tag scripts themselves (universal-video_1.js and the others) are
+ * taken the same way, wherever a page's <script src> points: the registry is
+ * where a fix to them is published, and a copy kept here is how the site came
+ * to run a version the registry did not have. scripts/accessors.json covers
+ * what no tag states: pages that build
  * their tags from JavaScript, the ServiceWorker packages, and accessors/, the
  * local mirror that test/ and sandbox/ read.
  *
@@ -69,6 +74,12 @@ const index = await getJSON(`${REGISTRY}/accessors/index.json`);
 const published = new Map();
 for (const f of index.filters || []) {
   published.set(f.file, { url: f.url, integrity: f.integrity, name: f.name, version: f.version, emsdk: f.emsdk ?? null });
+}
+
+/* The scripts that define the elements, published as one package. */
+const tagScripts = new Map();
+for (const t of index.tags || []) {
+  tagScripts.set(t.file, { file: t.file, url: t.url, integrity: t.integrity, name: t.name, version: t.version });
 }
 
 /* A solver's name carries its version (mm_solver_1.0.5), and a page may name
@@ -132,6 +143,21 @@ for (const page of await htmlFiles()) {
     for (const a of (attr(tag, 'with') || '').split(';').map(s => s.trim()).filter(Boolean)) need(dir, a);
   }
 }
+
+/* The tag scripts, wherever a page takes them from. */
+const scriptNeeds = new Map();    // dir -> Set(file)
+const needScript = (dir, file) => { if (!scriptNeeds.has(dir)) scriptNeeds.set(dir, new Set()); scriptNeeds.get(dir).add(file); };
+for (const page of await htmlFiles()) {
+  const html = await readFile(page, 'utf8');
+  for (const m of html.matchAll(/<script\b[^>]*?\bsrc="([^"]+)"/gi)) {
+    const src = m[1].split(/[?#]/)[0];
+    if (/^(https?:)?\/\//i.test(src)) continue;
+    const file = src.split('/').pop();
+    if (!tagScripts.has(file)) continue;
+    needScript(relative(ROOT, dirname(resolve(dirname(page), src))) || '.', file);
+  }
+}
+if (config.mirror) for (const file of tagScripts.keys()) needScript(config.mirror, file);
 
 /* What no tag states. */
 for (const [dir, modules] of Object.entries(config.extra || {})) for (const mod of modules) need(dir, mod);
@@ -210,6 +236,15 @@ for (const [dir, modules] of [...needs].sort()) {
       } catch (e) {
         problems.push(`${dir}/${module}: ${e.message}`);
       }
+    });
+  }
+}
+
+for (const [dir, files] of [...scriptNeeds].sort()) {
+  for (const file of [...files].sort()) {
+    jobs.push(async () => {
+      try { await place(dir, tagScripts.get(file)); }
+      catch (e) { problems.push(`${dir}/${file}: ${e.message}`); }
     });
   }
 }
