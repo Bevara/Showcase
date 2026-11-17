@@ -15,12 +15,15 @@
     "",
     "override: files a directory keeps from the repository although the registry",
     "publishes that name, because the published build does not work there. Same",
-    "debt as local, one step worse: the registry copy is known to be broken."
+    "debt as local, one step worse: the registry copy is known to be broken.",
+    "",
+    "\"@mm_solver\" in extra stands for the full solver the registry publishes now, so a",
+    "version bump does not leave this file naming one that is gone."
   ],
   "mirror": "accessors",
   "extra": {
     "MutationObserver": [
-      "mm_solver_1.0.5",
+      "@mm_solver",
       "isobmff_1",
       "liba52_1",
       "libjxl_1",

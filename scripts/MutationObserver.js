@@ -1,6 +1,21 @@
 (function () {
   "use strict";
 
+  /* The solver's name carries its version, so it is not written here: it
+   * comes from the registry's index, which scripts/fetch-accessors.mjs places
+   * in accessors/ with the binaries. This script spelt mm_solver_1.0.1 by hand
+   * and went on asking for it after the registry had moved on, so every
+   * element it took over failed on a 404. */
+  const HERE = document.currentScript.src;
+  const SOLVER = fetch(new URL("../accessors/index.json", HERE).href)
+    .then(r => { if (!r.ok) throw new Error(r.status + " " + r.statusText); return r.json(); })
+    .then(index => {
+      const rt = (index.runtimes || []).find(r => r.name === "bevara:mm_solver");
+      if (!rt) throw new Error("the registry index lists no mm_solver");
+      return rt.file.replace(/\.wasm$/, "");
+    });
+  SOLVER.catch(e => console.error("MutationObserver demo: cannot tell which solver to use (" + e.message + ")"));
+
 
   function sendMessageWorker(el, messageHandler, message) {
     return new Promise((resolve, reject) => {
@@ -312,13 +327,13 @@
 
   new MutationObserver(mutations => mutations.forEach(mutation => mutation.addedNodes.forEach(el => {
     if (el instanceof HTMLImageElement || el instanceof HTMLPictureElement)
-      decode(el, "mm_solver_1.0.1", "libjxl_1");
+      SOLVER.then(solver => decode(el, solver, "libjxl_1"));
     else if(el instanceof HTMLAudioElement )
-      decode(el, "mm_solver_1.0.1", "liba52_1");
+      SOLVER.then(solver => decode(el, solver, "liba52_1"));
     else if (el instanceof HTMLVideoElement)
-      upgradeToUniversalVideo(el, "mm_solver_1.0.1",
-        "ogg_1;vorbis_1;theora_1;isobmff_1;libx264_1;libopusenc_1");
+      SOLVER.then(solver => upgradeToUniversalVideo(el, solver,
+        "ogg_1;vorbis_1;theora_1;isobmff_1;libx264_1;libopusenc_1"));
     else if( el instanceof HTMLCanvasElement)
-      decode(el, "mm_solver_1.0.1", "ogg_1;vorbis_1;theora_1");
+      SOLVER.then(solver => decode(el, solver, "ogg_1;vorbis_1;theora_1"));
   }))).observe(document.documentElement, { subtree: true, childList: true });
 }());

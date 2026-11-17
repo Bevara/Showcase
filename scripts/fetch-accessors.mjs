@@ -160,7 +160,14 @@ for (const page of await htmlFiles()) {
 if (config.mirror) for (const file of tagScripts.keys()) needScript(config.mirror, file);
 
 /* What no tag states. */
-for (const [dir, modules] of Object.entries(config.extra || {})) for (const mod of modules) need(dir, mod);
+const currentSolver = (name) => {
+  const rt = (index.runtimes || []).find(r => r.name === 'bevara:' + name);
+  if (!rt) throw new Error(`scripts/accessors.json asks for @${name}, which the registry does not publish`);
+  return rt.file.replace(/\.wasm$/, '');
+};
+for (const [dir, modules] of Object.entries(config.extra || {})) {
+  for (const mod of modules) need(dir, mod.startsWith('@') ? currentSolver(mod.slice(1)) : mod);
+}
 if (config.mirror) {
   for (const f of index.filters || []) need(config.mirror, f.file.replace(/\.wasm$/, ''));
   for (const r of index.runtimes || []) need(config.mirror, r.file.replace(/\.wasm$/, ''));

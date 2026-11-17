@@ -18,7 +18,6 @@
   "decode": {
     "vp9": "Its video source is missing, so there is nothing to decode. Same cause as the copies entry.",
     "img_bench": "References test_sequences/..._1080p.jxl, and get_testing_files.sh only downloads the variant without _1080p. Either the script fetches it or the page points at the file that exists.",
-    "midi": "libmidi@1.0.2 with mm_solver_minimal@1.0.1 - the pair the registry declares compatible - dies in reportUndefinedSymbols: the accessor wants a symbol the minimal solver does not export. Moving the demo to mm_solver_1.0.4 does not help (it fails differently), and the registry says libmidi supports the minimal runtime only, so libmidi has to be republished.",
     "mkv": "Loads ffdmx_1, which is not published in the registry at all, so nothing keeps it in step with the solver; it dies on a missing stub (resolved is not a function). Either ffdmx is published or the demo points at a published demultiplexer."
   }
 }
