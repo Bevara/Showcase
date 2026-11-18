@@ -159,6 +159,21 @@ for (const page of await htmlFiles()) {
 }
 if (config.mirror) for (const file of tagScripts.keys()) needScript(config.mirror, file);
 
+/* Pages that build their tags in JavaScript name the accessors on a
+ * placeholder instead: <div class="slot" data-with="ogg_1;theora_1">. Those
+ * need the accessors next to the page too, and the solver the placeholder
+ * names with data-using, or the current full one. webcodec/ lost its decoders
+ * when the binaries left the repository because this was not read. */
+const slotNeeds = [];
+for (const page of await htmlFiles()) {
+  const html = await readFile(page, 'utf8');
+  const here = relative(ROOT, dirname(page)) || '.';
+  for (const m of html.matchAll(/<[a-z][a-z0-9-]*\b[^>]*?\bdata-with="([^"]+)"[^>]*>/gi)) {
+    const using = attr(m[0], 'data-using');
+    slotNeeds.push({ dir: here, using: using || '@mm_solver', with: m[1].split(';').map(s => s.trim()).filter(Boolean) });
+  }
+}
+
 /* What no tag states. */
 const currentSolver = (name) => {
   const rt = (index.runtimes || []).find(r => r.name === 'bevara:' + name);
@@ -167,6 +182,10 @@ const currentSolver = (name) => {
 };
 for (const [dir, modules] of Object.entries(config.extra || {})) {
   for (const mod of modules) need(dir, mod.startsWith('@') ? currentSolver(mod.slice(1)) : mod);
+}
+for (const slot of slotNeeds) {
+  need(slot.dir, slot.using.startsWith('@') ? currentSolver(slot.using.slice(1)) : slot.using);
+  for (const a of slot.with) need(slot.dir, a);
 }
 if (config.mirror) {
   for (const f of index.filters || []) need(config.mirror, f.file.replace(/\.wasm$/, ''));

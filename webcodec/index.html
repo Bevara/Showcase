@@ -127,12 +127,17 @@
       /* An absolute URL: the tag resolves script-directory through urlExist,
        * which parses it with new URL() and rejects a relative path. */
       const REG = new URL(".", location.href).href;
+      /* The solver's name carries its version, so it is read from the
+       * registry's index that the build places in accessors/, not written
+       * here. */
+      const index = await fetch(new URL("../accessors/index.json", location.href)).then(r => r.json());
+      const SOLVER = index.runtimes.find(r => r.name === "bevara:mm_solver").file.replace(/\.wasm$/, "");
       for (const slot of document.querySelectorAll(".slot")) {
         const status = slot.querySelector(".status");
         status.textContent = "decoding and re-encoding…";
         const v = document.createElement("video", { is: "universal-video_1" });
         v.setAttribute("is", "universal-video_1");
-        v.setAttribute("using", "mm_solver_1.0.5");
+        v.setAttribute("using", SOLVER);
         v.setAttribute("with", slot.dataset.with);
         v.setAttribute("script-directory", REG);
         v.setAttribute("use-webcodec", "enc");

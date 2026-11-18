@@ -56,6 +56,27 @@ const attrOf = (tag, name) => {
   return m ? m[1] : null;
 };
 
+/* The full solver the registry publishes now, for placeholders that do not
+ * name one: from the index the build placed in accessors/, else the deployed
+ * site's, else the registry's own. */
+let currentSolverCache;
+async function currentSolver() {
+  if (currentSolverCache !== undefined) return currentSolverCache;
+  const sources = [
+    async () => JSON.parse(await readFile(join(ROOT, 'accessors', 'index.json'), 'utf8')),
+    async () => BASE ? (await fetch(String(BASE).replace(/\/+$/, '') + '/accessors/index.json')).json() : null,
+    async () => (await fetch((process.env.BEVARA_REGISTRY || 'https://registry.bevara.ddns.net') + '/accessors/index.json')).json()
+  ];
+  for (const get of sources) {
+    try {
+      const idx = await get();
+      const rt = idx && (idx.runtimes || []).find(r => r.name === 'bevara:mm_solver');
+      if (rt) return (currentSolverCache = rt.file.replace(/\.wasm$/, ''));
+    } catch {}
+  }
+  return (currentSolverCache = null);
+}
+
 async function discover() {
   const demos = [];
   for (const name of (await readdir(ROOT, { withFileTypes: true })).filter(d => d.isDirectory()).map(d => d.name)) {
@@ -74,6 +95,20 @@ async function discover() {
         scriptDirectory: attrOf(m[0], 'script-directory'),
         /* a canvas tag names its source with data-url */
         src: attrOf(m[0], 'src') || attrOf(m[0], 'data-src') || attrOf(m[0], 'data-url')
+      });
+    }
+    /* Pages that build their tags in JavaScript name the accessors on a
+     * placeholder, <div class="slot" data-with="..." data-src="...">. They
+     * need the same files, so the copies and registry passes count them -
+     * webcodec/ lost every decoder once without any check noticing. */
+    for (const m of html.matchAll(/<[a-z][a-z0-9-]*\b[^>]*?\bdata-with="([^"]+)"[^>]*>/gi)) {
+      const using = attrOf(m[0], 'data-using') || await currentSolver();
+      if (!using) continue;
+      tags.push({
+        raw: m[0], kind: 'slot', slot: true, using,
+        with: m[1].split(';').map(s => s.trim()).filter(Boolean),
+        scriptDirectory: null,
+        src: attrOf(m[0], 'data-src')
       });
     }
     if (tags.length) demos.push({ name, tags });
