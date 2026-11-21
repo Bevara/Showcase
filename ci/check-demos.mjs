@@ -44,6 +44,12 @@ const knownIn = (pass, name) => (KNOWN[pass] || {})[name] || null;
 const argv = process.argv.slice(2);
 const flag = (n, d = null) => { const i = argv.indexOf('--' + n); return i < 0 ? d : (argv[i + 1] || true); };
 const DEMO_TIMEOUT = Number(flag('timeout', 45000));
+/* Demos whose decode is legitimately longer than that budget. hevc
+ * transcodes 4267 frames of 1280x720 HEVC to H.264 before anything plays:
+ * about 210 s on a laptop. It used to "pass" in seconds only because the
+ * decoder then emitted nothing and the muxer wrote an empty MP4. */
+const DEMO_TIMEOUTS = { hevc: 10 * 60 * 1000 };
+const timeoutFor = (d) => Math.max(DEMO_TIMEOUT, DEMO_TIMEOUTS[d.name] || 0);
 const ONLY = flag('only') ? String(flag('only')).split(',').map(s => s.trim()) : null;
 const BASE = flag('base');
 const COPIES_ONLY = argv.includes('--copies-only');
@@ -322,6 +328,8 @@ const IN_PAGE = `async (timeout) => {
 async function checkDecode(demos, base) {
   const puppeteer = (await import('puppeteer')).default;
   const browser = await puppeteer.launch({
+    // page.evaluate waits for the whole decode; the 180 s default would cut hevc.
+    protocolTimeout: Math.max(180000, ...Object.values(DEMO_TIMEOUTS)) + 60000,
     executablePath: process.env.CHROME_BIN || undefined,
     args: [
       '--no-sandbox',
@@ -351,7 +359,7 @@ async function checkDecode(demos, base) {
     try {
       await page.goto(base + '/' + d.name + '/', { waitUntil: 'load', timeout: 30000 });
       await new Promise(r => setTimeout(r, 800));          // let the custom elements upgrade
-      tags = await page.evaluate(`(${IN_PAGE})(${DEMO_TIMEOUT})`);
+      tags = await page.evaluate(`(${IN_PAGE})(${timeoutFor(d)})`);
       // canvas tags: screenshot the element and look for more than one colour.
       // Works for a 2D canvas and a WebGL one alike, which reading pixels from
       // the page does not.
@@ -363,7 +371,7 @@ async function checkDecode(demos, base) {
          * a broken demo. */
         try { await handle.evaluate(e => e.scrollIntoView({ block: 'center' })); } catch {}
         let shot = null;
-        const deadline = Date.now() + DEMO_TIMEOUT;
+        const deadline = Date.now() + timeoutFor(d);
         while (Date.now() < deadline) {
           try { shot = await handle.screenshot({ encoding: 'binary' }); } catch { shot = null; }
           if (shot && manyColours(shot)) break;
@@ -385,7 +393,7 @@ async function checkDecode(demos, base) {
             t.how = `configured ${sized.w}x${sized.h}, not painted (no GPU here)`;
           } else {
             t.why = shot
-              ? `canvas is a single flat colour and still at ${sized ? sized.w + 'x' + sized.h : 'an unknown size'} after ${DEMO_TIMEOUT}ms`
+              ? `canvas is a single flat colour and still at ${sized ? sized.w + 'x' + sized.h : 'an unknown size'} after ${timeoutFor(d)}ms`
               : 'canvas could not be captured and was never sized by the pipeline';
           }
         }

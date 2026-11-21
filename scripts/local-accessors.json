@@ -9,6 +9,8 @@
     "Where the manifest stopped at mm_solver_1.0.4, 1.0.5 is added here: its dynamic-linking",
     "surface is identical to 1.0.4's (checked on both binaries), which is the evidence the",
     "\"using\" rule asks for.",
+    "1.0.6 is added the same way: its surface is identical to 1.0.5's (only the WebCodecs",
+    "encoder, inside the main module, changed).",
     "Encoders (ffmpeg-x264, libx265, libmp3lame) are left out: they declare the format they",
     "produce, and the tester, which only assembles decoding pipelines, would otherwise pick",
     "them as decoders - ffmpeg-x264_1 claiming AVC broke the H.264 test that way."
@@ -30,7 +32,8 @@
         "mm_solver_1.0.2",
         "mm_solver_1.0.3",
         "mm_solver_1.0.4",
-        "mm_solver_1.0.5"
+        "mm_solver_1.0.5",
+        "mm_solver_1.0.6"
       ]
     },
     {
@@ -50,7 +53,8 @@
         "mm_solver_1.0.2",
         "mm_solver_1.0.3",
         "mm_solver_1.0.4",
-        "mm_solver_1.0.5"
+        "mm_solver_1.0.5",
+        "mm_solver_1.0.6"
       ]
     },
     {
@@ -68,7 +72,8 @@
         "mm_solver_1.0.2",
         "mm_solver_1.0.3",
         "mm_solver_1.0.4",
-        "mm_solver_1.0.5"
+        "mm_solver_1.0.5",
+        "mm_solver_1.0.6"
       ]
     },
     {
@@ -87,7 +92,8 @@
         "mm_solver_1.0.2",
         "mm_solver_1.0.3",
         "mm_solver_1.0.4",
-        "mm_solver_1.0.5"
+        "mm_solver_1.0.5",
+        "mm_solver_1.0.6"
       ]
     },
     {
@@ -108,7 +114,8 @@
         "mm_solver_1.0.2",
         "mm_solver_1.0.3",
         "mm_solver_1.0.4",
-        "mm_solver_1.0.5"
+        "mm_solver_1.0.5",
+        "mm_solver_1.0.6"
       ]
     },
     {
@@ -127,7 +134,8 @@
         "mm_solver_1.0.2",
         "mm_solver_1.0.3",
         "mm_solver_1.0.4",
-        "mm_solver_1.0.5"
+        "mm_solver_1.0.5",
+        "mm_solver_1.0.6"
       ]
     },
     {
@@ -146,7 +154,8 @@
         "mm_solver_1.0.2",
         "mm_solver_1.0.3",
         "mm_solver_1.0.4",
-        "mm_solver_1.0.5"
+        "mm_solver_1.0.5",
+        "mm_solver_1.0.6"
       ]
     },
     {
@@ -165,7 +174,8 @@
         "mm_solver_1.0.2",
         "mm_solver_1.0.3",
         "mm_solver_1.0.4",
-        "mm_solver_1.0.5"
+        "mm_solver_1.0.5",
+        "mm_solver_1.0.6"
       ]
     }
   ]

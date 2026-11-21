@@ -50,17 +50,18 @@
     <h1>Decode Ogg/Theora video using the <code>&lt;video&gt;</code> tag</h1>
     <p>This demo shows how an Ogg/Theora video can be played back in modern browsers using a WebAssembly-based filter pipeline.</p>
     
-    <video is="universal-video_1" src="https://bevara.github.io/Showcase/test_sequences/trailer_1080p.ogg" using="mm_solver_1.0.5"
+    <video is="universal-video_1" src="https://bevara.github.io/Showcase/test_sequences/trailer_1080p.ogg" using="mm_solver_1.0.6"
         with="ogg_1;vorbis_1;theora_1;libx264_1;isobmff_1;libopusenc_1" progressive controls></video>
 
     <p>Although this format was once promoted as an open video standard, most major browsers (including Chrome, Firefox and Safari) no longer support it natively.</p>
+    <p>The video is played <strong>progressively</strong>: it starts within a few seconds, while the rest is still being transcoded. The Vorbis sound is re-encoded to Opus by <a href="https://github.com/Bevara/libopusenc">libopusenc_1</a>, because Media Source Extensions do not take Vorbis inside MP4. A browser that cannot do it falls back to decoding the whole file; the line under the player says which way it went.</p>
     
     <h2>Code snippet</h2>
     <p>We decode the Ogg file <a
             href="http://download.blender.org/peach/trailer/trailer_1080p.ogg">trailer_1080p.ogg</a>, which contains a
         Theora video stream and a Vorbis audio stream, using the <em>universal</em> video tag:</p>
 
-    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="trailer_1080p.ogg" using="<a href="https://github.com/Bevara/solver">mm_solver_1.0.5</a>" with="<a href="https://github.com/Bevara/ogg">ogg_1</a>;<a href="https://github.com/Bevara/vorbis">vorbis_1</a>;<a href="https://github.com/Bevara/theora">theora_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>" controls&gt; &lt;/video&gt;
+    <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" src="trailer_1080p.ogg" using="<a href="https://github.com/Bevara/solver">mm_solver_1.0.6</a>" with="<a href="https://github.com/Bevara/ogg">ogg_1</a>;<a href="https://github.com/Bevara/vorbis">vorbis_1</a>;<a href="https://github.com/Bevara/theora">theora_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libopusenc">libopusenc_1</a>" progressive controls&gt; &lt;/video&gt;
 </code></pre>
 
 
@@ -141,6 +142,7 @@
     </table>
 
     <script src="../scripts/universal-video_1.js"></script>
+    <script src="../scripts/progressive-status.js"></script>
 </body>
 
 </html>

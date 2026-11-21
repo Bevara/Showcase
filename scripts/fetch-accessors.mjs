@@ -15,9 +15,9 @@
  *
  * What each demo needs is read from its page, not from a list: a tag
  *
- *     <video is="universal-video_1" using="mm_solver_1.0.5" with="flvdmx_1;libx264_1">
+ *     <video is="universal-video_1" using="mm_solver_1.0.6" with="flvdmx_1;libx264_1">
  *
- * needs mm_solver_1.0.5.js, mm_solver_1.0.5.wasm, flvdmx_1.wasm and
+ * needs mm_solver_1.0.6.js, mm_solver_1.0.6.wasm, flvdmx_1.wasm and
  * libx264_1.wasm next to the page, because no page sets script-directory and
  * the tags then resolve those names against the page's own directory. A tag
  * whose script-directory is an absolute URL loads from there and needs nothing
@@ -82,7 +82,7 @@ for (const t of index.tags || []) {
   tagScripts.set(t.file, { file: t.file, url: t.url, integrity: t.integrity, name: t.name, version: t.version });
 }
 
-/* A solver's name carries its version (mm_solver_1.0.5), and a page may name
+/* A solver's name carries its version (mm_solver_1.0.6), and a page may name
  * one that is no longer the latest: versions are immutable in the registry,
  * so an older one is still there, described by its own document. */
 const solverCache = new Map();
@@ -125,7 +125,7 @@ async function htmlFiles(dir = ROOT, out = []) {
 const attr = (tag, name) => { const m = new RegExp('\\b' + name + '="([^"]*)"', 'i').exec(tag); return m ? m[1] : null; };
 
 /* directory (relative to the repository) -> Set of module names, solvers and
- * accessors alike, as pages spell them: "mm_solver_1.0.5", "libpng_1". */
+ * accessors alike, as pages spell them: "mm_solver_1.0.6", "libpng_1". */
 const needs = new Map();
 const need = (dir, module) => { if (!needs.has(dir)) needs.set(dir, new Set()); needs.get(dir).add(module); };
 

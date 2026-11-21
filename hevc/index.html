@@ -61,15 +61,15 @@
 
     <p>HEVC/H.265 offers roughly double the compression efficiency of H.264 but carries licensing costs that keep many browsers from supporting it natively. This demo demuxes the MP4 container with <a href="https://github.com/Bevara/isobmff">isobmff_1</a>, decodes the HEVC stream with <a href="https://github.com/Bevara/libde265">libde265_1</a> and re-encodes it to H.264 with <a href="https://github.com/Bevara/libx264">libx264_1</a> so that the native &lt;video&gt; element can play it back.</p>
 
-    <p>The source and the filter chain are the ones covered by the <code>#libde265</code> functional test: a video-only sequence. Keeping the AAC audio track (and adding <code>libfaad_1</code> to the pipeline) makes the muxer abort - "PID(s) configuration unknown on one or more inputs" - because the decoded audio has no encoder in this chain.</p>
+    <p>The file also carries an HE-AAC audio track, which this chain leaves out: it has no AAC decoder, so what plays is the picture alone. The <code>#libde265</code> functional test runs the same chain on the video-only version of this sequence and checks the size of the MP4 it gets back.</p>
 
-    <p><strong>Known issue:</strong> with the current build this pipeline still produces an empty MP4 - <code>libde265_1</code> emits no frames, so <code>libx264_1</code> encodes none and the muxer writes a header-only file. The <code>#libde265</code> test does not catch it: it only waits for the decoding promise to settle and never inspects the file it produced. If your browser happens to support HEVC natively, the &lt;video&gt; tag may still start playing the source directly - that's the browser's own built-in decoder, not this pipeline.</p>
+    <p>The decoder is libde265 1.1.3. Earlier builds of <code>libde265_1</code> used 1.1.1, which rejects this stream's picture parameter set: no frame came out, <code>libx264_1</code> had nothing to encode and the page stayed black, while the test, which then only waited for the transcode to finish, still passed. All 4267 frames now come out; transcoding them takes about three and a half minutes on a laptop, after which the video plays. If your browser decodes HEVC natively, the &lt;video&gt; tag may start playing the source directly in the meantime - that is the browser's own decoder, not this pipeline.</p>
 
-    <video is="universal-video_1" src="https://bevara.github.io/Showcase/test_sequences/hevcds_720p30_2M.mp4" using="mm_solver_1.0.5" with="libde265_1;isobmff_1;libx264_1" controls></video>
+    <video is="universal-video_1" src="https://bevara.github.io/Showcase/test_sequences/hevcds_720p30_2M.mp4" using="mm_solver_1.0.6" with="libde265_1;isobmff_1;libx264_1" controls></video>
 
     <h2>Code snippet</h2>
 
-    <pre><code>&lt;video is="universal-video_1" src="hevcds_720p30_2M.mp4" using="mm_solver_1.0.5" with="libde265_1;isobmff_1;libx264_1" controls&gt; &lt;/video&gt;</code></pre>
+    <pre><code>&lt;video is="universal-video_1" src="hevcds_720p30_2M.mp4" using="mm_solver_1.0.6" with="libde265_1;isobmff_1;libx264_1" controls&gt; &lt;/video&gt;</code></pre>
 
     <h2> Specifications : </h2>
 
@@ -82,7 +82,7 @@
         <tbody>
             <tr>
                 <td>Format</td>
-                <td>MP4 (HEVC, video only)</td>
+                <td>MP4 (HEVC 1280x720, HE-AAC audio)</td>
             </tr>
             <tr>
                 <td>FileSize</td>
@@ -90,7 +90,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>mm_solver_1.0.5</td>
+                <td>mm_solver_1.0.6</td>
             </tr>
         </tbody>
     </table>
