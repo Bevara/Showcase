@@ -304,7 +304,11 @@ const IN_PAGE = `async (timeout) => {
        * to reach metadata, since the promise can resolve before it has.
        */
       let size = 0, how = '';
-      const deadline = Date.now() + 10000;
+      /* A progressive element resolves at once, with its MediaSource URL:
+       * the decode has only just started, and metadata comes with the first
+       * segment - 9 s for hevc on a laptop, more on an agent. Give it the
+       * demo's budget rather than the 10 s a finished decode needs. */
+      const deadline = Date.now() + (el.hasAttribute('progressive') ? timeout : 10000);
       while (Date.now() < deadline) {
         const nat = el.naturalWidth || el.videoWidth || 0;
         const dur = Number.isFinite(el.duration) ? el.duration : 0;
