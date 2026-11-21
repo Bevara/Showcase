@@ -1,11 +1,6 @@
-# The solvers and accessors are not in the repository: fetch them from the
-# Bevara registry first (scripts/fetch-accessors.mjs needs Node 18 or later,
-# which Debian bullseye does not package).
-FROM node:20-bookworm-slim AS accessors
-WORKDIR /site
-COPY . .
-RUN node scripts/fetch-accessors.mjs
-
+# The solvers, the accessors and the tag scripts are not part of the site: the
+# pages load them from the Bevara registry at run time. get_testing_files.sh
+# fetches the few the ServiceWorker packages carry inside their MP4 files.
 FROM debian:bullseye
 
 WORKDIR /var/www/html
@@ -18,7 +13,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=accessors /site /var/www/html/
+COPY . /var/www/html/
 
 RUN ./get_testing_files.sh
 

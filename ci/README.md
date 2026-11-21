@@ -7,26 +7,23 @@ caught here instead of on the live site.
 
 ## Why a demo breaks without anybody noticing
 
-No page sets `script-directory`, so the tags resolve `using=` and `with=`
-against the page's own directory. Every demo folder therefore carries its own
-copy of the solver and of the accessors it names - `flv/` holds
-`mm_solver_1.0.4.js`, `mm_solver_1.0.4.wasm`, `flvdmx_1.wasm`,
-`ffmpeg-h26x_1.wasm`, `isobmff_1.wasm` and `libx264_1.wasm`. Copy a new solver
-into some folders and not others, or bump a demo's `using=` without copying the
-matching files, and that demo stops working while the rest of the site is fine.
-Nothing in the page says so: the tag simply never produces an image.
+Every tag names the registry (`registry="https://registry.bevara.ddns.net"`)
+and loads its solver and accessors from there, after its `script-directory`
+when it sets one - the demos that use an accessor the registry does not
+publish keep it committed beside them and set `script-directory="./"`. Bump a
+demo's `using=` to a solver the registry does not serve, name an accessor that
+was never published, or drop a committed one, and that demo stops working
+while the rest of the site is fine. Nothing in the page says so: the tag
+simply never produces an image.
 
 ## The two passes
 
-The solvers and accessors are fetched from the registry at build time
-(`scripts/fetch-accessors.mjs`), so a bare checkout does not hold them. Against
-a deployed site (`--base`) the first pass asks the site for each file with a
-HEAD request; without `--base` it looks on disk, after the fetch script has run.
-
-**1. copies** - for each demo, check its folder actually contains
-`<using>.js`, `<using>.wasm` and one `.wasm` per name in `with=`, plus any
-source file the page references inside its own folder. No browser, runs in
-under a second, and catches the partial-roll-out case on its own.
+**1. copies** - for each demo, check that each file a tag needs -
+`<using>.js`, `<using>.wasm` and one `.wasm` per name in `with=` - is either
+in its `script-directory` or served by the registry (a HEAD request), plus any
+source file the page references inside its own folder. With `--base`, the
+local copies are looked for on the deployed site rather than on disk. No
+browser, runs in a few seconds, and catches a missing file on its own.
 
 A source above the demo folder (`../test_sequences/...`) is skipped: that
 directory is gitignored and filled by `get_testing_files.sh`, so its absence
@@ -86,6 +83,9 @@ retire it.
 ```sh
 node ci/check-demos.mjs                  # serve this checkout (what CI does)
 node ci/check-demos.mjs --copies-only    # pass 1 alone, no browser
+node ci/check-demos.mjs --tags ../Editor/Interface/player/build/dist
+                                         # tag scripts from a local build instead
+                                         # of the registry, before publishing them
 node ci/check-demos.mjs --base https://bevara.github.io/Showcase
 node ci/check-demos.mjs --only flv,mkv,vp9
 node ci/check-demos.mjs --timeout 60000

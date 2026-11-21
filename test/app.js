@@ -3,16 +3,18 @@
 // home page or from a page of its own.
 const HERE = document.currentScript.src;
 // What exists, what it decodes and which solver it loads with all come from
-// the registry's own index, which scripts/fetch-accessors.mjs places next to
-// the binaries it describes. This page used to read a list frozen at some
-// earlier Bevara Access build and to spell the solvers by hand - and went on
-// asking for mm_solver_1.0.1 long after the registry had stopped serving it
+// the registry's own index, read from the registry itself (it answers with
+// Access-Control-Allow-Origin: *). This page used to read a list frozen at
+// some earlier Bevara Access build and to spell the solvers by hand - and went
+// on asking for mm_solver_1.0.1 long after the registry had stopped serving it
 // under that name, so every video failed on a 404.
-const REGISTRY_INDEX = new URL('../accessors/index.json', HERE).href;
+const REGISTRY = 'https://registry.bevara.ddns.net';
+const REGISTRY_INDEX = REGISTRY + '/accessors/index.json';
 // The few accessors in accessors/ that the registry does not publish.
 const LOCAL_ACCESSORS = new URL('../scripts/local-accessors.json', HERE).href;
-// Must be absolute: the tag does not resolve a relative script-directory
-// against the document, and silently falls back to a plain tag instead.
+// Where the accessors the registry does not publish are committed. A tag
+// naming one of them looks here first and in the registry for the rest; the
+// others load from the registry alone.
 const SCRIPT_DIRECTORY = new URL('../accessors/', HERE).href;
 const MEDIAINFO_WASM = new URL('MediaInfoModule.wasm', HERE).href;
 
@@ -137,7 +139,9 @@ function buildTag(tag, url, accessors, solver) {
     const source = tag === 'canvas' ? 'data-url' : 'src';
     const controls = tag === 'audio' ? ' controls' : '';
     const open = `<${tag} is="universal-${tag}_1" ${source}="${url}" using="${solver}" ` +
-        `with="${accessors.join(';')}" script-directory="${SCRIPT_DIRECTORY}"${controls}>`;
+        `with="${accessors.join(';')}" registry="${REGISTRY}" force` +
+        (accessors.some((id) => accessorsById[id] && accessorsById[id].local) ? ` script-directory="${SCRIPT_DIRECTORY}"` : '') +
+        `${controls}>`;
     // <img> is void: giving it a closing tag would be invalid markup.
     return tag === 'img' ? open : `${open}</${tag}>`;
 }

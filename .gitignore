@@ -3,20 +3,17 @@ ServiceWorker/NBA_score_table_2_hd.mp4
 ServiceWorker/trailer_1080p.mp4
 test_sequences/
 
-# Solvers and accessors come from the Bevara registry at build time
-# (scripts/fetch-accessors.mjs, run by the Pages workflow). They are not
-# committed.
+# Solvers, accessors and tag scripts are loaded from the Bevara registry by
+# the pages at run time (registry="..." on each tag). They are not committed.
 *.wasm
 mm_solver_*.js
 # the scripts that define the elements, published as bevara:universal-tags
 universal-*_1.js
 art-player_*.js
-accessors/fetched.json
-accessors/index.json
 .cache/
 
-# ...except the ones the registry does not publish, which cannot be fetched
-# (scripts/accessors.json, "local"), and MediaInfo, which is not ours.
+# ...except the ones the registry does not publish, which the pages find
+# through script-directory (see README.MD), and MediaInfo, which is not ours.
 !accessors/ffmpeg-hevc_1.wasm
 !accessors/ffmpeg-x264_1.wasm
 !accessors/libape_1.wasm
@@ -35,8 +32,7 @@ accessors/index.json
 !qoi/libqoi_1.wasm
 !test/MediaInfoModule.wasm
 
-# ...and the ones a demo keeps because the published build is broken there
-# (scripts/accessors.json, "override").
+# ...and the ones a demo keeps because the published build is broken there.
 !pgf/libpgf_1.wasm
 !pgf/mm_solver_minimal_1.0.1.js
 !pgf/mm_solver_minimal_1.0.1.wasm

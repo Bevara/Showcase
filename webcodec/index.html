@@ -26,7 +26,7 @@
                   border-radius: 4px; font-size: .9rem; color: #555; }
         .status.failed { background: #fdecea; border-color: #f0b4ae; color: #b42318; }
     </style>
-    <script src="../accessors/universal-tags_1.js"></script>
+    <script src="https://registry.bevara.ddns.net/accessors/universal-tags_1.js"></script>
 </head>
 
 <body>
@@ -57,7 +57,7 @@
         <p class="note">Decoded by <a href="https://github.com/Bevara/theora">theora_1</a> through
             <a href="https://github.com/Bevara/ogg">ogg_1</a>, multiplexed by
             <a href="https://github.com/Bevara/isobmff">isobmff_1</a>, encoded by the browser:</p>
-        <pre><code>&lt;video is="universal-video_1" src="theora_short.ogv"
+        <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="theora_short.ogv"
        using="mm_solver_1.0.6" with="ogg_1;theora_1;isobmff_1"
        use-webcodec="enc" controls&gt;&lt;/video&gt;</code></pre>
     </div>
@@ -120,17 +120,14 @@
      * leaving a truncated or empty file. So the players are built in turn,
      * each waiting for the one before it. */
     (async () => {
-      /* The accessors sit next to this page rather than being pulled from
-       * the registry: a worker script has to be same-origin, and decoding on
-       * the main thread instead starves the WebCodecs callbacks - the Dirac
-       * clip never completes that way. */
-      /* An absolute URL: the tag resolves script-directory through urlExist,
-       * which parses it with new URL() and rejects a relative path. */
-      const REG = new URL(".", location.href).href;
+      /* The solver and the accessors come from the registry. They run in a
+       * worker - decoding on the main thread starves the WebCodecs callbacks,
+       * the Dirac clip never completes that way - and the tag starts a
+       * worker on the registry's script from one of this page's origin. */
+      const REG = "https://registry.bevara.ddns.net";
       /* The solver's name carries its version, so it is read from the
-       * registry's index that the build places in accessors/, not written
-       * here. */
-      const index = await fetch(new URL("../accessors/index.json", location.href)).then(r => r.json());
+       * registry's index, not written here. */
+      const index = await fetch(REG + "/accessors/index.json").then(r => r.json());
       const SOLVER = index.runtimes.find(r => r.name === "bevara:mm_solver").file.replace(/\.wasm$/, "");
       for (const slot of document.querySelectorAll(".slot")) {
         const status = slot.querySelector(".status");
@@ -139,7 +136,8 @@
         v.setAttribute("is", "universal-video_1");
         v.setAttribute("using", SOLVER);
         v.setAttribute("with", slot.dataset.with);
-        v.setAttribute("script-directory", REG);
+        v.setAttribute("registry", REG);
+        v.setAttribute("force", "");
         v.setAttribute("use-webcodec", "enc");
         v.setAttribute("use-worker", "");
         v.setAttribute("controls", "");

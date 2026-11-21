@@ -1,11 +1,11 @@
 {
   "comment": [
     "Descriptors of the accessors in accessors/ that the registry does not publish",
-    "(scripts/accessors.json, \"local\"). The registry's index cannot describe them, so",
+    "(committed there, see README.MD). The registry's index cannot describe them, so",
     "\"Test your own file\" reads this next to it and says, for these, that the build is",
     "local. \"using\" comes from the accessor's manifest in the player tree; null means",
     "it was not found there and the tester then assumes the full solver only.",
-    "Publishing an accessor removes its entry here and in accessors.json.",
+    "Publishing an accessor removes its entry here.",
     "Where the manifest stopped at mm_solver_1.0.4, 1.0.5 is added here: its dynamic-linking",
     "surface is identical to 1.0.4's (checked on both binaries), which is the evidence the",
     "\"using\" rule asks for.",

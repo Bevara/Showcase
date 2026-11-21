@@ -65,11 +65,11 @@
 
     <p>The decoder is libde265 1.1.3. Earlier builds of <code>libde265_1</code> used 1.1.1, which rejects this stream's picture parameter set: no frame came out, <code>libx264_1</code> had nothing to encode and the page stayed black, while the test, which then only waited for the transcode to finish, still passed. All 4267 frames now come out, and the <code>#libde265</code> test checks the size of what it gets back. If your browser decodes HEVC natively, the &lt;video&gt; tag may start playing the source directly - that is the browser's own decoder, not this pipeline.</p>
 
-    <video is="universal-video_1" src="https://bevara.github.io/Showcase/test_sequences/hevcds_720p30_2M.mp4" using="mm_solver_1.0.6" with="libde265_1;isobmff_1;libx264_1;libfaad_1;libopusenc_1" progressive controls></video>
+    <video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="https://bevara.github.io/Showcase/test_sequences/hevcds_720p30_2M.mp4" using="mm_solver_1.0.6" with="libde265_1;isobmff_1;libx264_1;libfaad_1;libopusenc_1" progressive controls></video>
 
     <h2>Code snippet</h2>
 
-    <pre><code>&lt;video is="universal-video_1" src="hevcds_720p30_2M.mp4" using="mm_solver_1.0.6" with="libde265_1;isobmff_1;libx264_1;libfaad_1;libopusenc_1" progressive controls&gt; &lt;/video&gt;</code></pre>
+    <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="hevcds_720p30_2M.mp4" using="mm_solver_1.0.6" with="libde265_1;isobmff_1;libx264_1;libfaad_1;libopusenc_1" progressive controls&gt; &lt;/video&gt;</code></pre>
 
     <p>Without <code>progressive</code>, the whole file is transcoded first - about three and a half minutes - and then plays. <code>with="libde265_1;isobmff_1;libx264_1"</code> then gives the picture alone, without the sound.</p>
 
@@ -97,7 +97,7 @@
         </tbody>
     </table>
 
-    <script src="../scripts/universal-video_1.js?v=2"></script>
+    <script src="https://registry.bevara.ddns.net/accessors/universal-video_1.js"></script>
     <script src="../scripts/progressive-status.js"></script>
 </body>
 
