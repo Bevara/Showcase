@@ -53,11 +53,11 @@
 
     <p>Opus is a modern, low-latency codec widely used for real-time communication. This demo demuxes the Ogg container with <a href="https://github.com/Bevara/ogg">ogg_1</a> and decodes the Opus stream with <a href="https://github.com/Bevara/libopus">libopus_1</a>.</p>
 
-    <audio is="universal-audio_1" src="ff-16b-1c-44100hz.opus" using="mm_solver_minimal_1.0.1" with="ogg_1;libopus_1" controls stats>
+    <audio is="universal-audio_1" registry="https://registry.bevara.ddns.net" force src="ff-16b-1c-44100hz.opus" using="mm_solver_minimal_1.0.1" with="ogg_1;libopus_1" controls stats>
     </audio>
 
     <h2>Code snippet</h2>
-    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" src="ff-16b-1c-44100hz.opus" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
+    <pre><code>&lt;audio is="<a href="https://github.com/Bevara/player">universal-audio_1</a>" registry="https://registry.bevara.ddns.net" force src="ff-16b-1c-44100hz.opus" using="<a href="https://github.com/Bevara/solver">mm_solver_minimal_1.0.1</a>"
         with="<a href="https://github.com/Bevara/ogg">ogg_1</a>;<a href="https://github.com/Bevara/libopus">libopus_1</a>" controls&gt; &lt;/audio&gt;
 </code></pre>
 
@@ -85,7 +85,7 @@
         </tbody>
     </table>
 
-    <script src="../scripts/universal-audio_1.js"></script>
+    <script src="https://registry.bevara.ddns.net/accessors/universal-audio_1.js"></script>
 </body>
 
 </html>

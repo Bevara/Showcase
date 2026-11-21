@@ -25,6 +25,9 @@
  *   node ci/check-demos.mjs --base https://...   # test an already-deployed site
  *   node ci/check-demos.mjs --only flv,mkv       # a subset
  *   node ci/check-demos.mjs --copies-only        # pass 1 alone
+ *   node ci/check-demos.mjs --tags ../Editor/Interface/player/build/dist
+ *                    # the registry's tag scripts replaced by a local build,
+ *                    # to check a new version of them before publishing it
  *
  * Writes JUnit XML to ci/showcase-results.xml and exits non-zero on failure.
  */
@@ -53,6 +56,7 @@ const timeoutFor = (d) => Math.max(DEMO_TIMEOUT, DEMO_TIMEOUTS[d.name] || 0);
 const ONLY = flag('only') ? String(flag('only')).split(',').map(s => s.trim()) : null;
 const BASE = flag('base');
 const COPIES_ONLY = argv.includes('--copies-only');
+const TAGS_DIR = flag('tags') ? resolve(String(flag('tags'))) : null;
 
 /* ---------- discovery ---------- */
 
@@ -99,6 +103,7 @@ async function discover() {
         using: m[1],
         with: (attrOf(m[0], 'with') || '').split(';').map(s => s.trim()).filter(Boolean),
         scriptDirectory: attrOf(m[0], 'script-directory'),
+        registry: attrOf(m[0], 'registry'),
         /* a canvas tag names its source with data-url */
         src: attrOf(m[0], 'src') || attrOf(m[0], 'data-src') || attrOf(m[0], 'data-url')
       });
@@ -114,6 +119,8 @@ async function discover() {
         raw: m[0], kind: 'slot', slot: true, using,
         with: m[1].split(';').map(s => s.trim()).filter(Boolean),
         scriptDirectory: null,
+        /* the page gives its elements the registry */
+        registry: process.env.BEVARA_REGISTRY || 'https://registry.bevara.ddns.net',
         src: attrOf(m[0], 'data-src')
       });
     }
@@ -125,10 +132,9 @@ async function discover() {
 /* ---------- pass 1: copies ---------- */
 
 async function checkCopies(demos) {
-  /* The solvers and accessors are fetched at build time, so a bare checkout
-   * does not hold them: against a deployed site (--base) the question is
-   * whether the site serves each file, asked with a HEAD request; without
-   * --base it is whether scripts/fetch-accessors.mjs has put it on disk. */
+  /* A file committed beside a demo is looked for on disk, or on the deployed
+   * site with a HEAD request when --base is given; a file the registry
+   * serves, with a HEAD request to the registry. */
   const remote = !!BASE;
   const seen = new Map();
   const present = async (dir, f) => {
@@ -137,13 +143,30 @@ async function checkCopies(demos) {
     if (!seen.has(url)) seen.set(url, fetch(url, { method: 'HEAD' }).then(r => r.ok, () => false));
     return seen.get(url);
   };
+  /* A tag with registry="..." looks in its script-directory first, when it
+   * names one, then in the registry: a file counts as there if either has it. */
+  const inRegistry = (registry, f) => {
+    const url = `${String(registry).replace(/\/+$/, '')}/accessors/${f}`;
+    if (!seen.has(url)) seen.set(url, fetch(url, { method: 'HEAD' }).then(r => r.ok, () => false));
+    return seen.get(url);
+  };
+  const localDir = (d, sd) => sd ? (join(d, sd).replace(/\/+$/, '') || '.') : d;
   const results = [];
   for (const d of demos) {
     const missing = [];
     for (const t of d.tags) {
+      const need = [t.using + '.js', t.using + '.wasm', ...t.with.map(a => a + '.wasm')];
+      if (t.registry) {
+        const sd = t.scriptDirectory && !/^https?:/i.test(t.scriptDirectory) ? t.scriptDirectory : null;
+        for (const f of need) {
+          if (sd && await present(localDir(d.name, sd), f)) continue;
+          if (!(await inRegistry(t.registry, f))) missing.push(f);
+        }
+        if (t.src && !/^(https?:|blob:|data:)/.test(t.src) && !t.src.startsWith('..') && !(await present(d.name, t.src))) missing.push(t.src);
+        continue;
+      }
       // a page that sets script-directory resolves elsewhere on purpose
       if (t.scriptDirectory) continue;
-      const need = [t.using + '.js', t.using + '.wasm', ...t.with.map(a => a + '.wasm')];
       // A source inside the demo's own folder is committed and must be there.
       // One above it lives in test_sequences/, which is gitignored and filled
       // by get_testing_files.sh, so its absence says nothing about this commit.
@@ -151,9 +174,6 @@ async function checkCopies(demos) {
       for (const f of need) if (!(await present(d.name, f))) missing.push(f);
     }
     results.push({ name: d.name, ok: missing.length === 0, missing: [...new Set(missing)] });
-  }
-  if (!remote && results.length && results.every(r => !r.ok)) {
-    console.log('  (nothing found on disk: run "node scripts/fetch-accessors.mjs" first)');
   }
   return results;
 }
@@ -359,6 +379,18 @@ async function checkDecode(demos, base) {
     page.on('console', m => { if (m.type() === 'error' && m.text().trim()) errors.push(m.text().slice(0, 200)); });
     page.on('pageerror', e => errors.push('pageerror: ' + String(e.message).slice(0, 200)));
     page.on('requestfailed', r => errors.push('request failed: ' + r.url().replace(base, '') + ' ' + (r.failure()?.errorText || '')));
+    if (TAGS_DIR) {
+      /* --tags: the tag scripts the pages take from the registry are served
+       * from a local build instead, everything else goes through. */
+      await page.setRequestInterception(true);
+      page.on('request', async (req) => {
+        const m = /\/accessors\/((?:universal-[a-z]+|art-player)_\d+\.js)(?:[?#]|$)/.exec(req.url());
+        const file = m && join(TAGS_DIR, m[1]);
+        if (file && existsSync(file)) {
+          req.respond({ status: 200, contentType: 'text/javascript', headers: { 'Access-Control-Allow-Origin': '*' }, body: await readFile(file) });
+        } else req.continue();
+      });
+    }
     let tags = [];
     try {
       await page.goto(base + '/' + d.name + '/', { waitUntil: 'load', timeout: 30000 });

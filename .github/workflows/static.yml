@@ -43,13 +43,13 @@ jobs:
           sudo apt install -y gpac
       - name: Verify installation
         run: MP4Box -version
-      # The solvers and accessors are not in the repository: they come from
-      # the Bevara registry, each checked against the sha256 it publishes. This
-      # has to run before get_testing_files.sh, which packs some of them into
-      # the ServiceWorker demos, and a failure here stops the deployment -
-      # better no new site than one whose demos have no decoder.
-      - name: Fetch solvers and accessors from the registry
-        run: node scripts/fetch-accessors.mjs
+      # The solvers, the accessors and the tag scripts are not part of the
+      # site: each page loads them from the Bevara registry at run time
+      # (registry="https://registry.bevara.ddns.net" on its tags), so they are
+      # not downloaded here. The one exception is the ServiceWorker demo, whose
+      # MP4 files carry their own decoders: get_testing_files.sh fetches the
+      # few that each package names while it builds them. The accessors the
+      # registry does not publish are committed, next to the demos using them.
       - name: Run get_testing_files.sh
         run: ./get_testing_files.sh
       # Stamps the published site with the commit it was built from. The Jenkins

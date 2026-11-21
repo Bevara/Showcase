@@ -11,25 +11,33 @@ curl https://filesamples.com/samples/video/mpeg/sample_1280x720_surfing_with_aud
 curl https://dl.photoprism.app/samples/Formats/Video/H.266-VVC/NovosobornayaSquare_640x360.mp4 -o ./test_sequences/NovosobornayaSquare_640x360.mp4
 
 # The two ServiceWorker demos are MP4 files that carry their own page, tag
-# script, solver and accessors as items (the tag script included: the page asks
-# for it beside itself, so the fetch puts it there). What goes in is whatever
-# scripts/fetch-accessors.mjs placed in the demo's directory, which is what its
-# content.html asks for - not names written here: this script used to spell
+# script, solver and accessors as items: that is the point of the demo, the
+# file brings what decodes it. The rest of the site loads these from the
+# Bevara registry at run time, so they are fetched here for the packages only,
+# and only the ones content.html names - its <script src>, using="..." and
+# with="..." - not names written in this script: it used to spell
 # mm_solver_1.0.1, the pages moved on, and the packages carried a solver their
 # page no longer named.
+REGISTRY="${BEVARA_REGISTRY:-https://registry.bevara.ddns.net}"
 package() {   # <source media> <output mp4> <ServiceWorker directory>
-  ls "$3"/mm_solver_*.wasm >/dev/null 2>&1 || {
-    echo "no solver in $3: run 'node scripts/fetch-accessors.mjs' first" >&2; return 1; }
-  items="-add-item $3/content.html:name=index.html:mime=text/html:id=1"
+  page="$3/content.html"
+  tag=$(grep -o '<canvas[^>]*is="universal-[^"]*"[^>]*>' "$page")
+  using=$(printf '%s' "$tag" | sed -n 's/.*using="\([^"]*\)".*/\1/p')
+  with=$(printf '%s' "$tag" | sed -n 's/.*with="\([^"]*\)".*/\1/p')
+  script=$(grep -o '<script src="universal-[^"]*"' "$page" | sed 's/^<script src="//; s/"$//')
+  tmp=$(mktemp -d)
+  items="-add-item $page:name=index.html:mime=text/html:id=1"
   id=2
-  for f in "$3"/*.js "$3"/*.wasm; do
-    [ -e "$f" ] || continue
+  for f in $script "$using.js" "$using.wasm" $(printf '%s' "$with" | tr ';' ' ' | sed 's/\([^ ]*\)/\1.wasm/g'); do
+    curl -fsSL "$REGISTRY/accessors/$f" -o "$tmp/$f" || {
+      echo "cannot fetch $f from $REGISTRY for $page" >&2; rm -rf "$tmp"; return 1; }
     case "$f" in *.js) mime=text/javascript ;; *) mime=application/wasm ;; esac
-    items="$items -add-item $f:name=$(basename "$f"):mime=$mime:id=$id"
+    items="$items -add-item $tmp/$f:name=$f:mime=$mime:id=$id"
     id=$((id + 1))
   done
   # shellcheck disable=SC2086
   MP4Box -add "$1" -new "$2" -set-meta html $items -set-primary 1
+  rm -rf "$tmp"
 }
 
 package ./test_sequences/trailer_1080p.ogg ./ServiceWorker/trailer_1080p.mp4 ./ServiceWorker/theora

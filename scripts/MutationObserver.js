@@ -1,13 +1,14 @@
 (function () {
   "use strict";
 
-  /* The solver's name carries its version, so it is not written here: it
-   * comes from the registry's index, which scripts/fetch-accessors.mjs places
-   * in accessors/ with the binaries. This script spelt mm_solver_1.0.1 by hand
-   * and went on asking for it after the registry had moved on, so every
-   * element it took over failed on a 404. */
-  const HERE = document.currentScript.src;
-  const SOLVER = fetch(new URL("../accessors/index.json", HERE).href)
+  /* The solver and the accessors come from the Bevara registry, which
+   * answers with Access-Control-Allow-Origin: *. The solver's name carries its
+   * version, so it is not written here: it comes from the registry's index.
+   * This script spelt mm_solver_1.0.1 by hand and went on asking for it after
+   * the registry had moved on, so every element it took over failed on a 404. */
+  const REGISTRY = "https://registry.bevara.ddns.net";
+  const REGISTRY_ACCESSORS = REGISTRY + "/accessors/";
+  const SOLVER = fetch(REGISTRY + "/accessors/index.json")
     .then(r => { if (!r.ok) throw new Error(r.status + " " + r.statusText); return r.json(); })
     .then(index => {
       const rt = (index.runtimes || []).find(r => r.name === "bevara:mm_solver");
@@ -181,8 +182,16 @@
     }
   }
 
+  /* A Worker must run a script of the page's origin: the registry's solver is
+   * started from a one-line worker of this origin that imports it. */
+  function createWorker(script) {
+    const url = new URL(script, document.baseURI);
+    if (url.protocol === "blob:" || url.origin === location.origin) return new Worker(script);
+    return new Worker(URL.createObjectURL(new Blob(["importScripts(" + JSON.stringify(url.href) + ");"], { type: "text/javascript" })));
+  }
+
   function launchWorker(el, script, out, message) {
-    const worker = new Worker(script);
+    const worker = createWorker(script);
     if (worker) {
       worker.postMessage(message);
 
@@ -192,18 +201,27 @@
     }
   }
 
+  async function urlExist(url) {
+    try {
+      const r = await fetch(url, { method: "HEAD" });
+      return r.status < 400 || r.status >= 500;
+    } catch (e) {
+      return false;
+    }
+  }
+
   async function test_url(directories, url) {
     const filter_directories = directories.filter(x => x != "");
 
+    /* Each directory in turn: this returned after the first one. */
     for (const directory of filter_directories) {
-      if (await urlExist(directory + url)) {
-        return directory + url;
+      const candidate = new URL(directory + url, document.baseURI).href;
+      if (await urlExist(candidate)) {
+        return candidate;
       }
-
-      return "";
     }
 
-    return url;
+    return filter_directories.length > 0 ? "" : url;
   }
 
   function addScriptDirectoryAndExtIfNeeded(scriptDirectory, url, ext) {
@@ -227,7 +245,8 @@
     let dynamicLibraries = [];
 
 
-    const scriptDirectory = el.getAttribute("script-directory") ? el.getAttribute("script-directory") : "";
+    /* script-directory first when the element names one, then the registry */
+    const scriptDirectory = (el.getAttribute("script-directory") ? el.getAttribute("script-directory") + ";" : "") + REGISTRY_ACCESSORS;
 
     js = await addScriptDirectoryAndExtIfNeeded(scriptDirectory, el_using, ".js");
     wasmBinaryFile = await addScriptDirectoryAndExtIfNeeded(scriptDirectory, el_using, ".wasm");
@@ -317,11 +336,10 @@
     upgraded.setAttribute("is", "universal-video_1");
     upgraded.setAttribute("using", using);
     upgraded.setAttribute("with", with_list);
-    /* The wasm sit next to the page, and the tag would otherwise look for them
-     * next to the script that defined it. */
-    if (!upgraded.getAttribute("script-directory")) {
-      upgraded.setAttribute("script-directory", new URL(".", document.baseURI).href);
-    }
+    /* The solver and the accessors come from the registry; force keeps the
+     * decode in the pipeline even where the browser could play the source. */
+    upgraded.setAttribute("registry", REGISTRY);
+    upgraded.setAttribute("force", "");
     el.replaceWith(upgraded);
   }
 
