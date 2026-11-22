@@ -1,14 +1,33 @@
-curl https://samples.ffmpeg.org/A-codecs/AC3/Canyon-5.1-48khz-448kbit.ac3 -o ./test_sequences/Canyon-5.1-48khz-448kbit.ac3
-curl https://jpegxl.info/images/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl -o ./test_sequences/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl
-curl https://download.blender.org/peach/trailer/trailer_1080p.ogg -o ./test_sequences/trailer_1080p.ogg
-curl https://download.blender.org/durian/trailer/Sintel_Trailer.480p.DivX_Plus_HD.mkv -o ./test_sequences/Sintel_Trailer.480p.DivX_Plus_HD.mkv
-curl http://download.tsi.telecom-paristech.fr/gpac/tests/live360/NBA_score_table_2_hd.mp4 -o ./test_sequences/NBA_score_table_2_hd.mp4
-curl http://download.tsi.telecom-paristech.fr/gpac/dataset/dash/uhd/mux_sources/hevcds_720p30_2M.mp4 -o ./test_sequences/hevcds_720p30_2M.mp4
-curl https://download.blender.org/durian/trailer/Sintel_Trailer.480p.DivX_Home_Theater.divx -o ./test_sequences/Sintel_Trailer.480p.DivX_Home_Theater.divx
-curl https://www.elecard.com/storage/video/CityHall_640x360.webm -o ./test_sequences/CityHall_640x360.webm
-curl https://dl6.webmfiles.org/elephants-dream.webm -o ./test_sequences/elephants-dream.webm
-curl https://filesamples.com/samples/video/mpeg/sample_1280x720_surfing_with_audio.mpeg -o ./test_sequences/sample_1280x720_surfing_with_audio.mpeg
-curl https://dl.photoprism.app/samples/Formats/Video/H.266-VVC/NovosobornayaSquare_640x360.mp4 -o ./test_sequences/NovosobornayaSquare_640x360.mp4
+#!/bin/sh
+# Fails on the first file that does not arrive whole, so that the Pages build
+# stops and the previous deployment stays online. It used to carry on: curl
+# without --fail returns what it got, and on 2026-11-22 the two files from
+# download.tsi.telecom-paristech.fr were cut after a few minutes from the
+# GitHub runners ("transfer closed with 34330247 bytes remaining") - the site
+# then served an 82 KB hevcds_720p30_2M.mp4 and a ServiceWorker package with
+# an empty video track, and hevc, hevc-canvas and ServiceWorker/360 broke with
+# a build marked green. Those two now come from the Bevara test signals.
+set -e
+
+fetch() {   # <url> <file in test_sequences/>
+  # --retry-all-errors covers a cut transfer too, and each retry starts the
+  # file over: resuming (-C -) is refused by servers without byte ranges,
+  # samples.ffmpeg.org among them.
+  curl -fL --retry 5 --retry-all-errors --retry-delay 10 -o "./test_sequences/$2" "$1"
+}
+
+TEST_SIGNALS=https://bevara.ddns.net/test-signals
+fetch https://samples.ffmpeg.org/A-codecs/AC3/Canyon-5.1-48khz-448kbit.ac3 Canyon-5.1-48khz-448kbit.ac3
+fetch https://jpegxl.info/images/zoltan-tasi-CLJeQCr2F_A-unsplash.jxl zoltan-tasi-CLJeQCr2F_A-unsplash.jxl
+fetch https://download.blender.org/peach/trailer/trailer_1080p.ogg trailer_1080p.ogg
+fetch https://download.blender.org/durian/trailer/Sintel_Trailer.480p.DivX_Plus_HD.mkv Sintel_Trailer.480p.DivX_Plus_HD.mkv
+fetch $TEST_SIGNALS/live360/NBA_score_table_2_hd.mp4 NBA_score_table_2_hd.mp4
+fetch $TEST_SIGNALS/HEVC/hevcds_720p30_2M.mp4 hevcds_720p30_2M.mp4
+fetch https://download.blender.org/durian/trailer/Sintel_Trailer.480p.DivX_Home_Theater.divx Sintel_Trailer.480p.DivX_Home_Theater.divx
+fetch https://www.elecard.com/storage/video/CityHall_640x360.webm CityHall_640x360.webm
+fetch https://dl6.webmfiles.org/elephants-dream.webm elephants-dream.webm
+fetch https://filesamples.com/samples/video/mpeg/sample_1280x720_surfing_with_audio.mpeg sample_1280x720_surfing_with_audio.mpeg
+fetch https://dl.photoprism.app/samples/Formats/Video/H.266-VVC/NovosobornayaSquare_640x360.mp4 NovosobornayaSquare_640x360.mp4
 
 # The two ServiceWorker demos are MP4 files that carry their own page, tag
 # script, solver and accessors as items: that is the point of the demo, the
