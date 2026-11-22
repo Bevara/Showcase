@@ -51,15 +51,21 @@
 
     <div class="demo-section">
         <h2>Ogg / Theora</h2>
-        <div class="slot" data-src="theora_short.ogv" data-with="ogg_1;theora_1;isobmff_1">
+        <div class="slot" data-src="../test_sequences/trailer_1080p.ogg" data-with="ogg_1;theora_1;vorbis_1;isobmff_1"
+             data-working="decoding and re-encoding the 33-second 1080p trailer, picture and sound — about a minute…">
             <p class="status">waiting…</p>
         </div>
-        <p class="note">Decoded by <a href="https://github.com/Bevara/theora">theora_1</a> through
-            <a href="https://github.com/Bevara/ogg">ogg_1</a>, multiplexed by
-            <a href="https://github.com/Bevara/isobmff">isobmff_1</a>, encoded by the browser:</p>
-        <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="theora_short.ogv"
-       using="mm_solver_1.0.6" with="ogg_1;theora_1;isobmff_1"
-       use-webcodec="enc" controls&gt;&lt;/video&gt;</code></pre>
+        <p class="note">The <a href="https://peach.blender.org/">Big Buck Bunny</a> trailer in full,
+            33 seconds of 1080p Theora with its Vorbis sound. The picture is decoded by
+            <a href="https://github.com/Bevara/theora">theora_1</a> and the sound by
+            <a href="https://github.com/Bevara/vorbis">vorbis_1</a>, both read through
+            <a href="https://github.com/Bevara/ogg">ogg_1</a>; the browser encodes them to H.264 and
+            AAC, and <a href="https://github.com/Bevara/isobmff">isobmff_1</a> puts them in an MP4:</p>
+        <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="trailer_1080p.ogg"
+       using="mm_solver_1.0.6" with="ogg_1;theora_1;vorbis_1;isobmff_1"
+       use-webcodec="enc" use-worker controls&gt;&lt;/video&gt;</code></pre>
+        <p class="note">Nothing plays until the whole file has been re-encoded: the 28 MB trailer takes
+            about a minute on a laptop, the Dirac clip below waits for it.</p>
     </div>
 
     <div class="demo-section">
@@ -73,13 +79,14 @@
 
     <div class="demo-section">
         <h2>What works, and what does not yet</h2>
-        <p>Measured against <code>mm_solver 1.0.2</code>, this is where the WebCodecs encoder stands
-            for the four royalty-free video families:</p>
+        <p>This is where the WebCodecs encoder stands for the four royalty-free video families. The
+            Theora row was measured with <code>mm_solver 1.0.6</code>, the others with
+            <code>1.0.2</code>:</p>
         <table>
             <thead><tr><th>Format</th><th>Decoder</th><th>Through WebCodecs</th></tr></thead>
             <tbody>
                 <tr><td>Theora</td><td><code>theora_1</code></td>
-                    <td class="ok">works on short clips</td></tr>
+                    <td class="ok">works, sound included (Vorbis to AAC)</td></tr>
                 <tr><td>Dirac</td><td><code>libschro_1</code></td>
                     <td class="ok">works</td></tr>
                 <tr><td>MPEG-1 / MPEG-2</td><td><code>libmpeg2_1</code></td>
@@ -93,11 +100,13 @@
             <code>HEIGHT</code> on its input at connection time, which <code>mpeg2vdec</code> only
             knows after parsing a sequence header; and no pixel-format conversion resolves between
             <code>libjpeg</code>'s output and what the encoder accepts.</p>
-        <p class="note">The clips here are deliberately short. A long or large source starves the
-            session while the asynchronous WebCodecs callbacks are in flight, GPAC reports
-            <code>No data received from fetch for 5000 ms with an idle session</code> and ends early,
-            leaving a truncated file — the same 1080p Theora runs complete at 4 seconds and stops after
-            1 second when given 33.</p>
+        <p class="note">Length is no longer a limit. With <code>mm_solver 1.0.2</code> on the page's
+            own thread, a long source starved the session while the asynchronous WebCodecs callbacks
+            were in flight: GPAC reported <code>No data received from fetch for 5000 ms with an idle
+            session</code> and ended early, and this same trailer stopped after 1 second of its 33.
+            With <code>1.0.6</code> in a worker it comes through whole, and so does a 2-minute VP8 and
+            Vorbis film; the cost grows with the length, about 1.5 seconds of work for each second of
+            video on a laptop.</p>
     </div>
 
     <div class="demo-section">
@@ -131,7 +140,7 @@
       const SOLVER = index.runtimes.find(r => r.name === "bevara:mm_solver").file.replace(/\.wasm$/, "");
       for (const slot of document.querySelectorAll(".slot")) {
         const status = slot.querySelector(".status");
-        status.textContent = "decoding and re-encoding…";
+        status.textContent = slot.dataset.working || "decoding and re-encoding…";
         const v = document.createElement("video", { is: "universal-video_1" });
         v.setAttribute("is", "universal-video_1");
         v.setAttribute("using", SOLVER);
