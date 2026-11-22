@@ -25,6 +25,15 @@
         .status { margin: 0; padding: .7em .9em; background: #f4f6fa; border: 1px solid #dde3ef;
                   border-radius: 4px; font-size: .9rem; color: #555; }
         .status.failed { background: #fdecea; border-color: #f0b4ae; color: #b42318; }
+        .status.working { display: flex; gap: .8em; align-items: center; color: #0b3d91;
+                          background: #eef3fc; border-color: #c9d6f0; }
+        .status.working::before { content: ""; flex: none; width: 1.1em; height: 1.1em;
+                                  border: 2px solid #c9d6f0; border-top-color: #0b3d91;
+                                  border-radius: 50%; animation: spin 1s linear infinite; }
+        .status .detail { display: block; color: #555; font-size: .85rem; }
+        .status .elapsed { font-variant-numeric: tabular-nums; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) { .status.working::before { animation: none; } }
     </style>
     <script src="https://registry.bevara.ddns.net/accessors/universal-tags_1.js"></script>
 </head>
@@ -52,8 +61,8 @@
     <div class="demo-section">
         <h2>Ogg / Theora</h2>
         <div class="slot" data-src="../test_sequences/trailer_1080p.ogg" data-with="ogg_1;theora_1;vorbis_1;isobmff_1"
-             data-working="decoding and re-encoding the 33-second 1080p trailer, picture and sound — about a minute…">
-            <p class="status">waiting…</p>
+             data-working="33 seconds of 1080p, picture and sound: about a minute on a laptop.">
+            <p class="status">Queued: starts once the player above is ready.</p>
         </div>
         <p class="note">The <a href="https://peach.blender.org/">Big Buck Bunny</a> trailer in full,
             33 seconds of 1080p Theora with its Vorbis sound. The picture is decoded by
@@ -71,7 +80,7 @@
     <div class="demo-section">
         <h2>Dirac</h2>
         <div class="slot" data-src="dirac_testcard.drc" data-with="libschro_1;isobmff_1">
-            <p class="status">waiting…</p>
+            <p class="status">Queued: starts once the player above is ready.</p>
         </div>
         <p class="note">Decoded by <a href="https://github.com/Bevara/libschro">libschro_1</a>, a raw
             Dirac elementary stream with no container at all.</p>
@@ -80,8 +89,8 @@
     <div class="demo-section">
         <h2>WebM / VP8, two minutes</h2>
         <div class="slot" data-src="../test_sequences/elephants-dream.webm" data-with="webmdmx_1;libvpx_1;vorbis_1;isobmff_1"
-             data-working="decoding and re-encoding the 2-minute film, picture and sound — about three minutes…">
-            <p class="status">waiting…</p>
+             data-working="2 minutes of video, picture and sound: about three minutes on a laptop.">
+            <p class="status">Queued: starts once the player above is ready.</p>
         </div>
         <p class="note">A two-minute excerpt of <a href="https://orange.blender.org/">Elephants Dream</a>,
             in 540×360 VP8 with Vorbis sound. <a href="https://github.com/Bevara/webmdmx">webmdmx_1</a>
@@ -163,7 +172,31 @@
       const SOLVER = index.runtimes.find(r => r.name === "bevara:mm_solver").file.replace(/\.wasm$/, "");
       for (const slot of document.querySelectorAll(".slot")) {
         const status = slot.querySelector(".status");
-        status.textContent = slot.dataset.working || "decoding and re-encoding…";
+        /* Until the re-encoded file arrives there is nothing to play, and the
+         * tag says nothing about how far it has got - so the player stays
+         * hidden behind a message saying the transcoding is running, with the
+         * time spent so far. */
+        status.className = "status working";
+        status.textContent = "";
+        const line = document.createElement("span");
+        const title = document.createElement("strong");
+        title.textContent = "Transcoding in progress";
+        const elapsed = document.createElement("span");
+        elapsed.className = "elapsed";
+        line.append(title, " · ", elapsed);
+        const detail = document.createElement("span");
+        detail.className = "detail";
+        detail.textContent = slot.dataset.working || "";
+        const text = document.createElement("span");
+        text.append(line, detail);
+        status.append(text);
+        const started = Date.now();
+        const tick = () => {
+          const s = Math.floor((Date.now() - started) / 1000);
+          elapsed.textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0") + " elapsed";
+        };
+        tick();
+        const timer = setInterval(tick, 1000);
         const v = document.createElement("video", { is: "universal-video_1" });
         v.setAttribute("is", "universal-video_1");
         v.setAttribute("using", SOLVER);
@@ -174,6 +207,7 @@
         v.setAttribute("use-worker", "");
         v.setAttribute("controls", "");
         v.setAttribute("src", slot.dataset.src);
+        v.hidden = true;
         slot.appendChild(v);
         try {
           const out = await v.decodingPromise;
@@ -186,8 +220,11 @@
             v.addEventListener("error", () => rej(new Error("the browser refused the result")), { once: true });
             setTimeout(() => (v.readyState >= 1 ? res() : rej(new Error("timed out"))), 20000);
           });
+          clearInterval(timer);
           status.remove();
+          v.hidden = false;
         } catch (e) {
+          clearInterval(timer);
           status.className = "status failed";
           status.textContent = "This one did not come through: " + (e.message || e)
             + ". The console carries the pipeline's own report.";
