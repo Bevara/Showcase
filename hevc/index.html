@@ -63,15 +63,12 @@
 
     <p>The video is played <strong>progressively</strong>: it starts within a few seconds and plays while the rest is still being transcoded, instead of after the whole file. The picture and the sound are cut into MP4 segments fed to the element through Media Source Extensions as they are produced. The HE-AAC sound is decoded by <a href="https://github.com/Bevara/libfaad">libfaad_1</a> and re-encoded to Opus by <a href="https://github.com/Bevara/libopusenc">libopusenc_1</a>. Transcoding runs a little slower than real time on a laptop, so playback may pause briefly at the edge of what is ready. A browser that cannot do it falls back to decoding the whole file; the line under the player says which way it went.</p>
 
-    <p>The decoder is libde265 1.1.3. Earlier builds of <code>libde265_1</code> used 1.1.1, which rejects this stream's picture parameter set: no frame came out, <code>libx264_1</code> had nothing to encode and the page stayed black, while the test, which then only waited for the transcode to finish, still passed. All 4267 frames now come out, and the <code>#libde265</code> test checks the size of what it gets back. If your browser decodes HEVC natively, the &lt;video&gt; tag may start playing the source directly - that is the browser's own decoder, not this pipeline.</p>
-
+  
     <video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="https://bevara.github.io/Showcase/test_sequences/hevcds_720p30_2M.mp4" using="mm_solver_1.0.6" with="libde265_1;isobmff_1;libx264_1;libfaad_1;libopusenc_1" progressive controls></video>
 
     <h2>Code snippet</h2>
 
     <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="hevcds_720p30_2M.mp4" using="mm_solver_1.0.6" with="libde265_1;isobmff_1;libx264_1;libfaad_1;libopusenc_1" progressive controls&gt; &lt;/video&gt;</code></pre>
-
-    <p>Without <code>progressive</code>, the whole file is transcoded first - about three and a half minutes - and then plays. <code>with="libde265_1;isobmff_1;libx264_1"</code> then gives the picture alone, without the sound.</p>
 
     <h2> Specifications : </h2>
 
