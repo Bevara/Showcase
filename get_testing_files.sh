@@ -26,7 +26,6 @@ fetch $TEST_SIGNALS/HEVC/hevcds_720p30_2M.mp4 hevcds_720p30_2M.mp4
 fetch https://download.blender.org/durian/trailer/Sintel_Trailer.480p.DivX_Home_Theater.divx Sintel_Trailer.480p.DivX_Home_Theater.divx
 fetch https://www.elecard.com/storage/video/CityHall_640x360.webm CityHall_640x360.webm
 fetch https://dl6.webmfiles.org/elephants-dream.webm elephants-dream.webm
-fetch https://filesamples.com/samples/video/mpeg/sample_1280x720_surfing_with_audio.mpeg sample_1280x720_surfing_with_audio.mpeg
 fetch https://dl.photoprism.app/samples/Formats/Video/H.266-VVC/NovosobornayaSquare_640x360.mp4 NovosobornayaSquare_640x360.mp4
 
 # The two ServiceWorker demos are MP4 files that carry their own page, tag
