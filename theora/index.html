@@ -54,7 +54,7 @@
         with="ogg_1;vorbis_1;theora_1;libx264_1;isobmff_1;libopusenc_1" progressive controls></video>
 
     <p>Although this format was once promoted as an open video standard, most major browsers (including Chrome, Firefox and Safari) no longer support it natively.</p>
-    <p>The video is played <strong>progressively</strong>: it starts within a few seconds, while the rest is still being transcoded. The Vorbis sound is re-encoded to Opus by <a href="https://github.com/Bevara/libopusenc">libopusenc_1</a>, because Media Source Extensions do not take Vorbis inside MP4. A browser that cannot do it falls back to decoding the whole file; the line under the player says which way it went.</p>
+    <p>The video is played <strong>progressively</strong>: it starts within a few seconds, while the rest is still being transcoded.</p>
     
     <h2>Code snippet</h2>
     <p>We decode the Ogg file <a
