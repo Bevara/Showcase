@@ -57,8 +57,7 @@
     <pre><code>&lt;video is="<a href="https://github.com/Bevara/player">universal-video_1</a>" registry="https://registry.bevara.ddns.net" force src="testcard.avi" using="<a href="https://github.com/Bevara/solver">mm_solver_1.0.6</a>"
         with="<a href="https://github.com/Bevara/avidmx">avidmx_1</a>;<a href="https://github.com/Bevara/ffmpeg-h26x">ffmpeg-h26x_1</a>;<a href="https://github.com/Bevara/isobmff">isobmff_1</a>;<a href="https://github.com/Bevara/libx264">libx264_1</a>" controls&gt; &lt;/video&gt;
 </code></pre>
-    <p>The same module also carries <code>rfh263</code>, so a bare <code>.263</code> elementary stream plays with <code>with="ffmpeg-h26x_1;isobmff_1;libx264_1"</code> and no demultiplexer at all. The container is used here only for the frame rate: H.263 numbers its pictures with a temporal reference but never states how many there are per second, so a raw stream falls back to the 15 fps of the recommendation and plays slower than it was encoded.</p>
-    <p>CIF is coded as 352x288 samples but displayed 4:3, so the sample aspect ratio is 12:11 and the player reports the picture as 384x288. The stored frame is unscaled; only the display geometry differs.</p>
+    
     <h2> Specifications : </h2>
     <p>The specifications of the test sequence are : </p>
     <table>
