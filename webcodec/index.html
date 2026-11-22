@@ -65,7 +65,7 @@
        using="mm_solver_1.0.6" with="ogg_1;theora_1;vorbis_1;isobmff_1"
        use-webcodec="enc" use-worker controls&gt;&lt;/video&gt;</code></pre>
         <p class="note">Nothing plays until the whole file has been re-encoded: the 28 MB trailer takes
-            about a minute on a laptop, the Dirac clip below waits for it.</p>
+            about a minute on a laptop, and the players below wait for it in turn.</p>
     </div>
 
     <div class="demo-section">
@@ -78,9 +78,30 @@
     </div>
 
     <div class="demo-section">
+        <h2>WebM / VP8, two minutes</h2>
+        <div class="slot" data-src="../test_sequences/elephants-dream.webm" data-with="webmdmx_1;libvpx_1;vorbis_1;isobmff_1"
+             data-working="decoding and re-encoding the 2-minute film, picture and sound — about three minutes…">
+            <p class="status">waiting…</p>
+        </div>
+        <p class="note">A two-minute excerpt of <a href="https://orange.blender.org/">Elephants Dream</a>,
+            in 540×360 VP8 with Vorbis sound. <a href="https://github.com/Bevara/webmdmx">webmdmx_1</a>
+            reads the WebM, <a href="https://github.com/Bevara/libvpx">libvpx_1</a> decodes the
+            picture and <a href="https://github.com/Bevara/vorbis">vorbis_1</a> the sound; the browser
+            encodes both, as above:</p>
+        <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="elephants-dream.webm"
+       using="mm_solver_1.0.6" with="webmdmx_1;libvpx_1;vorbis_1;isobmff_1"
+       use-webcodec="enc" use-worker controls&gt;&lt;/video&gt;</code></pre>
+        <p class="note">Your browser plays this WebM on its own; <code>force</code> sends it through
+            the WebAssembly decoders anyway, to show a long film going the whole way. It is the
+            slowest of the three, about three minutes on a laptop for 8.5 MB.
+            Elephants Dream © 2006 Blender Foundation / Netherlands Media Art Institute,
+            <a href="https://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a>.</p>
+    </div>
+
+    <div class="demo-section">
         <h2>What works, and what does not yet</h2>
-        <p>This is where the WebCodecs encoder stands for the four royalty-free video families. The
-            Theora row was measured with <code>mm_solver 1.0.6</code>, the others with
+        <p>This is where the WebCodecs encoder stands for the royalty-free video families. The
+            Theora and VP8 rows were measured with <code>mm_solver 1.0.6</code>, the others with
             <code>1.0.2</code>:</p>
         <table>
             <thead><tr><th>Format</th><th>Decoder</th><th>Through WebCodecs</th></tr></thead>
@@ -89,6 +110,8 @@
                     <td class="ok">works, sound included (Vorbis to AAC)</td></tr>
                 <tr><td>Dirac</td><td><code>libschro_1</code></td>
                     <td class="ok">works</td></tr>
+                <tr><td>VP8</td><td><code>libvpx_1</code></td>
+                    <td class="ok">works, sound included (Vorbis to AAC)</td></tr>
                 <tr><td>MPEG-1 / MPEG-2</td><td><code>libmpeg2_1</code></td>
                     <td class="no">refused: <code>Failed to connect mpeg2vdec to wcenc: Bad Parameter</code></td></tr>
                 <tr><td>Motion JPEG</td><td><code>libjpeg_1</code></td>
@@ -104,8 +127,8 @@
             own thread, a long source starved the session while the asynchronous WebCodecs callbacks
             were in flight: GPAC reported <code>No data received from fetch for 5000 ms with an idle
             session</code> and ended early, and this same trailer stopped after 1 second of its 33.
-            With <code>1.0.6</code> in a worker it comes through whole, and so does a 2-minute VP8 and
-            Vorbis film; the cost grows with the length, about 1.5 seconds of work for each second of
+            With <code>1.0.6</code> in a worker it comes through whole, and so does the 2-minute VP8
+            and Vorbis film above; the cost grows with the length, about 1.5 seconds of work for each second of
             video on a laptop.</p>
     </div>
 
