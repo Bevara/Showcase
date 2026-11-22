@@ -107,39 +107,6 @@
             <a href="https://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a>.</p>
     </div>
 
-    <div class="demo-section">
-        <h2>What works, and what does not yet</h2>
-        <p>This is where the WebCodecs encoder stands for the royalty-free video families. The
-            Theora and VP8 rows were measured with <code>mm_solver 1.0.6</code>, the others with
-            <code>1.0.2</code>:</p>
-        <table>
-            <thead><tr><th>Format</th><th>Decoder</th><th>Through WebCodecs</th></tr></thead>
-            <tbody>
-                <tr><td>Theora</td><td><code>theora_1</code></td>
-                    <td class="ok">works, sound included (Vorbis to AAC)</td></tr>
-                <tr><td>Dirac</td><td><code>libschro_1</code></td>
-                    <td class="ok">works</td></tr>
-                <tr><td>VP8</td><td><code>libvpx_1</code></td>
-                    <td class="ok">works, sound included (Vorbis to AAC)</td></tr>
-                <tr><td>MPEG-1 / MPEG-2</td><td><code>libmpeg2_1</code></td>
-                    <td class="no">refused: <code>Failed to connect mpeg2vdec to wcenc: Bad Parameter</code></td></tr>
-                <tr><td>Motion JPEG</td><td><code>libjpeg_1</code></td>
-                    <td class="no">refused: <code>Filter not found for the desired type</code></td></tr>
-            </tbody>
-        </table>
-        <p class="note">The two refusals are in the encoder, not in the decoders, and neither can be
-            worked around from the page. <code>wcenc</code> requires <code>WIDTH</code> and
-            <code>HEIGHT</code> on its input at connection time, which <code>mpeg2vdec</code> only
-            knows after parsing a sequence header; and no pixel-format conversion resolves between
-            <code>libjpeg</code>'s output and what the encoder accepts.</p>
-        <p class="note">Length is no longer a limit. With <code>mm_solver 1.0.2</code> on the page's
-            own thread, a long source starved the session while the asynchronous WebCodecs callbacks
-            were in flight: GPAC reported <code>No data received from fetch for 5000 ms with an idle
-            session</code> and ended early, and this same trailer stopped after 1 second of its 33.
-            With <code>1.0.6</code> in a worker it comes through whole, and so does the 2-minute VP8
-            and Vorbis film above; the cost grows with the length, about 1.5 seconds of work for each second of
-            video on a laptop.</p>
-    </div>
 
     <div class="demo-section">
         <h2>The same thing, without touching the page</h2>
