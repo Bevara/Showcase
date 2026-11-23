@@ -51,9 +51,10 @@ const DEMO_TIMEOUT = Number(flag('timeout', 45000));
  * transcodes 4267 frames of 1280x720 HEVC to H.264 before anything plays:
  * about 210 s on a laptop. It used to "pass" in seconds only because the
  * decoder then emitted nothing and the muxer wrote an empty MP4. webcodec
- * re-encodes, one after the other, the 33 s 1080p Theora trailer (about
- * 52 s on a laptop) and the 2-minute Elephants Dream in VP8 (about 184 s),
- * both with their sound, before either plays. */
+ * re-encodes, one after the other, the 33 s 1080p Theora trailer
+ * (progressive: first image after about 5 s, done in about 35 s), a Dirac
+ * clip and the 2-minute Elephants Dream in VP8 (whole file, about 3 min),
+ * all through WebCodecs. */
 const DEMO_TIMEOUTS = { hevc: 10 * 60 * 1000, webcodec: 8 * 60 * 1000 };
 const timeoutFor = (d) => Math.max(DEMO_TIMEOUT, DEMO_TIMEOUTS[d.name] || 0);
 const ONLY = flag('only') ? String(flag('only')).split(',').map(s => s.trim()) : null;

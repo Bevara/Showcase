@@ -60,9 +60,9 @@
 
     <div class="demo-section">
         <h2>Ogg / Theora</h2>
-        <div class="slot" data-src="../test_sequences/trailer_1080p.ogg" data-with="ogg_1;theora_1;vorbis_1;isobmff_1"
-             data-working="33 seconds of 1080p, picture and sound: about a minute on a laptop.">
-            <p class="status">Queued: starts once the player above is ready.</p>
+        <div class="slot" data-src="../test_sequences/trailer_1080p.ogg" data-with="ogg_1;theora_1;vorbis_1;isobmff_1" data-progressive
+             data-working="33 seconds of 1080p, picture and sound.">
+            <p class="status">Queued: starts once the player above has finished transcoding.</p>
         </div>
         <p class="note">The <a href="https://peach.blender.org/">Big Buck Bunny</a> trailer in full,
             33 seconds of 1080p Theora with its Vorbis sound. The picture is decoded by
@@ -72,25 +72,31 @@
             AAC, and <a href="https://github.com/Bevara/isobmff">isobmff_1</a> puts them in an MP4:</p>
         <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="trailer_1080p.ogg"
        using="mm_solver_1.0.7" with="ogg_1;theora_1;vorbis_1;isobmff_1"
-       use-webcodec="enc" use-worker controls&gt;&lt;/video&gt;</code></pre>
-        <p class="note">Nothing plays until the whole file has been re-encoded: the 28 MB trailer takes
-            about a minute on a laptop, and the players below wait for it in turn.</p>
+       use-webcodec="enc" progressive controls&gt;&lt;/video&gt;</code></pre>
+        <p class="note">The video is played <strong>progressively</strong>: it starts after a few
+            seconds and plays while the rest is still being transcoded. The picture and the sound are
+            cut into one-second MP4 segments, handed to the element through Media Source Extensions as
+            they come out. Each segment has to begin on a key frame, which the browser's encoder is
+            asked for since <code>mm_solver_1.0.7</code>. On a laptop the transcoding keeps up with
+            playback; the players below wait for it to finish, one at a time.</p>
     </div>
 
     <div class="demo-section">
         <h2>Dirac</h2>
         <div class="slot" data-src="dirac_testcard.drc" data-with="libschro_1;isobmff_1">
-            <p class="status">Queued: starts once the player above is ready.</p>
+            <p class="status">Queued: starts once the player above has finished transcoding.</p>
         </div>
         <p class="note">Decoded by <a href="https://github.com/Bevara/libschro">libschro_1</a>, a raw
-            Dirac elementary stream with no container at all.</p>
+            Dirac elementary stream with no container at all. It has no sound, and progressive playback
+            through WebCodecs waits for a first sound packet next to the first picture, so this short
+            clip is transcoded whole, in a worker, before it plays.</p>
     </div>
 
     <div class="demo-section">
         <h2>WebM / VP8, two minutes</h2>
         <div class="slot" data-src="../test_sequences/elephants-dream.webm" data-with="webmdmx_1;libvpx_1;vorbis_1;isobmff_1"
              data-working="2 minutes of video, picture and sound: about three minutes on a laptop.">
-            <p class="status">Queued: starts once the player above is ready.</p>
+            <p class="status">Queued: starts once the player above has finished transcoding.</p>
         </div>
         <p class="note">A two-minute excerpt of <a href="https://orange.blender.org/">Elephants Dream</a>,
             in 540×360 VP8 with Vorbis sound. <a href="https://github.com/Bevara/webmdmx">webmdmx_1</a>
@@ -101,8 +107,10 @@
        using="mm_solver_1.0.7" with="webmdmx_1;libvpx_1;vorbis_1;isobmff_1"
        use-webcodec="enc" use-worker controls&gt;&lt;/video&gt;</code></pre>
         <p class="note">Your browser plays this WebM on its own; <code>force</code> sends it through
-            the WebAssembly decoders anyway, to show a long film going the whole way. It is the
-            slowest of the three, about three minutes on a laptop for 8.5 MB.
+            the WebAssembly decoders anyway, to show a long film going the whole way. This one is
+            transcoded whole, in a worker, before it plays: about three minutes on a laptop for
+            8.5 MB. Progressive playback runs the solver on the page's own thread, and for now a
+            page can only run one such session - the trailer above has it.
             Elephants Dream © 2006 Blender Foundation / Netherlands Media Art Institute,
             <a href="https://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a>.</p>
     </div>
@@ -126,23 +134,22 @@
      * loses the race goes quiet long enough for GPAC to report "No data
      * received from fetch for 5000 ms with an idle session" and end early,
      * leaving a truncated or empty file. So the players are built in turn,
-     * each waiting for the one before it. */
+     * each waiting for the one before it to finish transcoding. */
     (async () => {
-      /* The solver and the accessors come from the registry. They run in a
-       * worker - decoding on the main thread starves the WebCodecs callbacks,
-       * the Dirac clip never completes that way - and the tag starts a
-       * worker on the registry's script from one of this page's origin. */
+      /* The solver and the accessors come from the registry. */
       const REG = "https://registry.bevara.ddns.net";
       /* The solver's name carries its version, so it is read from the
        * registry's index, not written here. */
       const index = await fetch(REG + "/accessors/index.json").then(r => r.json());
       const SOLVER = index.runtimes.find(r => r.name === "bevara:mm_solver").file.replace(/\.wasm$/, "");
       for (const slot of document.querySelectorAll(".slot")) {
+        const progressive = "progressive" in slot.dataset;
         const status = slot.querySelector(".status");
-        /* Until the re-encoded file arrives there is nothing to play, and the
-         * tag says nothing about how far it has got - so the player stays
-         * hidden behind a message saying the transcoding is running, with the
-         * time spent so far. */
+        /* The tag says nothing about how far it has got, so a message says the
+         * transcoding is running, with the time spent so far. A whole-file
+         * player stays hidden behind it until its file arrives; a progressive
+         * one shows up with its first segment and the message stays above it
+         * until the last. */
         status.className = "status working";
         status.textContent = "";
         const line = document.createElement("span");
@@ -153,7 +160,8 @@
         line.append(title, " · ", elapsed);
         const detail = document.createElement("span");
         detail.className = "detail";
-        detail.textContent = slot.dataset.working || "";
+        detail.textContent = (slot.dataset.working || "")
+          + (progressive ? " The player appears with the first segments." : "");
         const text = document.createElement("span");
         text.append(line, detail);
         status.append(text);
@@ -171,7 +179,11 @@
         v.setAttribute("registry", REG);
         v.setAttribute("force", "");
         v.setAttribute("use-webcodec", "enc");
-        v.setAttribute("use-worker", "");
+        /* progressive runs the solver on this thread (the tag ignores
+         * use-worker there), which holds up at 1080p. A whole-file decode goes
+         * to a worker: on this thread it starved the WebCodecs callbacks and
+         * the Dirac clip never completed. */
+        v.setAttribute(progressive ? "progressive" : "use-worker", "");
         v.setAttribute("controls", "");
         v.setAttribute("src", slot.dataset.src);
         v.hidden = true;
@@ -179,14 +191,42 @@
         try {
           const out = await v.decodingPromise;
           if (!out) throw new Error("the pipeline produced no output");
-          /* decodingPromise resolves when the blob is attached, not when the
-           * browser has accepted it - wait for the metadata to be sure. */
-          await new Promise((res, rej) => {
-            if (v.readyState >= 1) return res();
-            v.addEventListener("loadedmetadata", res, { once: true });
-            v.addEventListener("error", () => rej(new Error("the browser refused the result")), { once: true });
-            setTimeout(() => (v.readyState >= 1 ? res() : rej(new Error("timed out"))), 20000);
-          });
+          if (progressive) {
+            /* decodingPromise resolved at once with the MediaSource's URL.
+             * While segments come in the duration is Infinity; it becomes the
+             * real one when the last segment closes the stream - the end of
+             * the transcoding. Should the tag give up on progressive playback
+             * it says so and decodes the whole file instead; that file then
+             * brings its own duration. */
+            let mse = out;
+            await new Promise((res, rej) => {
+              const own = () => v.src === mse || (mse === null && v.src !== out);
+              const show = () => { if (own() && v.readyState >= 2) v.hidden = false; };
+              const done = () => {
+                show();
+                if (own() && Number.isFinite(v.duration) && v.duration > 0) res();
+              };
+              v.addEventListener("loadeddata", show);
+              v.addEventListener("durationchange", done);
+              v.addEventListener("loadedmetadata", done);
+              v.addEventListener("progressivefallback", () => {
+                mse = null;
+                v.hidden = true;
+                detail.textContent = "Progressive playback did not start here, so the whole file is "
+                  + "transcoded first.";
+              });
+              setTimeout(() => rej(new Error("timed out")), 15 * 60 * 1000);
+            });
+          } else {
+            /* decodingPromise resolves when the blob is attached, not when the
+             * browser has accepted it - wait for the metadata to be sure. */
+            await new Promise((res, rej) => {
+              if (v.readyState >= 1) return res();
+              v.addEventListener("loadedmetadata", res, { once: true });
+              v.addEventListener("error", () => rej(new Error("the browser refused the result")), { once: true });
+              setTimeout(() => (v.readyState >= 1 ? res() : rej(new Error("timed out"))), 20000);
+            });
+          }
           clearInterval(timer);
           status.remove();
           v.hidden = false;
