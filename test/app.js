@@ -146,7 +146,52 @@ function buildTag(tag, url, accessors, solver) {
     return tag === 'img' ? open : `${open}</${tag}>`;
 }
 
+// A verdict that Bevara could act on comes with a GitHub issue filled in
+// from what the page knows. Only the structure MediaInfo reports goes in,
+// field by field from a fixed list: a track's Title, Album or encoder
+// string can carry what the person would rather not publish, and so can a
+// dropped file's name. An address typed in is public, so it goes in.
+const ISSUES = 'https://github.com/Bevara/Showcase/issues/new';
+const TRACK_FIELDS = ['Format', 'Format_Profile', 'Format_Version', 'Format_Commercial_IfAny', 'CodecID',
+    'Width', 'Height', 'FrameRate', 'BitDepth', 'ColorSpace', 'ChromaSubsampling', 'SamplingRate', 'Channels'];
+
+// MediaInfo pads some values with a space ("jxl ").
+const field = (v) => String(v).trim();
+const size = (n) => (n < 10240 ? `${n} bytes` : `${(n / 1024).toFixed(0)} KB`);
+
+function describe(source, ext, tracks) {
+    const lines = [`Extension: ${ext ? '.' + ext : '(none)'}`, `Size: ${size(source.size)}`];
+    if (!source.local) lines.push(`Address: ${source.url}`);
+    lines.push('', 'MediaInfo:');
+    if (!tracks.length) lines.push('- nothing recognised');
+    for (const t of tracks) {
+        const fields = TRACK_FIELDS.filter((f) => t[f] !== undefined).map((f) => `${f}=${field(t[f])}`);
+        lines.push(`- ${t['@type'] ?? 'Track'}: ${fields.join(', ') || '(no format field)'}`);
+    }
+    return lines;
+}
+
+function offerIssue(kind, source, ext, tracks, tried) {
+    const formats = [...new Set(tracks.map((t) => t.Format && field(t.Format)).filter(Boolean))];
+    const what = formats.length ? formats.join(' / ') : (ext ? '.' + ext : 'unknown format');
+    const lines = describe(source, ext, tracks);
+    if (tried) lines.push('', `Accessors: ${tried.accessors.join(', ') || 'none'}`, `Solver: ${tried.solver ?? ''}`);
+    lines.push('', `Browser: ${navigator.userAgent}`, `Tester: ${location.origin}${location.pathname}`);
+    const request = kind === 'request';
+    // encodeURIComponent rather than URLSearchParams: the latter writes a
+    // space as "+", which not every reader of the query turns back.
+    const params = Object.entries({
+        template: request ? 'format-request.yml' : 'decode-failure.yml',
+        title: `${request ? 'Format request' : 'Decode failure'}: ${what}`,
+        detected: lines.join('\n'),
+    }).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
+    el('issue-link').href = `${ISSUES}?${params}`;
+    el('issue-link').textContent = request ? 'Request this format' : 'Report this file';
+    el('issue').hidden = false;
+}
+
 function setVerdict(kind, text) {
+    el('issue').hidden = true;
     const v = el('verdict');
     v.className = `verdict ${kind}`;
     v.textContent = text;
@@ -210,8 +255,9 @@ async function test(source) {
     el('r-solver').textContent = solver ?? '';
 
     if (accessors.length === 0 || !tag) {
-        setVerdict('no', 'This format is not supported yet. Write to support@bevara.com to ask about ' +
-            'support options, or add the accessor yourself with the Bevara Access IDE.');
+        setVerdict('no', 'This format is not supported yet. Ask for it below, or add the accessor ' +
+            'yourself with the Bevara Access IDE.');
+        offerIssue('request', source, ext, tracks);
         return;
     }
 
@@ -227,6 +273,7 @@ async function test(source) {
     if (strangers.length) {
         setVerdict('no', `${strangers.join(', ')} does not declare ${solver} among the solvers it loads with, ` +
             'so this combination cannot be assembled from the registry as it stands.');
+        offerIssue('report', source, ext, tracks, { accessors, solver });
         return;
     }
 
@@ -259,7 +306,8 @@ async function test(source) {
             `Bevara matters here for browsers that do not.`);
     } else {
         setVerdict('no', `${accessors.join(', ')} claims this format but produced nothing. ` +
-            'That is an interesting finding. Can you report the file to support@bevara.com?');
+            'That is an interesting finding: can you report it below?');
+        offerIssue('report', source, ext, tracks, { accessors, solver });
     }
 }
 

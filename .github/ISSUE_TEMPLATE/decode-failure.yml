@@ -1,0 +1,21 @@
+name: File that does not decode
+description: Report a file that "Test your own file" matched with accessors but could not decode.
+title: "Decode failure: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting this. The accessors claim the format, so a sample of the file is what helps most.
+  - type: textarea
+    id: detected
+    attributes:
+      label: What the tester detected
+      description: Filled in by "Test your own file": the file's structure as MediaInfo reports it, the accessors and the solver that were tried, and the browser.
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Sample file
+      description: If you can, attach the file or a short cut of it (drop it here; zip it if GitHub refuses the extension). Issues are public, so attach only a file you are allowed to share.

@@ -1,0 +1,26 @@
+name: Format request
+description: Ask for a format that "Test your own file" says Bevara does not decode yet.
+title: "Format request: "
+labels: ["format-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for asking. Before you send this, look through the [open format requests](https://github.com/Bevara/Showcase/issues?q=is%3Aissue+label%3Aformat-request). If your format is already there, add a 👍 to that issue instead: requests are prioritised by those votes.
+  - type: textarea
+    id: detected
+    attributes:
+      label: What the tester detected
+      description: Filled in by "Test your own file". It holds what MediaInfo reports about the file's structure, not its content or its name.
+    validations:
+      required: true
+  - type: textarea
+    id: use
+    attributes:
+      label: Where you meet this format
+      description: The device, software or archive that produces it, and what you would do with it in a browser.
+  - type: textarea
+    id: sample
+    attributes:
+      label: Sample file
+      description: If you can, attach a short sample (drop it here; zip it if GitHub refuses the extension). Issues are public, so attach only a file you are allowed to share.

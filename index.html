@@ -134,6 +134,11 @@
             cursor: pointer;
         }
 
+        #issue .hint {
+            display: block;
+            margin-top: 0.4em;
+        }
+
         .try-it h3 {
             color: #0b3d91;
         }
@@ -331,7 +336,8 @@
         <p>Your format is not listed above? Find out whether Bevara decodes it anyway. The page identifies the
             format with <a href="https://mediaarea.net/en/MediaInfo">MediaInfo</a>, looks for accessors that
             declare it, and previews the result right below. Nothing is uploaded: a dropped file is read in your
-            browser, and the decoding is done by the right combination of accessors.</p>
+            browser, and the decoding is done by the right combination of accessors. If your format is not supported
+            yet, you can ask for it in one click.</p>
 
         <div id="drop" tabindex="0" role="button" aria-label="Choose a picture or a sound file to test">
             <p><strong>Drop a picture or a sound file here</strong></p>
@@ -358,6 +364,9 @@
         <section id="report" hidden>
             <h3>Result</h3>
             <p id="verdict" class="verdict"></p>
+            <p id="issue" hidden><a id="issue-link" class="cta" target="_blank" rel="noopener"></a>
+                <span class="hint">Opens a GitHub issue filled in with what the tester found about the file's
+                    structure. You review it before sending; the file itself is not sent.</span></p>
             <table>
                 <tbody>
                     <tr>
