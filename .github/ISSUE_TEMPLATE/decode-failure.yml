@@ -11,7 +11,7 @@ body:
     id: detected
     attributes:
       label: What the tester detected
-      description: Filled in by "Test your own file": the file's structure as MediaInfo reports it, the accessors and the solver that were tried, and the browser.
+      description: 'Filled in by "Test your own file": the file''s structure as MediaInfo reports it, the accessors and the solver that were tried, and the browser.'
     validations:
       required: true
   - type: textarea
