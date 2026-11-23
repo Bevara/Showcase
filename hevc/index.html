@@ -64,11 +64,11 @@
     <p>The video is played <strong>progressively</strong>: it starts within a few seconds and plays while the rest is still being transcoded, instead of after the whole file. The picture and the sound are cut into MP4 segments fed to the element through Media Source Extensions as they are produced. The HE-AAC sound is decoded by <a href="https://github.com/Bevara/libfaad">libfaad_1</a> and re-encoded to Opus by <a href="https://github.com/Bevara/libopusenc">libopusenc_1</a>. Transcoding runs a little slower than real time on a laptop, so playback may pause briefly at the edge of what is ready. A browser that cannot do it falls back to decoding the whole file; the line under the player says which way it went.</p>
 
   
-    <video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="https://bevara.github.io/Showcase/test_sequences/hevcds_720p30_2M.mp4" using="mm_solver_1.0.6" with="libde265_1;isobmff_1;libx264_1;libfaad_1;libopusenc_1" progressive controls></video>
+    <video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="https://bevara.github.io/Showcase/test_sequences/hevcds_720p30_2M.mp4" using="mm_solver_1.0.7" with="libde265_1;isobmff_1;libx264_1;libfaad_1;libopusenc_1" progressive controls></video>
 
     <h2>Code snippet</h2>
 
-    <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="hevcds_720p30_2M.mp4" using="mm_solver_1.0.6" with="libde265_1;isobmff_1;libx264_1;libfaad_1;libopusenc_1" progressive controls&gt; &lt;/video&gt;</code></pre>
+    <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="hevcds_720p30_2M.mp4" using="mm_solver_1.0.7" with="libde265_1;isobmff_1;libx264_1;libfaad_1;libopusenc_1" progressive controls&gt; &lt;/video&gt;</code></pre>
 
     <h2> Specifications : </h2>
 
@@ -89,7 +89,7 @@
             </tr>
             <tr>
                 <td>Solver</td>
-                <td>mm_solver_1.0.6</td>
+                <td>mm_solver_1.0.7</td>
             </tr>
         </tbody>
     </table>

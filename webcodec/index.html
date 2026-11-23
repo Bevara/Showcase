@@ -71,7 +71,7 @@
             <a href="https://github.com/Bevara/ogg">ogg_1</a>; the browser encodes them to H.264 and
             AAC, and <a href="https://github.com/Bevara/isobmff">isobmff_1</a> puts them in an MP4:</p>
         <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="trailer_1080p.ogg"
-       using="mm_solver_1.0.6" with="ogg_1;theora_1;vorbis_1;isobmff_1"
+       using="mm_solver_1.0.7" with="ogg_1;theora_1;vorbis_1;isobmff_1"
        use-webcodec="enc" use-worker controls&gt;&lt;/video&gt;</code></pre>
         <p class="note">Nothing plays until the whole file has been re-encoded: the 28 MB trailer takes
             about a minute on a laptop, and the players below wait for it in turn.</p>
@@ -98,7 +98,7 @@
             picture and <a href="https://github.com/Bevara/vorbis">vorbis_1</a> the sound; the browser
             encodes both, as above:</p>
         <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="elephants-dream.webm"
-       using="mm_solver_1.0.6" with="webmdmx_1;libvpx_1;vorbis_1;isobmff_1"
+       using="mm_solver_1.0.7" with="webmdmx_1;libvpx_1;vorbis_1;isobmff_1"
        use-webcodec="enc" use-worker controls&gt;&lt;/video&gt;</code></pre>
         <p class="note">Your browser plays this WebM on its own; <code>force</code> sends it through
             the WebAssembly decoders anyway, to show a long film going the whole way. It is the

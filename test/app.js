@@ -24,7 +24,7 @@ const fileInput = el('file');
 
 // id ("libwebp_1") -> { formats, extensions, support, using, local }
 const accessorsById = {};
-// The two solvers, by the name pages give them ("mm_solver_1.0.6").
+// The two solvers, by the name pages give them ("mm_solver_1.0.7").
 const SOLVERS = { full: null, minimal: null };
 
 // The extensions an accessor claims are in its capabilities, as the input
