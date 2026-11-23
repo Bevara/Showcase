@@ -85,9 +85,7 @@
             <p class="status">Queued: starts once the player above has finished transcoding.</p>
         </div>
         <p class="note">Decoded by <a href="https://github.com/Bevara/libschro">libschro_1</a>, a raw
-            Dirac elementary stream with no container at all. It has no sound, and progressive playback
-            through WebCodecs waits for a first sound packet next to the first picture, so this short
-            clip is transcoded whole, in a worker, before it plays.</p>
+            Dirac elementary stream with no container at all.</p>
     </div>
 
     <div class="demo-section">
@@ -104,11 +102,7 @@
         <pre><code>&lt;video is="universal-video_1" registry="https://registry.bevara.ddns.net" force src="elephants-dream.webm"
        using="mm_solver_1.0.7" with="webmdmx_1;libvpx_1;vorbis_1;isobmff_1"
        use-webcodec="enc" use-worker controls&gt;&lt;/video&gt;</code></pre>
-        <p class="note">Your browser plays this WebM on its own; <code>force</code> sends it through
-            the WebAssembly decoders anyway, to show a long film going the whole way. This one is
-            transcoded whole, in a worker, before it plays: about three minutes on a laptop for
-            8.5 MB. Progressive playback runs the solver on the page's own thread, and for now a
-            page can only run one such session - the trailer above has it.
+        <p class="note">
             Elephants Dream © 2006 Blender Foundation / Netherlands Media Art Institute,
             <a href="https://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a>.</p>
     </div>
